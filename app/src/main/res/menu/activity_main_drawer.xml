@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/settings">
+        <menu>
+        <group android:checkableBehavior="single">
+            <item android:id="@+id/nav_last_sync" android:icon="@mipmap/ic_device_access_time"
+                android:title="@string/last_sync" />
+            <item android:id="@+id/nav_theme" android:icon="@mipmap/ic_image_color_lens"
+                android:title="@string/theme" />
+            <item android:id="@+id/nav_user_message" android:icon="@mipmap/ic_action_action_perm_identity"
+                android:title="@string/user_message" />
+        </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/about">
+        <menu>
+            <item android:id="@+id/nav_version" android:icon="@mipmap/ic_image_details"
+                android:title="@string/version" />
+            <item android:id="@+id/nav_about_author" android:icon="@mipmap/ic_action_editor_insert_emoticon"
+                android:title="@string/about_author" />
+        </menu>
+    </item>
+
+</menu>
