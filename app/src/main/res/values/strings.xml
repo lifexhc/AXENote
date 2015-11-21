@@ -4,12 +4,14 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- 侧边栏 -->
+    <!-- 临时 -->
+    <string name="jay">周杰伦</string>
+    <string name="aiyo">哎哟，不错哦！</string>
 
-    <string name="all_note">所有便签</string>
+    <!-- 侧边栏 -->
+    <string name="settings">设置</string>
     <string name="last_sync">上次同步</string>
     <string name="theme">主题</string>
-    <string name="settings">设置</string>
     <string name="user_message">用户信息</string>
 
     <string name="about">关于</string>
@@ -18,4 +20,16 @@
 
 
     <string name="action_settings">设置</string>
+
+    <!-- 版本号 -->
+    <string name="version_number">版本号：0.1.0</string>
+    <string name="check_update">检查更新</string>
+
+    <!-- 关于作者 -->
+    <string name="author_name">许宏川</string>
+    <string name="motto">其疾如风，其徐如林，侵略如火，不动如山。</string>
+    <string name="jianshu">简书：@许宏川</string>
+    <string name="weibo">微博：@许宏川</string>
+    <string name="weixin">微信：xuhongchuan-uht</string>
+    <string name="mail">邮箱：life.xhc@gmail.com</string>
 </resources>

@@ -109,19 +109,19 @@ public class MainActivity extends AppCompatActivity
      * 侧滑菜单点击事件
      */
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_last_sync) {
-            // Handle the camera action
         } else if (id == R.id.nav_theme) {
 
         } else if (id == R.id.nav_user_message) {
 
         } else if (id == R.id.nav_version) {
-
+            Intent intent = new Intent(this, VersionActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_about_author) {
-
+            Intent intent = new Intent(this, AboutAuthorActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
