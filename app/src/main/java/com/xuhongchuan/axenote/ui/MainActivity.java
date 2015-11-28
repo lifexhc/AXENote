@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,35 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView mRecycleView;
     private NoteListAdapter mAdapter;
+
+    /**
+     * NoteList相关事件
+     */
+    ItemTouchHelper.Callback mCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+
+        @Override
+        /**
+         * 长按移动便签
+         */
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition(); // 得到拖动ViewHolder的position
+            int toPosition = target.getAdapterPosition(); // 得到目标ViewHolder的position
+            mAdapter.notifyItemMoved(fromPosition, toPosition);
+            // 返回true表示执行拖动
+            return true;
+        }
+
+        @Override
+        /**
+         * 滑动删除便签
+         */
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            mAdapter.notifyItemRemoved(position);
+//            mAdapter.getData().remove(position);
+            mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +94,9 @@ public class MainActivity extends AppCompatActivity
         mAdapter = new NoteListAdapter(this);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(mAdapter);
+        // 为NoteList绑定事件
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mCallback);
+        itemTouchHelper.attachToRecyclerView(mRecycleView);
     }
 
     @Override
