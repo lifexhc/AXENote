@@ -13,13 +13,18 @@ import com.xuhongchuan.axenote.R;
  * Created by xuhongchuan on 15/10/17.
  */
 public class ContentActivity extends AppCompatActivity {
-
     private Toolbar toolbar;
     private EditText etContent;
+    private String content; // 便签内容
+    private int index; // 便签索引
 
     private void initElement() {
-        etContent = (EditText) findViewById(R.id.et_content);
+        content = getIntent().getStringExtra("content");
+        index = getIntent().getIntExtra("index", 0);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        etContent = (EditText) findViewById(R.id.et_content);
+        etContent.setText(content);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.xuhongchuan.axenote.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
-import com.xuhongchuan.axenote.util.L;
+import com.xuhongchuan.axenote.ui.ContentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     private List<Note> mData = new ArrayList<Note>(); // 测试数据
 
+    /**
+     * 初始化便签
+     */
     void initData() {
         Note note;
         for(int i = 0; i < 50; i++) {
@@ -37,6 +41,41 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
             note.setContent("这是一条便签" + i);
             mData.add(note);
         }
+    }
+
+    /**
+     * 获取所有便签
+     * @return
+     */
+    public List<Note> getData() {
+        return mData;
+    }
+
+    /**
+     * 获取指定便签
+     * @param index
+     * @return
+     */
+    public Note getDataByIndex(int index) {
+        return mData.get(index);
+    }
+
+    /**
+     * 新建一条便签
+     */
+    public void addData() {
+        Note note = new Note();
+        note.setContent("");
+        mData.add(0, note);
+    }
+
+    /**
+     * 更新指定便签
+     * @param index
+     * @param value
+     */
+    public void updateData(int index, String value) {
+        mData.get(index).setContent(value);
     }
 
     @Override
@@ -60,13 +99,17 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
     public static class NoteListViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
 
-        public NoteListViewHolder(View view) {
+        public NoteListViewHolder(final View view) {
             super(view);
             mTextView = (TextView) view.findViewById(R.id.tv_note_tittle);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    L.d(this, "onClick--> position = " + getPosition());
+                    // 进入便签编辑Activity，并且传递当前便签内容和索引
+                    Intent intent = new Intent(view.getContext(), ContentActivity.class);
+                    intent.putExtra("content", mTextView.getText().toString());
+                    intent.putExtra("index", getPosition());
+                    view.getContext().startActivity(intent);
                 }
             });
         }
