@@ -1,7 +1,6 @@
 package com.xuhongchuan.axenote.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +11,7 @@ import com.xuhongchuan.axenote.R;
 /**
  * Created by xuhongchuan on 15/10/17.
  */
-public class ContentActivity extends AppCompatActivity {
+public class ContentActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private EditText etContent;
