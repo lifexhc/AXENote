@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import com.xuhongchuan.axenote.R;
+import com.xuhongchuan.axenote.util.L;
 
 /**
  * Created by xuhongchuan on 15/10/17.
@@ -19,23 +21,24 @@ public class ContentActivity extends BaseActivity {
     private int mIndex; // 便签索引
 
     private void initElement() {
-        mContent = getIntent().getStringExtra("content");
-        mIndex = getIntent().getIntExtra("index", 0);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mEtContent = (EditText) findViewById(R.id.et_content);
-        mEtContent.setText(mContent);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
-
         initElement();
-        mToolbar.setNavigationIcon(R.mipmap.ic_action_navigation_arrow_back);
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
     }
 
     @Override
