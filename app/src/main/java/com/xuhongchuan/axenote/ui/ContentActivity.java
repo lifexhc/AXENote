@@ -1,7 +1,6 @@
 package com.xuhongchuan.axenote.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,19 +11,20 @@ import com.xuhongchuan.axenote.R;
 /**
  * Created by xuhongchuan on 15/10/17.
  */
-public class ContentActivity extends AppCompatActivity {
-    private Toolbar toolbar;
-    private EditText etContent;
-    private String content; // 便签内容
-    private int index; // 便签索引
+public class ContentActivity extends BaseActivity {
+
+    private Toolbar mToolbar;
+    private EditText mEtContent;
+    private String mContent; // 便签内容
+    private int mIndex; // 便签索引
 
     private void initElement() {
-        content = getIntent().getStringExtra("content");
-        index = getIntent().getIntExtra("index", 0);
+        mContent = getIntent().getStringExtra("content");
+        mIndex = getIntent().getIntExtra("index", 0);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        etContent = (EditText) findViewById(R.id.et_content);
-        etContent.setText(content);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mEtContent = (EditText) findViewById(R.id.et_content);
+        mEtContent.setText(mContent);
     }
 
     @Override
@@ -33,9 +33,9 @@ public class ContentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_content);
 
         initElement();
-        toolbar.setNavigationIcon(R.mipmap.ic_action_navigation_arrow_back);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+        mToolbar.setNavigationIcon(R.mipmap.ic_action_navigation_arrow_back);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
     }
 
     @Override
