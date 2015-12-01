@@ -13,12 +13,18 @@ import com.xuhongchuan.axenote.R;
  */
 public class ContentActivity extends BaseActivity {
 
-    private Toolbar toolbar;
-    private EditText etContent;
+    private Toolbar mToolbar;
+    private EditText mEtContent;
+    private String mContent; // 便签内容
+    private int mIndex; // 便签索引
 
     private void initElement() {
-        etContent = (EditText) findViewById(R.id.et_content);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mContent = getIntent().getStringExtra("content");
+        mIndex = getIntent().getIntExtra("index", 0);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mEtContent = (EditText) findViewById(R.id.et_content);
+        mEtContent.setText(mContent);
     }
 
     @Override
@@ -27,9 +33,9 @@ public class ContentActivity extends BaseActivity {
         setContentView(R.layout.activity_content);
 
         initElement();
-        toolbar.setNavigationIcon(R.mipmap.ic_action_navigation_arrow_back);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+        mToolbar.setNavigationIcon(R.mipmap.ic_action_navigation_arrow_back);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
     }
 
     @Override

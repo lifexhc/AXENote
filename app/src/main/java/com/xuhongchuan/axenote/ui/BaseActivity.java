@@ -8,7 +8,7 @@ import com.xuhongchuan.axenote.R;
 /**
  * Created by xuhongchuan on 15/11/28.
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
