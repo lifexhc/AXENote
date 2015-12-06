@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.ui;
+package com.xuhongchuan.axenote.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import com.xuhongchuan.axenote.R;
  * Created by xuhongchuan on 15/11/28.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

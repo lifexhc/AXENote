@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar" >
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,17 +23,19 @@
         </activity>
 
         <activity
-            android:name=".ui.ContentActivity">
-
-        </activity>
-        <activity
-            android:name=".ui.AboutAuthorActivity">
-
+            android:name=".ui.activity.ContentActivity">
         </activity>
 
         <activity
-            android:name=".ui.VersionActivity">
+            android:name=".ui.activity.UserInfoActivity">
+        </activity>
 
+        <activity
+            android:name=".ui.activity.AboutAuthorActivity">
+        </activity>
+
+        <activity
+            android:name=".ui.activity.VersionActivity">
         </activity>
     </application>
 

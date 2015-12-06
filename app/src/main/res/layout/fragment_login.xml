@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:id="@+id/ll_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">>
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            >
+            <TableRow
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_name"
+                    android:textColor="@color/primary" />
+
+                <EditText
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/accent"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password"
+                    android:textColor="@color/primary" />
+
+                <EditText
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/accent"/>
+            </TableRow>
+            <TableRow
+                android:layout_marginTop="20dp"
+                android:translationZ="5dp"
+                android:elevation="3dp">
+                <Button
+                    android:layout_span="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login"
+                    android:textSize="18sp"
+                    android:textColor="#fff"
+                    android:background="@color/primary"
+                    android:translationZ="5dp"
+                    android:elevation="3dp"/>
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_register"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/ll_login"
+        >
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:layout_marginLeft="70dp"
+            >
+            <TableRow>
+                <EditText
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:text="用户名"
+                    android:textColor="@color/accent"/>
+            </TableRow>
+            <TableRow
+                android:layout_marginTop="20dp">
+                <EditText
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:text="密码"
+                    android:textColor="@color/accent"/>
+            </TableRow>
+            <TableRow
+                android:layout_marginTop="20dp"
+                android:translationZ="5dp"
+                android:elevation="3dp">
+                <Button
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:text="登录"
+                    android:textSize="18sp"
+                    android:textColor="#fff"
+                    android:background="@color/primary"
+                    android:translationZ="5dp"
+                    android:elevation="3dp"/>
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

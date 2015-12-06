@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.ui;
+package com.xuhongchuan.axenote.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -149,8 +149,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_last_sync) {
         } else if (id == R.id.nav_theme) {
 
-        } else if (id == R.id.nav_user_message) {
-
+        } else if (id == R.id.nav_user_info) {
+            Intent intent = new Intent(this, UserInfoActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_version) {
             Intent intent = new Intent(this, VersionActivity.class);
             startActivity(intent);

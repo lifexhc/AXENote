@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.ui;
+package com.xuhongchuan.axenote.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.xuhongchuan.axenote.R;
-import com.xuhongchuan.axenote.util.L;
 
 /**
  * Created by xuhongchuan on 15/10/17.
