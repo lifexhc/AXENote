@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
-import com.xuhongchuan.axenote.ui.ContentActivity;
+import com.xuhongchuan.axenote.ui.activity.ContentActivity;
 
 import java.util.ArrayList;
 import java.util.List;

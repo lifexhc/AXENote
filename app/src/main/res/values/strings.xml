@@ -32,4 +32,12 @@
     <string name="weibo">微博：@许宏川</string>
     <string name="weixin">微信：xuhongchuan-uht</string>
     <string name="mail">邮箱：life.xhc@gmail.com</string>
+
+    <!-- 用户信息 -->
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+
+    <string name="user_name">用&#160;&#160;户&#160;&#160;名:</string>
+    <string name="password">密&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;码:</string>
+    <string name="confirm_password">确认密码:</string>
 </resources>
