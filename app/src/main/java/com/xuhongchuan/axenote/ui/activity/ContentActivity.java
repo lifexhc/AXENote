@@ -1,5 +1,6 @@
 package com.xuhongchuan.axenote.ui.activity;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -7,7 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
+import com.xuhongchuan.axenote.util.GlobalConfig;
 
 /**
  * Created by xuhongchuan on 15/10/17.
@@ -19,6 +22,19 @@ public class ContentActivity extends BaseActivity {
     private String mContent; // 便签内容
     private int mIndex; // 便签索引
 
+    private Prism mPrism; // 主题切换
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_content);
+        initElement();
+        initTheme();
+    }
+
+    /**
+     * 初始化元素
+     */
     private void initElement() {
         mEtContent = (EditText) findViewById(R.id.et_content);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -33,11 +49,32 @@ public class ContentActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 初始化主题
+     */
+    public void initTheme() {
+        mPrism = Prism.Builder.newInstance()
+                .background(getWindow())
+                .background(mToolbar)
+                .build();
+        changeTheme();
+    }
+
+    /**
+     * 切换主题
+     */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content);
-        initElement();
+    public void changeTheme() {
+        super.changeTheme();
+        Resources res = getResources();
+        EditText etContext = (EditText) findViewById(R.id.et_content);
+        if (GlobalConfig.getInstance().isNight(ContentActivity.this)) {
+            mPrism.setColour(res.getColor(R.color.divider));
+            etContext.setBackgroundColor(res.getColor(R.color.bg_night));
+        } else {
+            mPrism.setColour(res.getColor(R.color.primary));
+            etContext.setBackgroundColor(res.getColor(R.color.bg_note));
+        }
     }
 
     @Override
@@ -56,4 +93,5 @@ public class ContentActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
