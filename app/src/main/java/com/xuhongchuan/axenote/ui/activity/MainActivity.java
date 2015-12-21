@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
@@ -22,7 +23,7 @@ import com.xuhongchuan.axenote.adapter.NoteListAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     private CircleImageView headerImage;
 
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
             mAdapter.notifyItemRemoved(position);
-//            mAdapter.getData().remove(position);
+            mAdapter.getData().remove(position);
             mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
         }
     };
@@ -117,8 +118,11 @@ public class MainActivity extends AppCompatActivity
      * 初始化菜单
      */
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        // 初始化SearchView
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView sv = (SearchView) searchItem.getActionView();
+        sv.setOnQueryTextListener(this);
         return true;
     }
 
@@ -129,9 +133,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.search) { // 查询事件
-            return true;
-        } else if (id == R.id.cached) { // 同步事件
+        if (id == R.id.cached) { // 同步事件
 
         }
 
@@ -163,5 +165,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * SearchView 提交查询事件
+     * @param query
+     * @return
+     */
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    /**
+     * SearchView 关键字变化事件
+     * @param newText
+     * @return
+     */
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        mAdapter.filter(newText);
+        return false;
     }
 }

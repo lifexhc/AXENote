@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.activity.ContentActivity;
+import com.xuhongchuan.axenote.util.PinyinUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,5 +115,35 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
             });
         }
     }
+
+    /**
+     * 查询
+     * @param query
+     */
+    public void filter(String query) {
+        initData(); // 重新初始化数据
+
+        PinyinUtil pinyinUtil = new PinyinUtil(); // 拼音模糊查询工具类
+        List<Note> data = new ArrayList<Note>();
+
+        for (Note note : mData) {
+            int index = 0;
+            if (pinyinUtil.contains(query)) {
+                index = note.getContent().indexOf(query);
+            } else {
+                String pinyin = pinyinUtil.getSpells(note.getContent());
+                index = pinyin.indexOf(query);
+            }
+            if (index != -1) {
+                data.add(note);
+            }
+        }
+        mData.clear();
+        mData.addAll(data);
+
+        notifyDataSetChanged(); // 刷新RecyclerView
+    }
+
+
 
 }
