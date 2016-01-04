@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment implements IChangeTheme {
     @Override
     public void changeTheme() {
         Resources res = getResources();
-        if (GlobalConfig.getInstance().isNight(getContext())) {
+        if (GlobalConfig.getInstance().isNightMode(getContext())) {
             mPrism.setColour(res.getColor(R.color.divider));
             mRL.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {

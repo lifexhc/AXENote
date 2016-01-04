@@ -9,28 +9,33 @@ import android.content.SharedPreferences;
  */
 public class GlobalConfig {
 
-    private final String SP_KEY_ISNIGHT = "isNight";
+    // 当前是否为夜间模式
+    private final String SP_KEY_NIGHT_MODE = "nightMode";
 
     private static GlobalConfig mInstance;
 
     public static GlobalConfig getInstance() {
         if (mInstance == null) {
-            mInstance = new GlobalConfig();
+            synchronized (GlobalConfig.class) {
+                if (mInstance == null) {
+                    mInstance = new GlobalConfig();
+                }
+            }
         }
         return mInstance;
     }
 
-    public boolean isNight(Context context) {
+    public boolean isNightMode(Context context) {
         SharedPreferences sp = context.getSharedPreferences(GlobalValue.SHARED_PRE_FILE_NAME,
                 Context.MODE_PRIVATE);
-        return sp.getBoolean(SP_KEY_ISNIGHT, false);
+        return sp.getBoolean(SP_KEY_NIGHT_MODE, false);
     }
 
-    public void setIsNight(Context context, boolean isNight) {
+    public void setNightMode(Context context, boolean isNight) {
         SharedPreferences sp = context.getSharedPreferences(GlobalValue.SHARED_PRE_FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean(SP_KEY_ISNIGHT, isNight);
+        editor.putBoolean(SP_KEY_NIGHT_MODE, isNight);
         editor.commit();
     }
 }

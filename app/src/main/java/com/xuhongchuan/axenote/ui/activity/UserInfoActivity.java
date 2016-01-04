@@ -112,7 +112,7 @@ public class UserInfoActivity extends FragmentActivity implements IChangeTheme{
     @Override
     public void changeTheme() {
         Resources res = getResources();
-        if (GlobalConfig.getInstance().isNight(UserInfoActivity.this)) {
+        if (GlobalConfig.getInstance().isNightMode(UserInfoActivity.this)) {
             mPrism.setColour(res.getColor(R.color.divider));
         } else {
             mPrism.setColour(res.getColor(R.color.primary));

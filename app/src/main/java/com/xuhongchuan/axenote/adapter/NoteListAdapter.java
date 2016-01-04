@@ -92,7 +92,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
         holder.mTextView.setText(mData.get(position).getContent());
         Resources res = mContext.getResources();
-        if (GlobalConfig.getInstance().isNight(mContext)) {
+        if (GlobalConfig.getInstance().isNightMode(mContext)) {
             holder.itemView.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {
             holder.itemView.setBackgroundColor(res.getColor(R.color.bg_note));

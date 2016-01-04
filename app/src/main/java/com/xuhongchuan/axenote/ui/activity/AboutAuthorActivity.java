@@ -60,7 +60,7 @@ public class AboutAuthorActivity extends BaseActivity {
         super.changeTheme();
         Resources res = getResources();
         RelativeLayout rlAboutAuthor = (RelativeLayout) findViewById(R.id.rl_about_author);
-        if (GlobalConfig.getInstance().isNight(AboutAuthorActivity.this)) {
+        if (GlobalConfig.getInstance().isNightMode(AboutAuthorActivity.this)) {
             mPrism.setColour(res.getColor(R.color.divider));
             rlAboutAuthor.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {

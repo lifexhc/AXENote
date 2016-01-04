@@ -117,14 +117,14 @@ public class MainActivity extends BaseActivity
     public void changeTheme() {
         super.changeTheme();
         Resources res = getResources();
-        if (GlobalConfig.getInstance().isNight(MainActivity.this)) {
+        if (GlobalConfig.getInstance().isNightMode(MainActivity.this)) {
             mPrism.setColour(res.getColor(R.color.divider));
         } else {
             mPrism.setColour(res.getColor(R.color.primary));
         }
         CoordinatorLayout dl = (CoordinatorLayout) findViewById(R.id.app_bar_main);
         NavigationView nav = (NavigationView) findViewById(R.id.nav_view);
-        if (GlobalConfig.getInstance().isNight(MainActivity.this)) {
+        if (GlobalConfig.getInstance().isNightMode(MainActivity.this)) {
             dl.setBackgroundColor(res.getColor(R.color.divider));
             nav.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {
@@ -217,14 +217,14 @@ public class MainActivity extends BaseActivity
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(res.getString(R.string.choice_theme));
             final GlobalConfig config = GlobalConfig.getInstance();
-            int checkedItem = config.isNight(MainActivity.this) ? 1 : 0; // 默认选中项
+            int checkedItem = config.isNightMode(MainActivity.this) ? 1 : 0; // 默认选中项
             builder.setSingleChoiceItems(themes, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == 0) {
-                        config.setIsNight(MainActivity.this, false);
+                        config.setNightMode(MainActivity.this, false);
                     } else {
-                        config.setIsNight(MainActivity.this, true);
+                        config.setNightMode(MainActivity.this, true);
                     }
                     // 发送切换主题广播
                     Intent intent = new Intent(GlobalValue.CHANGE_THEME);

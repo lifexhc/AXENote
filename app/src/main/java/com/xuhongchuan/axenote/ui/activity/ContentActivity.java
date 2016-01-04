@@ -68,7 +68,7 @@ public class ContentActivity extends BaseActivity {
         super.changeTheme();
         Resources res = getResources();
         EditText etContext = (EditText) findViewById(R.id.et_content);
-        if (GlobalConfig.getInstance().isNight(ContentActivity.this)) {
+        if (GlobalConfig.getInstance().isNightMode(ContentActivity.this)) {
             mPrism.setColour(res.getColor(R.color.divider));
             etContext.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {

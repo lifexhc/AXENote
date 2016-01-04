@@ -76,7 +76,7 @@ public class VersionActivity extends BaseActivity {
         super.changeTheme();
         Resources res = getResources();
         LinearLayout llVersion = (LinearLayout) findViewById(R.id.ll_version);
-        if (GlobalConfig.getInstance().isNight(VersionActivity.this)) {
+        if (GlobalConfig.getInstance().isNightMode(VersionActivity.this)) {
             mPrism.setColour(res.getColor(R.color.divider));
             llVersion.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {
