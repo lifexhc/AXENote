@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.util;
+package com.xuhongchuan.axenote.utils;
 
 /**
  * Created by xuhongchuan on 15/12/22.
@@ -22,6 +22,6 @@ public class GlobalValue {
     public static final int DATABASE_VERSION = 1;
 
     // 广播action
-    public static String REFRESH_NOTE_LIST = "refreshNoteList";
+    public static String REFRESH_NOTE_LIST = "refreshNoteList"; // 刷新便签列表
 
 }

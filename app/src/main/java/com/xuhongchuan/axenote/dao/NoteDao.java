@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.xuhongchuan.axenote.data.Note;
-import com.xuhongchuan.axenote.util.AXEDatabaseHelper;
-import com.xuhongchuan.axenote.util.GlobalValue;
+import com.xuhongchuan.axenote.utils.AXEDatabaseHelper;
+import com.xuhongchuan.axenote.utils.GlobalValue;
 
 import java.util.ArrayList;
 
@@ -44,13 +44,14 @@ public class NoteDao {
      * @param createTime
      * @param updateTime
      */
-    public void createNewNote(String content, long createTime, long updateTime) {
+    public void createNewNote(final String content, final long createTime, final long updateTime) {
         ContentValues values = new ContentValues();
         values.put(GlobalValue.COLUMN_NAME_ORDINAL, getMaxOrdinal() + 1);
         values.put(GlobalValue.COLUMN_NAME_CONTENT, content);
         values.put(GlobalValue.COLUMN_NAME_CREATE_TIME, createTime);
         values.put(GlobalValue.COLUMN_NAME_UPDATE_TIME, updateTime);
         mDB.insert(GlobalValue.TABLE_NAME_NOTE, null, values);
+        values.clear();
     }
 
     /**
@@ -63,15 +64,15 @@ public class NoteDao {
 
     /**
      * 修改数据
-     * @param noteId
+     * @param id
      * @param content
      * @param updateTime
      */
-    public void updateNote(int noteId, String content, long updateTime) {
+    public void updateNote(int id, String content, long updateTime) {
         ContentValues values = new ContentValues();
         values.put(GlobalValue.COLUMN_NAME_CONTENT, content);
         values.put(GlobalValue.COLUMN_NAME_UPDATE_TIME, updateTime);
-        mDB.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{noteId + ""});
+        mDB.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id + ""});
     }
 
     /**
@@ -80,13 +81,13 @@ public class NoteDao {
      */
     public int getNoteCount() {
         String select = "select count(*) from " + GlobalValue.TABLE_NAME_NOTE;
+        int count = 0;
         Cursor cursor = mDB.rawQuery(select, null);
         if (cursor.moveToFirst()) {
-            int count = cursor.getInt(0);
-            return count;
-        } else {
-            return 0;
+            count = cursor.getInt(0);
         }
+        cursor.close();
+        return count;
     }
 
     /**
@@ -111,6 +112,7 @@ public class NoteDao {
             note.setCreateTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_CREATE_TIME)));
             note.setUpdateTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_UPDATE_TIME)));
         }
+        cursor.close();
         return note;
     }
 
@@ -120,7 +122,7 @@ public class NoteDao {
      */
     public ArrayList<Note> getAllNotes() {
         ArrayList<Note> noteList = new ArrayList<Note>();
-        Cursor cursor = mDB.query(false, GlobalValue.TABLE_NAME_NOTE, new String[] {GlobalValue.COLUMN_NAME_ID, GlobalValue.COLUMN_NAME_ORDINAL, GlobalValue.COLUMN_NAME_CONTENT,
+        Cursor cursor = mDB.query(false, GlobalValue.TABLE_NAME_NOTE, new String[]{GlobalValue.COLUMN_NAME_ID, GlobalValue.COLUMN_NAME_ORDINAL, GlobalValue.COLUMN_NAME_CONTENT,
                         GlobalValue.COLUMN_NAME_CREATE_TIME, GlobalValue.COLUMN_NAME_UPDATE_TIME},
                 null, null, null, null, GlobalValue.COLUMN_NAME_ORDINAL, null);
         if (cursor.moveToLast()) {
@@ -134,6 +136,7 @@ public class NoteDao {
                 noteList.add(note);
             } while (cursor.moveToPrevious());
         }
+        cursor.close();
         return noteList;
     }
 
@@ -142,13 +145,19 @@ public class NoteDao {
      * @return
      */
     public int getLastId() {
+//        if (getNoteCount() == 0) {
+//            return 1;
+//        } else {
+//
+//        }
+
         Cursor cursor = mDB.rawQuery("select last_insert_rowid() from" + GlobalValue.TABLE_NAME_NOTE, null);
+        int rowid = -1;
         if(cursor.moveToFirst()) {
-            int rowid = cursor.getInt(0);
-            return rowid;
-        } else {
-            return -1;
+            rowid = cursor.getInt(0);
         }
+        cursor.close();
+        return rowid;
     }
 
     /**
@@ -159,12 +168,12 @@ public class NoteDao {
         String select = "select max(" + GlobalValue.COLUMN_NAME_ORDINAL+ ") from " +
                 GlobalValue.TABLE_NAME_NOTE;
         Cursor cursor = mDB.rawQuery(select, null);
+        int maxOrd = -1;
         if (cursor.moveToFirst()) {
-            int maxOrd = cursor.getInt(0);
-            return maxOrd;
-        } else {
-            return -1;
+            maxOrd = cursor.getInt(0);
         }
+        cursor.close();
+        return maxOrd;
     }
 
     /**
@@ -200,5 +209,7 @@ public class NoteDao {
 
         values.put(GlobalValue.COLUMN_NAME_ORDINAL, ordinal2);
         mDB.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id1 + ""});
+        cursor.close();
     }
+
 }

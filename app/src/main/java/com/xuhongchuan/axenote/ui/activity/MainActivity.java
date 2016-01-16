@@ -23,8 +23,8 @@ import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.NoteListAdapter;
 import com.xuhongchuan.axenote.dao.NoteDao;
 import com.xuhongchuan.axenote.data.Note;
-import com.xuhongchuan.axenote.util.GlobalValue;
-import com.xuhongchuan.axenote.util.L;
+import com.xuhongchuan.axenote.utils.GlobalDataCache;
+import com.xuhongchuan.axenote.utils.GlobalValue;
 
 import java.util.Date;
 import java.util.List;
@@ -42,11 +42,11 @@ public class MainActivity extends AppCompatActivity
     /**
      * 广播
      */
-    BroadcastReceiver mReceiver = new BroadcastReceiver(){
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(GlobalValue.REFRESH_NOTE_LIST)) {
-                L.d(this, "receive");
+                GlobalDataCache.getInstance().initNotes();
                 mAdapter.notifyDataSetChanged();
             }
         }
@@ -99,10 +99,8 @@ public class MainActivity extends AppCompatActivity
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
             mAdapter.notifyItemRemoved(position);
-
-            NoteDao dao = NoteDao.getInstance();
-            L.d(this, dao.getAllNotes().get(position).getId() + "");
-            dao.deleteNote(dao.getAllNotes().get(position).getId());
+            GlobalDataCache cache = GlobalDataCache.getInstance();
+            cache.deleteNote(cache.getNotes().get(position).getId());
             mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
         }
     };
@@ -120,18 +118,18 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date date = new Date();
-                long time = date.getTime();
+            Date date = new Date();
+            long time = date.getTime();
+            // 创建新便签
+            GlobalDataCache cache = GlobalDataCache.getInstance();
+            cache.createNewNote("", time, time);
 
-                NoteDao dao = NoteDao.getInstance();
-                dao.createNewNote("", time, time);
-
-                Intent intent = new Intent(MainActivity.this, ContentActivity.class);
-                intent.putExtra("id", dao.getLastId());
-                intent.putExtra("content", "");
-                intent.putExtra("createTime", time);
-                intent.putExtra("updateTime", time);
-                startActivity(intent);
+            Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+            intent.putExtra("id", cache.getLastId());
+            intent.putExtra("content", "");
+            intent.putExtra("createTime", time);
+            intent.putExtra("updateTime", time);
+            startActivity(intent);
             }
         });
 

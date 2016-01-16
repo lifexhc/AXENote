@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.xuhongchuan.axenote.R;
-import com.xuhongchuan.axenote.dao.NoteDao;
-import com.xuhongchuan.axenote.util.GlobalValue;
+import com.xuhongchuan.axenote.utils.GlobalDataCache;
+import com.xuhongchuan.axenote.utils.GlobalValue;
 
 import java.util.Date;
 
@@ -26,8 +26,6 @@ public class ContentActivity extends BaseActivity {
     private String mContent; // 便签内容
     private long mCreateTime; // 便签创建时间
     private long mUpdateTime; // 便签最后编辑时间
-
-    private int mIndex; // 便签索引
 
     /**
      * 获取传递进来的便签信息
@@ -70,11 +68,20 @@ public class ContentActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         mContent = mEtContent.getText().toString();
-        // 保存便签更新到数据库
-        NoteDao dao = NoteDao.getInstance();
-        dao.updateNote(mID, mContent, new Date().getTime());
+
+        GlobalDataCache.getInstance().updateNote(mID, mContent, new Date().getTime());
+        // 发送更新便签列表的广播
+        Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
+        sendBroadcast(intent);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        mContent = mEtContent.getText().toString();
+
+        GlobalDataCache.getInstance().updateNote(mID, mContent + mID, new Date().getTime());
         // 发送更新便签列表的广播
         Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
         sendBroadcast(intent);
