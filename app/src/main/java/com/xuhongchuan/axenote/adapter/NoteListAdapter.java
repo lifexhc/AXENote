@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuhongchuan.axenote.R;
-import com.xuhongchuan.axenote.dao.NoteDao;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.activity.ContentActivity;
+import com.xuhongchuan.axenote.utils.GlobalDataCache;
 
 /**
  * Created by xuhongchuan on 15/10/17.
@@ -20,12 +20,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
-    private NoteDao mDao;
 
     public NoteListAdapter(Context context) {
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        mDao = NoteDao.getInstance();
     }
 
     @Override
@@ -38,12 +36,12 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
-        holder.mTextView.setText(mDao.getAllNotes().get(position).getContent());
+        holder.mTextView.setText(GlobalDataCache.getInstance().getNotes().get(position).getContent());
     }
 
     @Override
     public int getItemCount() {
-        return mDao.getNoteCount();
+        return GlobalDataCache.getInstance().getNotes().size();
     }
 
     public static class NoteListViewHolder extends RecyclerView.ViewHolder {
@@ -55,14 +53,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NoteDao dao = NoteDao.getInstance();
-                    Note note = dao.getAllNotes().get(getPosition());
+                    Note note = GlobalDataCache.getInstance().getNotes().get(getPosition());
                     // 进入便签编辑Activity，并且传递当前便签内容和索引
                     Intent intent = new Intent(view.getContext(), ContentActivity.class);
-                    intent.putExtra("id", note.getId());
-                    intent.putExtra("content", note.getContent());
-                    intent.putExtra("createTime", note.getCreateTime());
-                    intent.putExtra("updateTime", note.getUpdateTime());
+                    intent.putExtra(ContentActivity.EXTRA_ID, note.getId());
+                    intent.putExtra(ContentActivity.EXTRA_CONTENT, note.getContent());
+                    intent.putExtra(ContentActivity.EXTRA_CREATE_TIME, note.getCreateTime());
+                    intent.putExtra(ContentActivity.EXTRA_LAST_MODIFIED_TIME, note.getLastModifiedTime());
                     view.getContext().startActivity(intent);
                 }
             });

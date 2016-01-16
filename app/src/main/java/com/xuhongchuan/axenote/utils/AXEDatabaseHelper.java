@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.util;
+package com.xuhongchuan.axenote.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,7 +32,7 @@ public class AXEDatabaseHelper extends SQLiteOpenHelper {
             GlobalValue.COLUMN_NAME_ORDINAL + " integer," +
             GlobalValue.COLUMN_NAME_CONTENT + " text," +
             GlobalValue.COLUMN_NAME_CREATE_TIME + " integer," +
-            GlobalValue.COLUMN_NAME_UPDATE_TIME + " integer)";
+            GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME + " integer)";
 
     private static final String SQL_CREATE_NOTE_INDEX = "create index index_name" +
             "on " + GlobalValue.TABLE_NAME_NOTE;

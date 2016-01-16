@@ -5,50 +5,49 @@ package com.xuhongchuan.axenote.data;
  */
 public class Note {
 
-    int id; // 数据库id
-    String content; // 笔记内容
-    long createTime; // 创建时间
-    long updateTime; // 修改时间
+    private int mId; // 便签id
+    private String mContent; // 便签内容
+    private long mCreateTime; // 创建时间
+    private long mLastModifiedTime; // 最后修改时间
+    private int mOrdinal; // 便签的位置，用于排序
 
     public int getId() {
-        return id;
+        return mId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.mId = id;
     }
 
     public String getContent() {
-        return content;
+        return mContent;
     }
 
     public void setContent(String content) {
-        this.content = content;
+        this.mContent = content;
     }
 
     public long getCreateTime() {
-        return createTime;
+        return mCreateTime;
     }
 
     public void setCreateTime(long createTime) {
-        this.createTime = createTime;
+        this.mCreateTime = createTime;
     }
 
-    public long getUpdateTime() {
-        return updateTime;
+    public long getLastModifiedTime() {
+        return mLastModifiedTime;
     }
 
-    public void setUpdateTime(long updateTime) {
-        this.updateTime = updateTime;
+    public void setLastModifiedTime(long mLastModifiedTime) {
+        this.mLastModifiedTime = mLastModifiedTime;
     }
-
-    int ordinal;
 
     public int getOrdinal() {
-        return ordinal;
+        return mOrdinal;
     }
 
     public void setOrdinal(int ordinal) {
-        this.ordinal = ordinal;
+        this.mOrdinal = ordinal;
     }
 }

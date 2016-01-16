@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.xuhongchuan.axenote.data.Note;
-import com.xuhongchuan.axenote.util.AXEDatabaseHelper;
-import com.xuhongchuan.axenote.util.GlobalValue;
+import com.xuhongchuan.axenote.utils.AXEDatabaseHelper;
+import com.xuhongchuan.axenote.utils.GlobalValue;
 
 import java.util.ArrayList;
 
@@ -16,11 +16,11 @@ import java.util.ArrayList;
  */
 public class NoteDao {
 
-    private SQLiteDatabase mDB;
+    private SQLiteDatabase mDb;
     private static NoteDao mInstance;
 
     public NoteDao() {
-        mDB = AXEDatabaseHelper.getInstatce().getWritableDatabase();
+        mDb = AXEDatabaseHelper.getInstatce().getWritableDatabase();
     }
 
     /**
@@ -42,36 +42,37 @@ public class NoteDao {
      * 插入一条新便签
      * @param content
      * @param createTime
-     * @param updateTime
+     * @param lastModifiedTime
      */
-    public void createNewNote(String content, long createTime, long updateTime) {
+    public void createNewNote(final String content, final long createTime, final long lastModifiedTime) {
         ContentValues values = new ContentValues();
         values.put(GlobalValue.COLUMN_NAME_ORDINAL, getMaxOrdinal() + 1);
         values.put(GlobalValue.COLUMN_NAME_CONTENT, content);
         values.put(GlobalValue.COLUMN_NAME_CREATE_TIME, createTime);
-        values.put(GlobalValue.COLUMN_NAME_UPDATE_TIME, updateTime);
-        mDB.insert(GlobalValue.TABLE_NAME_NOTE, null, values);
+        values.put(GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME, lastModifiedTime);
+        mDb.insert(GlobalValue.TABLE_NAME_NOTE, null, values);
+        values.clear();
     }
 
     /**
-     * 删除指定ID的便签
+     * 删除指定id的便签
      * @param id
      */
     public void deleteNote(int id) {
-        mDB.delete(GlobalValue.TABLE_NAME_NOTE, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id + ""});
+        mDb.delete(GlobalValue.TABLE_NAME_NOTE, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id + ""});
     }
 
     /**
      * 修改数据
-     * @param noteId
+     * @param id
      * @param content
-     * @param updateTime
+     * @param lastModifiedTime
      */
-    public void updateNote(int noteId, String content, long updateTime) {
+    public void updateNote(int id, String content, long lastModifiedTime) {
         ContentValues values = new ContentValues();
         values.put(GlobalValue.COLUMN_NAME_CONTENT, content);
-        values.put(GlobalValue.COLUMN_NAME_UPDATE_TIME, updateTime);
-        mDB.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{noteId + ""});
+        values.put(GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME, lastModifiedTime);
+        mDb.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id + ""});
     }
 
     /**
@@ -80,17 +81,17 @@ public class NoteDao {
      */
     public int getNoteCount() {
         String select = "select count(*) from " + GlobalValue.TABLE_NAME_NOTE;
-        Cursor cursor = mDB.rawQuery(select, null);
+        int count = 0;
+        Cursor cursor = mDb.rawQuery(select, null);
         if (cursor.moveToFirst()) {
-            int count = cursor.getInt(0);
-            return count;
-        } else {
-            return 0;
+            count = cursor.getInt(0);
         }
+        cursor.close();
+        return count;
     }
 
     /**
-     * 查询指定ID的便签
+     * 查询指定id的便签
      * @param id
      */
     public Note getNote(int id) {
@@ -100,17 +101,18 @@ public class NoteDao {
                 GlobalValue.COLUMN_NAME_ORDINAL + "," +
                 GlobalValue.COLUMN_NAME_CONTENT + "," +
                 GlobalValue.COLUMN_NAME_CREATE_TIME + "," +
-                GlobalValue.COLUMN_NAME_UPDATE_TIME +
+                GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME +
                 " from " + GlobalValue.TABLE_NAME_NOTE + " where id = " + id;
-        Cursor cursor = mDB.rawQuery(select, null);
+        Cursor cursor = mDb.rawQuery(select, null);
 
         if (cursor.moveToFirst()) {
             note.setId(cursor.getInt(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_ID)));
             note.setOrdinal(cursor.getInt(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_ORDINAL)));
             note.setContent(cursor.getString(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_CONTENT)));
             note.setCreateTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_CREATE_TIME)));
-            note.setUpdateTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_UPDATE_TIME)));
+            note.setLastModifiedTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME)));
         }
+        cursor.close();
         return note;
     }
 
@@ -120,8 +122,8 @@ public class NoteDao {
      */
     public ArrayList<Note> getAllNotes() {
         ArrayList<Note> noteList = new ArrayList<Note>();
-        Cursor cursor = mDB.query(false, GlobalValue.TABLE_NAME_NOTE, new String[] {GlobalValue.COLUMN_NAME_ID, GlobalValue.COLUMN_NAME_ORDINAL, GlobalValue.COLUMN_NAME_CONTENT,
-                        GlobalValue.COLUMN_NAME_CREATE_TIME, GlobalValue.COLUMN_NAME_UPDATE_TIME},
+        Cursor cursor = mDb.query(false, GlobalValue.TABLE_NAME_NOTE, new String[]{GlobalValue.COLUMN_NAME_ID, GlobalValue.COLUMN_NAME_ORDINAL, GlobalValue.COLUMN_NAME_CONTENT,
+                        GlobalValue.COLUMN_NAME_CREATE_TIME, GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME},
                 null, null, null, null, GlobalValue.COLUMN_NAME_ORDINAL, null);
         if (cursor.moveToLast()) {
             do {
@@ -130,10 +132,11 @@ public class NoteDao {
                 note.setOrdinal(cursor.getInt(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_ORDINAL)));
                 note.setContent(cursor.getString(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_CONTENT)));
                 note.setCreateTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_CREATE_TIME)));
-                note.setUpdateTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_UPDATE_TIME)));
+                note.setLastModifiedTime(cursor.getLong(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME)));
                 noteList.add(note);
             } while (cursor.moveToPrevious());
         }
+        cursor.close();
         return noteList;
     }
 
@@ -142,13 +145,13 @@ public class NoteDao {
      * @return
      */
     public int getLastId() {
-        Cursor cursor = mDB.rawQuery("select last_insert_rowid() from" + GlobalValue.TABLE_NAME_NOTE, null);
+        Cursor cursor = mDb.rawQuery("select last_insert_rowid() from" + GlobalValue.TABLE_NAME_NOTE, null);
+        int rowid = -1;
         if(cursor.moveToFirst()) {
-            int rowid = cursor.getInt(0);
-            return rowid;
-        } else {
-            return -1;
+            rowid = cursor.getInt(0);
         }
+        cursor.close();
+        return rowid;
     }
 
     /**
@@ -158,13 +161,13 @@ public class NoteDao {
     public int getMaxOrdinal() {
         String select = "select max(" + GlobalValue.COLUMN_NAME_ORDINAL+ ") from " +
                 GlobalValue.TABLE_NAME_NOTE;
-        Cursor cursor = mDB.rawQuery(select, null);
+        Cursor cursor = mDb.rawQuery(select, null);
+        int maxOrdinal = -1;
         if (cursor.moveToFirst()) {
-            int maxOrd = cursor.getInt(0);
-            return maxOrd;
-        } else {
-            return -1;
+            maxOrdinal = cursor.getInt(0);
         }
+        cursor.close();
+        return maxOrdinal;
     }
 
     /**
@@ -183,22 +186,24 @@ public class NoteDao {
                 GlobalValue.COLUMN_NAME_ORDINAL +
                 " from " + GlobalValue.TABLE_NAME_NOTE + " where id = " + id2;
 
-        Cursor cursor = mDB.rawQuery(select1, null);
+        Cursor cursor = mDb.rawQuery(select1, null);
 
         if (cursor.moveToFirst()) {
             ordinal1 = cursor.getInt(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_ORDINAL));
         }
 
-        cursor = mDB.rawQuery(select2, null);
+        cursor = mDb.rawQuery(select2, null);
         if (cursor.moveToFirst()) {
             ordinal2 = cursor.getInt(cursor.getColumnIndex(GlobalValue.COLUMN_NAME_ORDINAL));
         }
 
         ContentValues values = new ContentValues();
         values.put(GlobalValue.COLUMN_NAME_ORDINAL, ordinal1);
-        mDB.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id2 + ""});
+        mDb.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id2 + ""});
 
         values.put(GlobalValue.COLUMN_NAME_ORDINAL, ordinal2);
-        mDB.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id1 + ""});
+        mDb.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id1 + ""});
+        cursor.close();
     }
+
 }
