@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.impl.IChangeTheme;
-import com.xuhongchuan.axenote.util.GlobalConfig;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
 
 /**
  * Created by xuhongchuan on 15/12/2.

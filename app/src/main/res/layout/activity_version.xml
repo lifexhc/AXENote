@@ -30,12 +30,12 @@
         android:text="@string/version_number"
         />
 
-    <Button
-        android:id="@+id/btn_check_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_version"
-        android:layout_marginTop="10dp"
-        android:text="@string/check_update"/>
+    <!--<Button-->
+        <!--android:id="@+id/btn_check_update"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/tv_version"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:text="@string/check_update"/>-->
 
 </LinearLayout>

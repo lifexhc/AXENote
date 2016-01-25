@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.impl.IChangeTheme;
-import com.xuhongchuan.axenote.util.GlobalValue;
+import com.xuhongchuan.axenote.utils.GlobalValue;
 
 /**
  * Created by xuhongchuan on 15/11/28.

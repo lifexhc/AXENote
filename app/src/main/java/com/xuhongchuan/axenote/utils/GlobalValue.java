@@ -29,4 +29,7 @@ public class GlobalValue {
     public static String REFRESH_NOTE_LIST = "refreshNoteList"; // 刷新便签列表
     public static String CHANGE_THEME = "changeTheme"; // 更换主题
 
+    // SharedPreferences的文件名
+    public static String SHARED_PRE_FILE_NAME = "axenote_data";
+
 }

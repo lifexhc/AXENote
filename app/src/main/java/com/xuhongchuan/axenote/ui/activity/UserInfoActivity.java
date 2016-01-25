@@ -18,8 +18,8 @@ import com.xuhongchuan.axenote.adapter.UserInfoFragmentPagerAdapter;
 import com.xuhongchuan.axenote.impl.IChangeTheme;
 import com.xuhongchuan.axenote.ui.fragment.LoginFragment;
 import com.xuhongchuan.axenote.ui.fragment.RegisterFragment;
-import com.xuhongchuan.axenote.util.GlobalConfig;
-import com.xuhongchuan.axenote.util.GlobalValue;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
+import com.xuhongchuan.axenote.utils.GlobalValue;
 
 /**
  * Created by xuhongchuan on 15/12/2.

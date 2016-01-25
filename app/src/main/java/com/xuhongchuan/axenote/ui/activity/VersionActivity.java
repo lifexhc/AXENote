@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 
 import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
-import com.xuhongchuan.axenote.util.GlobalConfig;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
 
 /**
  * Created by xuhongchuan on 15/10/21.
@@ -33,17 +33,17 @@ public class VersionActivity extends BaseActivity {
             }
         });
 
-        mBtnCheckUpdate = (Button) findViewById(R.id.btn_check_update);
-
-        /**
-         * 检查更新
-         */
-        mBtnCheckUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        mBtnCheckUpdate = (Button) findViewById(R.id.btn_check_update);
+//
+//        /**
+//         * 检查更新
+//         */
+//        mBtnCheckUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
     }
 
     @Override

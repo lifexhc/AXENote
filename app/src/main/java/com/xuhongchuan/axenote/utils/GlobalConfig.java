@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.util;
+package com.xuhongchuan.axenote.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

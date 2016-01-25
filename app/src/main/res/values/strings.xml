@@ -46,4 +46,7 @@
     <string name="choice_theme">选择主题</string>
     <string name="day">白天</string>
     <string name="night">夜间</string>
+    <string name="get_img_failed">获取图片失败</string>
+
+    <string name="app_description">一个简洁的便签</string>
 </resources>

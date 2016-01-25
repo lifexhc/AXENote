@@ -14,8 +14,8 @@ import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.activity.ContentActivity;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
-import com.xuhongchuan.axenote.util.ContrastPinyin;
-import com.xuhongchuan.axenote.util.GlobalConfig;
+import com.xuhongchuan.axenote.utils.ContrastPinyin;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
 
 import java.util.ArrayList;
 import java.util.List;

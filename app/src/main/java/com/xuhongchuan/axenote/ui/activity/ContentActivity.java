@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -35,11 +34,11 @@ import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.dao.ImgDao;
 import com.xuhongchuan.axenote.utils.BitmapUtils;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 
 import java.util.Date;
-import com.xuhongchuan.axenote.util.GlobalConfig;
 
 /**
  * Created by xuhongchuan on 15/10/17.
@@ -315,7 +314,7 @@ public class ContentActivity extends BaseActivity {
                         mEtContent.append(spannableString);
                         mEtContent.append("\n");
                     } else {
-                        Toast.makeText(this, "获取图片失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.get_img_failed), Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
