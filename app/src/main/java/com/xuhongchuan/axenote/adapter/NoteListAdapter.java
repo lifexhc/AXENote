@@ -2,6 +2,7 @@ package com.xuhongchuan.axenote.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.activity.ContentActivity;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.util.ContrastPinyin;
+import com.xuhongchuan.axenote.util.GlobalConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
         String content = GlobalDataCache.getInstance().getNotes().get(position).getContent();
         holder.mTextView.setText(Html.fromHtml(content));
+
+        Resources res = mContext.getResources();
+        if (GlobalConfig.getInstance().isNightMode(mContext)) {
+            holder.itemView.setBackgroundColor(res.getColor(R.color.bg_night));
+        } else {
+            holder.itemView.setBackgroundColor(res.getColor(R.color.bg_note));
+        }
     }
 
     @Override

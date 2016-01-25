@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -30,6 +31,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.dao.ImgDao;
 import com.xuhongchuan.axenote.utils.BitmapUtils;
@@ -37,6 +39,7 @@ import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 
 import java.util.Date;
+import com.xuhongchuan.axenote.util.GlobalConfig;
 
 /**
  * Created by xuhongchuan on 15/10/17.
@@ -55,12 +58,15 @@ public class ContentActivity extends BaseActivity {
     private long mCreateTime; // 便签创建时间
     private long mUpdateTime; // 便签最后编辑时间
 
+    private Prism mPrism; // 主题切换
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
         initElement();
         initContent();
+        initTheme();
     }
 
     /**
@@ -123,6 +129,20 @@ public class ContentActivity extends BaseActivity {
         mEtContent.setText(Html.fromHtml(mContent, imageGetter, null));
     }
 
+    /**
+     * 初始化主题
+     */
+    public void initTheme() {
+        mPrism = Prism.Builder.newInstance()
+                .background(getWindow())
+                .background(mToolbar)
+                .build();
+        changeTheme();
+    }
+
+    /**
+     * 切换主题
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -132,6 +152,19 @@ public class ContentActivity extends BaseActivity {
         // 发送更新便签列表的广播
         Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
         sendBroadcast(intent);
+    }
+
+    public void changeTheme() {
+        super.changeTheme();
+        Resources res = getResources();
+        EditText etContext = (EditText) findViewById(R.id.et_content);
+        if (GlobalConfig.getInstance().isNightMode(ContentActivity.this)) {
+            mPrism.setColour(res.getColor(R.color.divider));
+            etContext.setBackgroundColor(res.getColor(R.color.bg_night));
+        } else {
+            mPrism.setColour(res.getColor(R.color.primary));
+            etContext.setBackgroundColor(res.getColor(R.color.bg_note));
+        }
     }
 
     @Override
@@ -288,7 +321,6 @@ public class ContentActivity extends BaseActivity {
             }
         }
     }
-
 }
 
 
