@@ -63,7 +63,6 @@ public class VersionActivity extends BaseActivity {
         mPrism = Prism.Builder.newInstance()
                 .background(getWindow())
                 .background(mToolbar)
-                .background(mBtnCheckUpdate)
                 .build();
         changeTheme();
     }
