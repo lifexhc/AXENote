@@ -72,7 +72,6 @@ public class VersionActivity extends BaseActivity {
      */
     @Override
     public void changeTheme() {
-        super.changeTheme();
         Resources res = getResources();
         LinearLayout llVersion = (LinearLayout) findViewById(R.id.ll_version);
         if (GlobalConfig.getInstance().isNightMode(VersionActivity.this)) {

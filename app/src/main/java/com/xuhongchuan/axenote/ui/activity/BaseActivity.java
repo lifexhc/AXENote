@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.xuhongchuan.axenote.R;
-import com.xuhongchuan.axenote.impl.IChangeTheme;
+import com.xuhongchuan.axenote.infr.IChangeTheme;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 
 /**
@@ -56,8 +56,4 @@ public abstract class BaseActivity extends AppCompatActivity implements IChangeT
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    @Override
-    public void changeTheme() {
-
-    }
 }

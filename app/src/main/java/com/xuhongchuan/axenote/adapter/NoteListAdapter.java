@@ -91,7 +91,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
         cache.initNotes();
         List<Note> notes = cache.getNotes();
 
-                ContrastPinyin contrastPinyin = new ContrastPinyin(); // 拼音模糊查询工具类
+        ContrastPinyin contrastPinyin = new ContrastPinyin(); // 拼音模糊查询工具类
         List<Note> data = new ArrayList<Note>();
 
         for (Note note : notes) {

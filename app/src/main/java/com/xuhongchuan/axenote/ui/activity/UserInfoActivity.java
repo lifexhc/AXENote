@@ -15,7 +15,7 @@ import android.view.View;
 import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.UserInfoFragmentPagerAdapter;
-import com.xuhongchuan.axenote.impl.IChangeTheme;
+import com.xuhongchuan.axenote.infr.IChangeTheme;
 import com.xuhongchuan.axenote.ui.fragment.LoginFragment;
 import com.xuhongchuan.axenote.ui.fragment.RegisterFragment;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
