@@ -10,6 +10,7 @@ public class GlobalValue {
 
     // 表名
     public static final String TABLE_NAME_NOTE = "note";
+    public static final String TABLE_NAME_IMG = "img";
 
     // 列名
     public static final String COLUMN_NAME_ID = "id"; // id
@@ -17,6 +18,9 @@ public class GlobalValue {
     public static final String COLUMN_NAME_CONTENT = "content"; // 便签内容
     public static final String COLUMN_NAME_CREATE_TIME = "create_time"; // 创建时间
     public static final String COLUMN_NAME_UPDATE_TIME = "update_time"; // 最后更新时间
+
+    public static final String COLUMN_NAME_IMG_ID = "imgId"; // 图片id
+    public static final String COLUMN_NAME_IMG_VALUES = "img_values"; // 图片内容
 
     // 数据库版本
     public static final int DATABASE_VERSION = 1;

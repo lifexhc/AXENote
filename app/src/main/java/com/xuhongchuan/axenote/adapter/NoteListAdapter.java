@@ -3,6 +3,7 @@ package com.xuhongchuan.axenote.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
-        holder.mTextView.setText(GlobalDataCache.getInstance().getNotes().get(position).getContent());
+        String content = GlobalDataCache.getInstance().getNotes().get(position).getContent();
+        holder.mTextView.setText(Html.fromHtml(content));
     }
 
     @Override

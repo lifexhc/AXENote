@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
             dao.swapOrdinal(id1, id2);
 
             mAdapter.notifyItemMoved(fromPosition, toPosition);
+            GlobalDataCache.getInstance().initNotes(); // 更新Note列表
             // 返回true表示执行拖动
             return true;
         }

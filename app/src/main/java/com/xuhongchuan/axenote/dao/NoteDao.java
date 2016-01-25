@@ -145,12 +145,6 @@ public class NoteDao {
      * @return
      */
     public int getLastId() {
-//        if (getNoteCount() == 0) {
-//            return 1;
-//        } else {
-//
-//        }
-
         Cursor cursor = mDB.rawQuery("select last_insert_rowid() from" + GlobalValue.TABLE_NAME_NOTE, null);
         int rowid = -1;
         if(cursor.moveToFirst()) {

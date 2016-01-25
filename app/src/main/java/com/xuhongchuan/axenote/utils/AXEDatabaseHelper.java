@@ -34,6 +34,11 @@ public class AXEDatabaseHelper extends SQLiteOpenHelper {
             GlobalValue.COLUMN_NAME_CREATE_TIME + " integer," +
             GlobalValue.COLUMN_NAME_UPDATE_TIME + " integer)";
 
+    // 创建Img表sql语句
+    private static final String SQL_CREATE_IMG = "create table if not exists " + GlobalValue.TABLE_NAME_IMG + "(" +
+            GlobalValue.COLUMN_NAME_IMG_ID + " integer primary key autoincrement," +
+            GlobalValue.COLUMN_NAME_IMG_VALUES + " blob)";
+
     private static final String SQL_CREATE_NOTE_INDEX = "create index index_name" +
             "on " + GlobalValue.TABLE_NAME_NOTE;
 
@@ -52,6 +57,8 @@ public class AXEDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_NOTE);
         L.d(this, "create table note");
+        db.execSQL(SQL_CREATE_IMG);
+        L.d(this, "create table IMG");
     }
 
     @Override
