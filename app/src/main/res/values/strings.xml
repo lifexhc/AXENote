@@ -22,7 +22,7 @@
     <string name="action_settings">设置</string>
 
     <!-- 版本号 -->
-    <string name="version_number">版本号：0.1.0</string>
+    <string name="version_number">版本号：beta1.0</string>
     <string name="check_update">检查更新</string>
 
     <!-- 关于作者 -->
@@ -36,8 +36,17 @@
     <!-- 用户信息 -->
     <string name="login">登录</string>
     <string name="register">注册</string>
-
-    <string name="user_name">用&#160;&#160;户&#160;&#160;名:</string>
-    <string name="password">密&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;码:</string>
+    <string name="user_name">用户名:</string>
+    <string name="user_name_space">用&#160;&#160;户&#160;&#160;名:</string>
+    <string name="password">密码:</string>
+    <string name="password_space">密&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;码:</string>
     <string name="confirm_password">确认密码:</string>
+
+    <!-- 其它 -->
+    <string name="choice_theme">选择主题</string>
+    <string name="day">白天</string>
+    <string name="night">夜间</string>
+    <string name="get_img_failed">获取图片失败</string>
+
+    <string name="app_description">一个简洁的便签</string>
 </resources>

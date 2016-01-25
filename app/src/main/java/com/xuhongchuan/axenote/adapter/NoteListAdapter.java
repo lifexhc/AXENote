@@ -2,7 +2,9 @@ package com.xuhongchuan.axenote.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,9 @@ import android.widget.TextView;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.activity.ContentActivity;
+import com.xuhongchuan.axenote.utils.GlobalDataCache;
+import com.xuhongchuan.axenote.utils.ContrastPinyin;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,56 +31,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
     public NoteListAdapter(Context context) {
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        initData();
-    }
-
-    private List<Note> mData = new ArrayList<Note>(); // 测试数据
-
-    /**
-     * 初始化便签
-     */
-    void initData() {
-        Note note;
-        for(int i = 0; i < 50; i++) {
-            note = new Note();
-            note.setContent("这是一条便签" + i);
-            mData.add(note);
-        }
-    }
-
-    /**
-     * 获取所有便签
-     * @return
-     */
-    public List<Note> getData() {
-        return mData;
-    }
-
-    /**
-     * 获取指定便签
-     * @param index
-     * @return
-     */
-    public Note getDataByIndex(int index) {
-        return mData.get(index);
-    }
-
-    /**
-     * 新建一条便签
-     */
-    public void addData() {
-        Note note = new Note();
-        note.setContent("");
-        mData.add(0, note);
-    }
-
-    /**
-     * 更新指定便签
-     * @param index
-     * @param value
-     */
-    public void updateData(int index, String value) {
-        mData.get(index).setContent(value);
     }
 
     @Override
@@ -88,12 +43,20 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
-        holder.mTextView.setText(mData.get(position).getContent());
+        String content = GlobalDataCache.getInstance().getNotes().get(position).getContent();
+        holder.mTextView.setText(Html.fromHtml(content));
+
+        Resources res = mContext.getResources();
+        if (GlobalConfig.getInstance().isNightMode(mContext)) {
+            holder.itemView.setBackgroundColor(res.getColor(R.color.bg_night));
+        } else {
+            holder.itemView.setBackgroundColor(res.getColor(R.color.bg_note));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mData == null ? 0 : mData.size();
+        return GlobalDataCache.getInstance().getNotes().size();
     }
 
     public static class NoteListViewHolder extends RecyclerView.ViewHolder {
@@ -105,14 +68,51 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Note note = GlobalDataCache.getInstance().getNotes().get(getPosition());
                     // 进入便签编辑Activity，并且传递当前便签内容和索引
                     Intent intent = new Intent(view.getContext(), ContentActivity.class);
-                    intent.putExtra("content", mTextView.getText().toString());
-                    intent.putExtra("index", getPosition());
+                    intent.putExtra("id", note.getId());
+                    intent.putExtra("content", note.getContent());
+                    intent.putExtra("createTime", note.getCreateTime());
+                    intent.putExtra("updateTime", note.getUpdateTime());
                     view.getContext().startActivity(intent);
                 }
             });
         }
     }
+
+    /**
+     * 查询
+     * @param query
+     */
+    public void filter(String query) {
+        // 重新初始化数据
+        GlobalDataCache cache = GlobalDataCache.getInstance();
+        cache.initNotes();
+        List<Note> notes = cache.getNotes();
+
+        ContrastPinyin contrastPinyin = new ContrastPinyin(); // 拼音模糊查询工具类
+        List<Note> data = new ArrayList<Note>();
+
+        for (Note note : notes) {
+            int index = 0;
+            String content = Html.fromHtml(note.getContent()).toString();
+            if (contrastPinyin.isContain(query)) {
+                index = content.indexOf(query);
+            } else {
+                String pinyin = contrastPinyin.getSpells(content);
+                index = pinyin.indexOf(query);
+            }
+            if (index != -1) {
+                data.add(note);
+            }
+        }
+        notes.clear();
+        notes.addAll(data);
+
+        notifyDataSetChanged(); // 刷新RecyclerView
+    }
+
+
 
 }

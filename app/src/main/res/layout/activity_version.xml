@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_version"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal">
@@ -29,11 +30,12 @@
         android:text="@string/version_number"
         />
 
-    <Button
-        android:id="@+id/btn_check_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_version"
-        android:text="@string/check_update"/>
+    <!--<Button-->
+        <!--android:id="@+id/btn_check_update"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/tv_version"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:text="@string/check_update"/>-->
 
 </LinearLayout>
