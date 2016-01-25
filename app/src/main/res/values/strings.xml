@@ -22,7 +22,7 @@
     <string name="action_settings">设置</string>
 
     <!-- 版本号 -->
-    <string name="version_number">版本号：0.1.0</string>
+    <string name="version_number">版本号：beta1.0</string>
     <string name="check_update">检查更新</string>
 
     <!-- 关于作者 -->

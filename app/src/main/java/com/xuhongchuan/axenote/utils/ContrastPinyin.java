@@ -37,14 +37,18 @@ public class ContrastPinyin {
      */
     public static String getSpells(String characters) {
         StringBuffer buffer = new StringBuffer();
-            for(int i=0;i<characters.length();i++) {
+            for (int i = 0; i < characters.length();i++) {
                 char ch = characters.charAt(i);
                 //判断是否为汉字，如果左移7为0就不是汉字，否则是汉字
-                if((ch>>7)==0){
+                if ((ch >> 7) == 0){
                     buffer.append(ch);
                 } else {
-                    char spell = getFirstLetter(ch);
-                    buffer.append(String.valueOf(spell));
+                    // TODO:插入图片时文本会有，65532这个字符导致搜索就崩溃
+                    // TODO:暂时跳过65532，尚未解决
+                    if (ch != 65532) {
+                        char spell = getFirstLetter(ch);
+                        buffer.append(String.valueOf(spell));
+                    }
                 }
          }
         return buffer.toString().toLowerCase();
