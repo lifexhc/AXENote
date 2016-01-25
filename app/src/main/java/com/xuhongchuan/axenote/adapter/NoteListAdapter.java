@@ -13,6 +13,10 @@ import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.activity.ContentActivity;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
+import com.xuhongchuan.axenote.util.ContrastPinyin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xuhongchuan on 15/10/17.
@@ -67,5 +71,39 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
             });
         }
     }
+
+    /**
+     * 查询
+     * @param query
+     */
+    public void filter(String query) {
+        // 重新初始化数据
+        GlobalDataCache cache = GlobalDataCache.getInstance();
+        cache.initNotes();
+        List<Note> notes = cache.getNotes();
+
+                ContrastPinyin contrastPinyin = new ContrastPinyin(); // 拼音模糊查询工具类
+        List<Note> data = new ArrayList<Note>();
+
+        for (Note note : notes) {
+            int index = 0;
+            String content = Html.fromHtml(note.getContent()).toString();
+            if (contrastPinyin.isContain(query)) {
+                index = content.indexOf(query);
+            } else {
+                String pinyin = contrastPinyin.getSpells(content);
+                index = pinyin.indexOf(query);
+            }
+            if (index != -1) {
+                data.add(note);
+            }
+        }
+        notes.clear();
+        notes.addAll(data);
+
+        notifyDataSetChanged(); // 刷新RecyclerView
+    }
+
+
 
 }
