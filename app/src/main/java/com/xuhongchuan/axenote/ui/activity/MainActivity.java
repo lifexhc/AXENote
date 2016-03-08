@@ -24,6 +24,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.RequestMobileCodeCallback;
 import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.NoteListAdapter;
@@ -33,7 +36,6 @@ import com.xuhongchuan.axenote.utils.GlobalConfig;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 
-import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -139,18 +141,39 @@ public class MainActivity extends BaseActivity
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Date date = new Date();
-            long time = date.getTime();
-            // 创建新便签
-            GlobalDataCache cache = GlobalDataCache.getInstance();
-            cache.createNewNote("", time, time);
+//            Date date = new Date();
+//            long time = date.getTime();
+//            // 创建新便签
+//            GlobalDataCache cache = GlobalDataCache.getInstance();
+//            cache.createNewNote("", time, time);
+//
+//            Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+//            intent.putExtra("id", cache.getLastId());
+//            intent.putExtra("content", "");
+//            intent.putExtra("createTime", time);
+//            intent.putExtra("updateTime", time);
+//            startActivity(intent);
 
-            Intent intent = new Intent(MainActivity.this, ContentActivity.class);
-            intent.putExtra("id", cache.getLastId());
-            intent.putExtra("content", "");
-            intent.putExtra("createTime", time);
-            intent.putExtra("updateTime", time);
-            startActivity(intent);
+//                AVUser user = new AVUser();
+//                user.setUsername("hang@leancloud.rocks");
+//                user.setPassword("whateverpassword");
+//                user.setMobilePhoneNumber("13716843806");   //本号码随机生成如有雷同纯属巧合
+//                user.signUpInBackground(new SignUpCallback() {
+//                    @Override
+//                    public void done(AVException e) {
+//
+//                    }
+//                });
+
+                //如果你的账号需要重新发送短信请参考下面的代码
+                AVUser.requestMobilePhoneVerifyInBackground("13716843806", new RequestMobileCodeCallback() {
+
+                    @Override
+                    public void done(AVException e) {
+                        //发送了验证码以后做点什么呢
+                    }
+                });
+
             }
         });
 
@@ -227,8 +250,6 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -295,6 +316,17 @@ public class MainActivity extends BaseActivity
                 }
             });
             dialog.show();
+        } else if (id == R.id.nav_user_info) {
+            AVUser currentUser = AVUser.getCurrentUser();
+            if (currentUser != null) {
+                // 用户已经登录
+                Intent intent = new Intent(this, UserInfoActivity.class);
+                startActivity(intent);
+            } else {
+                // 用户尚未登录
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+            }
         } else if (id == R.id.nav_version) { // 版本号
             Intent intent = new Intent(this, VersionActivity.class);
             startActivity(intent);

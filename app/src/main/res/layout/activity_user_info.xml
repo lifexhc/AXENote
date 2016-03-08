@@ -1,20 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_user_info2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
     <include android:id="@+id/ly_toolbar" layout="@layout/toolbar" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
+    <!-- 圆形头像 -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ci_user_header"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ly_toolbar"
+        android:src="@mipmap/xuhongchuan"
+        />
+
+    <TableLayout
+        android:id="@+id/tl_user_info"
+        android:layout_below="@id/ci_user_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ly_toolbar" />
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="5dp">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="昵称" />
+
+            <TextView
+                android:id="@+id/value"
+                android:gravity="right"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="许宏川" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray"  />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="座右铭" />
+
+            <TextView
+                android:gravity="right"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="岁月静好" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray"  />
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/tl_safety"
+        android:layout_below="@id/tl_user_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="5dp" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="手机号" />
+
+            <TextView
+                android:gravity="right"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="13716843806" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray"  />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="邮箱" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:gravity="right"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="life.xhc@gmail.com" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray"  />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="密码" />
+
+            <TextView
+                android:gravity="right"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="修改密码" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray"  />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出登录"/>
+
+    </TableLayout>
 
 </RelativeLayout>

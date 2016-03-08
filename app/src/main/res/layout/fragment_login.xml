@@ -13,18 +13,18 @@
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="120dp"
             >
             <TableRow
                 android:layout_marginTop="10dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/user_name_space"
+                    android:text="@string/mobile_phone_number"
                     android:textColor="@color/primary" />
 
                 <EditText
-                    android:id="@+id/et_user_name"
+                    android:id="@+id/et_mobile_phone_number"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/accent"/>

@@ -1,63 +1,31 @@
 package com.xuhongchuan.axenote.ui.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
+import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-import com.stylingandroid.prism.Prism;
+import com.avos.avoscloud.AVUser;
 import com.xuhongchuan.axenote.R;
-import com.xuhongchuan.axenote.adapter.UserInfoFragmentPagerAdapter;
-import com.xuhongchuan.axenote.impl.IChangeTheme;
-import com.xuhongchuan.axenote.ui.fragment.LoginFragment;
-import com.xuhongchuan.axenote.ui.fragment.RegisterFragment;
-import com.xuhongchuan.axenote.utils.GlobalConfig;
-import com.xuhongchuan.axenote.utils.GlobalValue;
+
+import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by xuhongchuan on 15/12/2.
+ * Created by xuhongchuan on 16/3/3.
  */
-public class UserInfoActivity extends FragmentActivity implements IChangeTheme{
+public class UserInfoActivity extends BaseActivity {
 
-    private Toolbar mToolbar;
-    private UserInfoFragmentPagerAdapter mPagerAdapter;
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
+    CircleImageView mCIVUserHeader;
+    TextView mTvEmail;
+    Button mBtnLogout;
 
-    private Prism mPrism; // 主题切换
-
-    /**
-     * 广播
-     */
-    BroadcastReceiver mReceiver = new BroadcastReceiver(){
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(GlobalValue.CHANGE_THEME)) {
-                changeTheme();
-            }
-        }
-    };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(GlobalValue.CHANGE_THEME);
-        registerReceiver(mReceiver, filter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(mReceiver);
-    }
+    private final int PICK_HEADER_FROM_FILE = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,57 +33,73 @@ public class UserInfoActivity extends FragmentActivity implements IChangeTheme{
         setContentView(R.layout.activity_user_info);
 
         initElement();
-        initTab();
-        initTheme();
     }
 
+    /**
+     * 初始化元素
+     */
     private void initElement() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("");
+        mCIVUserHeader = (CircleImageView) findViewById(R.id.ci_user_header);
+        mTvEmail = (TextView) findViewById(R.id.tv_email);
+        mBtnLogout = (Button) findViewById(R.id.btn_logout);
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mCIVUserHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_HEADER_FROM_FILE);
+            }
+        });
+
+        mTvEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserInfoActivity.this, ModifyActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mBtnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AVUser.logOut(); // 退出登录
+                AVUser currentUser = AVUser.getCurrentUser();
+                if (currentUser == null) {
+                    Intent intent = new Intent(UserInfoActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
 
-    private void initTab() {
-        mPagerAdapter = new UserInfoFragmentPagerAdapter(getSupportFragmentManager(), this);
-        mPagerAdapter.addFragment(new LoginFragment(), getString(R.string.login));
-        mPagerAdapter.addFragment(new RegisterFragment(), getString(R.string.register));
-
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setAdapter(mPagerAdapter);
-
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PICK_HEADER_FROM_FILE:
+                    Uri uri = data.getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        mCIVUserHeader.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
     }
 
-    /**
-     * 初始化主题
-     */
     @Override
     public void initTheme() {
-        mPrism = Prism.Builder.newInstance()
-                .background(getWindow())
-                .background(mToolbar)
-                .build();
-        changeTheme();
+
     }
 
-    /**
-     * 修改主题
-     */
     @Override
-    public void changeTheme() {
-        Resources res = getResources();
-        if (GlobalConfig.getInstance().isNightMode(UserInfoActivity.this)) {
-            mPrism.setColour(res.getColor(R.color.divider));
-        } else {
-            mPrism.setColour(res.getColor(R.color.primary));
-        }
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(UserInfoActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

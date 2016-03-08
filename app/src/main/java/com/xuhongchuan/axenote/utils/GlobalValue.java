@@ -32,4 +32,8 @@ public class GlobalValue {
     // SharedPreferences的文件名
     public static String SHARED_PRE_FILE_NAME = "axenote_data";
 
+    // LeanCloud
+    public static final String LEAN_CLOUD_APP_ID = "CdxBLcj1RMa5MDAHWRpG97um";
+    public static final String LEAN_CLOUD_APP_KEY = "wLVsFHcHJxEsVrYDnzBXF1Vq";
+
 }
