@@ -1,6 +1,9 @@
 package com.xuhongchuan.axenote.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,6 +21,13 @@ import android.view.View;
 
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.NoteListAdapter;
+import com.xuhongchuan.axenote.dao.NoteDao;
+import com.xuhongchuan.axenote.data.Note;
+import com.xuhongchuan.axenote.utils.GlobalDataCache;
+import com.xuhongchuan.axenote.utils.GlobalValue;
+
+import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,6 +38,33 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView mRecycleView;
     private NoteListAdapter mAdapter;
+
+    /**
+     * 广播
+     */
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(GlobalValue.REFRESH_NOTE_LIST)) {
+                GlobalDataCache.getInstance().initNotes();
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(GlobalValue.REFRESH_NOTE_LIST);
+        registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
 
     /**
      * NoteList相关事件
@@ -41,6 +78,15 @@ public class MainActivity extends AppCompatActivity
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             int fromPosition = viewHolder.getAdapterPosition(); // 得到拖动ViewHolder的position
             int toPosition = target.getAdapterPosition(); // 得到目标ViewHolder的position
+
+            // 交换数据库两条便签的排序值
+            List<Note> notes;
+            NoteDao dao = NoteDao.getInstance();
+            notes = dao.getAllNotes();
+            int id1 = notes.get(fromPosition).getId();
+            int id2 = notes.get(toPosition).getId();
+            dao.swapOrdinal(id1, id2);
+
             mAdapter.notifyItemMoved(fromPosition, toPosition);
             // 返回true表示执行拖动
             return true;
@@ -53,7 +99,8 @@ public class MainActivity extends AppCompatActivity
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
             mAdapter.notifyItemRemoved(position);
-//            mAdapter.getData().remove(position);
+            GlobalDataCache cache = GlobalDataCache.getInstance();
+            cache.deleteNote(cache.getNotes().get(position).getId());
             mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
         }
     };
@@ -71,10 +118,18 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ContentActivity.class);
-                startActivity(intent);
-                mAdapter.addData();
-                mAdapter.notifyDataSetChanged();
+            Date date = new Date();
+            long time = date.getTime();
+            // 创建新便签
+            GlobalDataCache cache = GlobalDataCache.getInstance();
+            cache.createNewNote("", time, time);
+
+            Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+            intent.putExtra("id", cache.getLastId());
+            intent.putExtra("content", "");
+            intent.putExtra("createTime", time);
+            intent.putExtra("updateTime", time);
+            startActivity(intent);
             }
         });
 
@@ -103,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        // 如果呼出了侧滑菜单则则关闭菜单
+        // 如果呼出了侧滑菜单则关闭菜单
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -117,7 +172,6 @@ public class MainActivity extends AppCompatActivity
      * 初始化菜单
      */
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
