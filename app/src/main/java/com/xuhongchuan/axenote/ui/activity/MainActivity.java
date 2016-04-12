@@ -120,16 +120,16 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
             Date date = new Date();
-            long time = date.getTime();
+            long currentTime = date.getTime();
             // 创建新便签
             GlobalDataCache cache = GlobalDataCache.getInstance();
-            cache.createNewNote("", time, time);
+            cache.createNewNote("", currentTime, currentTime);
 
             Intent intent = new Intent(MainActivity.this, ContentActivity.class);
-            intent.putExtra("id", cache.getLastId());
-            intent.putExtra("content", "");
-            intent.putExtra("createTime", time);
-            intent.putExtra("updateTime", time);
+            intent.putExtra(ContentActivity.EXTRA_ID, cache.getLastId());
+            intent.putExtra(ContentActivity.EXTRA_CONTENT, "");
+            intent.putExtra(ContentActivity.EXTRA_CREATE_TIME, currentTime);
+            intent.putExtra(ContentActivity.EXTRA_LAST_MODIFIED_TIME, currentTime);
             startActivity(intent);
             }
         });
