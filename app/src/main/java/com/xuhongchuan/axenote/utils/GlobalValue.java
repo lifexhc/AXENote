@@ -23,5 +23,9 @@ public class GlobalValue {
 
     // 广播action
     public static String REFRESH_NOTE_LIST = "refreshNoteList"; // 刷新便签列表
+    public static String CHANGE_THEME = "changeTheme";
+
+    // SharedPreferences的文件名
+    public static String SHARED_PRE_FILE_NAME = "axenote_data";
 
 }

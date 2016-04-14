@@ -28,7 +28,13 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:cardview-v7:23.0.1'
 
-    // 圆形头像，github:https://github.com/hdodenhof/CircleImageView
+    // 圆形头像
+    // https://github.com/hdodenhof/CircleImageView
     compile 'de.hdodenhof:circleimageview:2.0.0'
+
+    // 主题切换框架
+    // https://github.com/StylingAndroid/Prism
+    // https://blog.leancloud.cn/3612/
+    compile 'com.stylingandroid.prism:prism:1.0.1'
 
 }

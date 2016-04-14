@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.util;
+package com.xuhongchuan.axenote.utils;
 
 import java.io.UnsupportedEncodingException;
 
