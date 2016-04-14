@@ -1,4 +1,4 @@
-package com.xuhongchuan.axenote.impl;
+package com.xuhongchuan.axenote.infr;
 
 /**
  * 切换主题

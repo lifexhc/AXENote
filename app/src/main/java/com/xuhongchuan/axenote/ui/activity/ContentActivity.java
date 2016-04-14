@@ -65,7 +65,6 @@ public class ContentActivity extends BaseActivity {
      */
     @Override
     public void changeTheme() {
-        super.changeTheme();
         Resources res = getResources();
         EditText etContext = (EditText) findViewById(R.id.et_content);
         if (GlobalConfig.getInstance().isNightMode(ContentActivity.this)) {

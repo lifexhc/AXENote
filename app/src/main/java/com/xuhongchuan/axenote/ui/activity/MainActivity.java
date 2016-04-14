@@ -115,7 +115,6 @@ public class MainActivity extends BaseActivity
      */
     @Override
     public void changeTheme() {
-        super.changeTheme();
         Resources res = getResources();
         if (GlobalConfig.getInstance().isNightMode(MainActivity.this)) {
             mPrism.setColour(res.getColor(R.color.divider));

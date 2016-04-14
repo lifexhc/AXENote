@@ -57,7 +57,6 @@ public class AboutAuthorActivity extends BaseActivity {
      */
     @Override
     public void changeTheme() {
-        super.changeTheme();
         Resources res = getResources();
         RelativeLayout rlAboutAuthor = (RelativeLayout) findViewById(R.id.rl_about_author);
         if (GlobalConfig.getInstance().isNightMode(AboutAuthorActivity.this)) {
