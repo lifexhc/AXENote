@@ -33,17 +33,17 @@ public class VersionActivity extends BaseActivity {
             }
         });
 
-        mBtnCheckUpdate = (Button) findViewById(R.id.btn_check_update);
-
-        /**
-         * 检查更新
-         */
-        mBtnCheckUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        mBtnCheckUpdate = (Button) findViewById(R.id.btn_check_update);
+//
+//        /**
+//         * 检查更新
+//         */
+//        mBtnCheckUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
     }
 
     @Override
@@ -63,7 +63,6 @@ public class VersionActivity extends BaseActivity {
         mPrism = Prism.Builder.newInstance()
                 .background(getWindow())
                 .background(mToolbar)
-                .background(mBtnCheckUpdate)
                 .build();
         changeTheme();
     }

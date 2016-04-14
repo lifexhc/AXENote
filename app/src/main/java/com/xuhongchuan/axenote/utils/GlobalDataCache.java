@@ -79,13 +79,13 @@ public class GlobalDataCache {
      * 插入一条新便签
      * @param content
      * @param createTime
-     * @param updateTime
+     * @param lastModifiedTime
      */
-    public void createNewNote(String content, long createTime, long updateTime) {
+    public void createNewNote(String content, long createTime, long lastModifiedTime) {
         Note note = new Note();
         note.setContent(content);
         note.setCreateTime(createTime);
-        note.setLastModifiedTime(updateTime);
+        note.setLastModifiedTime(lastModifiedTime);
 
         createNewNote(note);
     }
@@ -110,19 +110,19 @@ public class GlobalDataCache {
      * 更新便签
      * @param id
      * @param content
-     * @param updateTime
+     * @param lastModifiedTime
      */
-    public void updateNote(int id, String content, long updateTime) {
+    public void updateNote(int id, String content, long lastModifiedTime) {
         Iterator it = notes.iterator();
         Note note = null;
         while (it.hasNext()) {
             note = (Note) it.next();
             if (note.getId() == id) {
                 note.setContent(content);
-                note.setLastModifiedTime(updateTime);
+                note.setLastModifiedTime(lastModifiedTime);
             }
         }
-        NoteDao.getInstance().updateNote(id, content, updateTime);
+        NoteDao.getInstance().updateNote(id, content, lastModifiedTime);
     }
 
     /**

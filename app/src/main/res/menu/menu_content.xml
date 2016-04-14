@@ -4,9 +4,9 @@
 
     <item android:title="insert_image"
         android:id="@+id/insert_image"
-        android:icon="@mipmap/ic_action_image_crop_original"
+        android:icon="@mipmap/ic_rich_insert_image"
         android:orderInCategory="200"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always" >
 
     </item>
 </menu>

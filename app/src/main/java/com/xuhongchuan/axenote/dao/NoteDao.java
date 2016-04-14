@@ -162,12 +162,12 @@ public class NoteDao {
         String select = "select max(" + GlobalValue.COLUMN_NAME_ORDINAL+ ") from " +
                 GlobalValue.TABLE_NAME_NOTE;
         Cursor cursor = mDb.rawQuery(select, null);
-        int maxOrdinal = -1;
+        int maxOrd = -1;
         if (cursor.moveToFirst()) {
-            maxOrdinal = cursor.getInt(0);
+            maxOrd = cursor.getInt(0);
         }
         cursor.close();
-        return maxOrdinal;
+        return maxOrd;
     }
 
     /**

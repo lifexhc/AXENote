@@ -99,6 +99,7 @@ public class MainActivity extends BaseActivity
             dao.swapOrdinal(id1, id2);
 
             mAdapter.notifyItemMoved(fromPosition, toPosition);
+            GlobalDataCache.getInstance().initNotes(); // 更新Note列表
             // 返回true表示执行拖动
             return true;
         }
@@ -167,7 +168,7 @@ public class MainActivity extends BaseActivity
         mNavigationView.setNavigationItemSelectedListener(this);
 
         // 头像
-        mHeaderImage = (CircleImageView) mNavigationView.findViewById(R.id.header_image);
+//        mHeaderImage = (CircleImageView) mNavigationView.findViewById(R.id.header_image);
 
         // 和侧滑菜单绑定
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -249,9 +250,9 @@ public class MainActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.cached) { // 同步事件
-
-        }
+//        if (id == R.id.cached) { // 同步事件
+//
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -264,9 +265,7 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_last_sync) { // 上次同步
-
-        } else if (id == R.id.nav_theme) { // 主题
+        if (id == R.id.nav_theme) { // 主题
             Resources res = getResources();
             final String[] themes = {res.getString(R.string.day), res.getString(R.string.night)};
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -294,9 +293,6 @@ public class MainActivity extends BaseActivity
                 }
             });
             dialog.show();
-        } else if (id == R.id.nav_user_info) { // 用户信息
-            Intent intent = new Intent(this, UserInfoActivity.class);
-            startActivity(intent);
         } else if (id == R.id.nav_version) { // 版本号
             Intent intent = new Intent(this, VersionActivity.class);
             startActivity(intent);
@@ -330,4 +326,5 @@ public class MainActivity extends BaseActivity
         mAdapter.filter(newText);
         return false;
     }
+
 }

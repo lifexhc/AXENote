@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
-        holder.mTextView.setText(GlobalDataCache.getInstance().getNotes().get(position).getContent());
+        String content = GlobalDataCache.getInstance().getNotes().get(position).getContent();
+        holder.mTextView.setText(Html.fromHtml(content));
         Resources res = mContext.getResources();
         if (GlobalConfig.getInstance().isNightMode(mContext)) {
             holder.itemView.setBackgroundColor(res.getColor(R.color.bg_night));
@@ -87,15 +89,16 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
         cache.initNotes();
         List<Note> notes = cache.getNotes();
 
-        PinyinUtil pinyinUtil = new PinyinUtil(); // 拼音模糊查询工具类
+        PinyinUtil contrastPinyin = new PinyinUtil(); // 拼音模糊查询工具类
         List<Note> data = new ArrayList<Note>();
 
         for (Note note : notes) {
             int index = 0;
-            if (pinyinUtil.contains(query)) {
-                index = note.getContent().indexOf(query);
+            String content = Html.fromHtml(note.getContent()).toString();
+            if (contrastPinyin.contains(query)) {
+                index = content.indexOf(query);
             } else {
-                String pinyin = pinyinUtil.getSpells(note.getContent());
+                String pinyin = contrastPinyin.getSpells(content);
                 index = pinyin.indexOf(query);
             }
             if (index != -1) {

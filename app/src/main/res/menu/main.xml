@@ -10,11 +10,11 @@
 
     </item>
 
-    <item android:title="cached"
-        android:id="@+id/cached"
-        android:icon="@mipmap/ic_action_action_cached"
-        android:orderInCategory="200"
-        app:showAsAction="ifRoom">
+    <!--<item android:title="cached"-->
+        <!--android:id="@+id/cached"-->
+        <!--android:icon="@mipmap/ic_action_action_cached"-->
+        <!--android:orderInCategory="200"-->
+        <!--app:showAsAction="ifRoom">-->
 
-    </item>
+    <!--</item>-->
 </menu>
