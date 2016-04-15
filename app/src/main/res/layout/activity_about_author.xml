@@ -1,92 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_about_author"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-    <include android:id="@+id/ly_toolbar" layout="@layout/toolbar" />
+    <include
+        android:id="@+id/ly_toolbar"
+        layout="@layout/toolbar" />
 
     <!-- 圆形头像 -->
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ci_author_header"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginTop="10dp"
-        app:civ_border_width="1dp"
-        app:civ_border_color="#FFFFFF"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/ly_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:src="@mipmap/xuhongchuan"
-        />
+        app:civ_border_color="#FFFFFF"
+        app:civ_border_width="1dp" />
 
     <!-- 作者 -->
     <TextView
         android:id="@+id/tv_author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/ci_author_header"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:text="@string/author_name"
-        />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <!-- 格言/座右铭 -->
     <TextView
         android:id="@+id/tv_motto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/tv_author_name"
-        android:text="@string/motto"
-        />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/motto" />
 
     <!-- 简书 -->
     <TextView
         android:id="@+id/tv_jianshu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/tv_motto"
         android:layout_alignLeft="@+id/tv_mail"
-        android:text="@string/jianshu"
-    />
+        android:layout_below="@id/tv_motto"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/jianshu" />
 
     <!-- 微博 -->
     <TextView
         android:id="@+id/tv_weibo"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_jianshu"
         android:layout_alignLeft="@id/tv_mail"
-        android:text="@string/weibo"
-    />
+        android:layout_below="@id/tv_jianshu"
+        android:layout_marginTop="10dp"
+        android:text="@string/weibo" />
 
     <!-- 微信 -->
     <TextView
         android:id="@+id/tv_weixin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/tv_weibo"
         android:layout_alignLeft="@id/tv_mail"
-        android:text="@string/weixin"
-    />
+        android:layout_below="@id/tv_weibo"
+        android:layout_marginTop="10dp"
+        android:text="@string/weixin" />
 
     <!-- 邮箱 -->
     <TextView
         android:id="@+id/tv_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/tv_weixin"
-        android:text="@string/mail"
-    />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/mail" />
 
 </RelativeLayout>

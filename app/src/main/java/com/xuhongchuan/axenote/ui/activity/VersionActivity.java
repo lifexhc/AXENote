@@ -32,18 +32,6 @@ public class VersionActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-
-//        mBtnCheckUpdate = (Button) findViewById(R.id.btn_check_update);
-//
-//        /**
-//         * 检查更新
-//         */
-//        mBtnCheckUpdate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
     }
 
     @Override

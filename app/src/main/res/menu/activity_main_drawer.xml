@@ -2,18 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/settings">
         <menu>
-        <group android:checkableBehavior="single">
-            <item android:id="@+id/nav_theme" android:icon="@mipmap/ic_image_color_lens"
-                android:title="@string/theme" />
-        </group>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_theme"
+                    android:icon="@mipmap/ic_image_color_lens"
+                    android:title="@string/theme" />
+            </group>
         </menu>
     </item>
 
     <item android:title="@string/about">
         <menu>
-            <item android:id="@+id/nav_version" android:icon="@mipmap/ic_image_details"
+            <item
+                android:id="@+id/nav_version"
+                android:icon="@mipmap/ic_image_details"
                 android:title="@string/version" />
-            <item android:id="@+id/nav_about_author" android:icon="@mipmap/ic_action_editor_insert_emoticon"
+            <item
+                android:id="@+id/nav_about_author"
+                android:icon="@mipmap/ic_action_editor_insert_emoticon"
                 android:title="@string/about_author" />
         </menu>
     </item>

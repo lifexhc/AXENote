@@ -32,6 +32,7 @@ import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.Date;
@@ -130,7 +131,7 @@ public class MainActivity extends BaseActivity
      * 初始化元素
      */
     private void initElement() {
-        mToolbar= (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         // 悬浮按钮
@@ -138,18 +139,18 @@ public class MainActivity extends BaseActivity
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Date date = new Date();
-            long currentTime = date.getTime();
-            // 创建新便签
-            GlobalDataCache cache = GlobalDataCache.getInstance();
-            cache.createNewNote("", currentTime, currentTime);
+                Date date = new Date();
+                long currentTime = date.getTime();
+                // 创建新便签
+                GlobalDataCache cache = GlobalDataCache.getInstance();
+                cache.createNewNote("", currentTime, currentTime);
 
-            Intent intent = new Intent(MainActivity.this, ContentActivity.class);
-            intent.putExtra(ContentActivity.EXTRA_ID, cache.getLastId());
-            intent.putExtra(ContentActivity.EXTRA_CONTENT, "");
-            intent.putExtra(ContentActivity.EXTRA_CREATE_TIME, currentTime);
-            intent.putExtra(ContentActivity.EXTRA_LAST_MODIFIED_TIME, currentTime);
-            startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+                intent.putExtra(ContentActivity.EXTRA_ID, cache.getLastId());
+                intent.putExtra(ContentActivity.EXTRA_CONTENT, "");
+                intent.putExtra(ContentActivity.EXTRA_CREATE_TIME, currentTime);
+                intent.putExtra(ContentActivity.EXTRA_LAST_MODIFIED_TIME, currentTime);
+                startActivity(intent);
             }
         });
 
@@ -308,6 +309,7 @@ public class MainActivity extends BaseActivity
 
     /**
      * SearchView 提交查询事件
+     *
      * @param query
      * @return
      */
@@ -318,6 +320,7 @@ public class MainActivity extends BaseActivity
 
     /**
      * SearchView 关键字变化事件
+     *
      * @param newText
      * @return
      */

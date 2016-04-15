@@ -16,6 +16,7 @@ import com.xuhongchuan.axenote.ui.activity.ContentActivity;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.PinyinUtil;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +82,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     /**
      * 查询
+     *
      * @param query
      */
     public void filter(String query) {

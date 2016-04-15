@@ -40,6 +40,7 @@ public class GlobalDataCache {
 
     /**
      * 获取指定id的便签
+     *
      * @param id
      * @return
      */
@@ -54,6 +55,7 @@ public class GlobalDataCache {
 
     /**
      * 获取指定排序值的便签
+     *
      * @param ordinal
      * @return
      */
@@ -68,6 +70,7 @@ public class GlobalDataCache {
 
     /**
      * 插入一条新便签
+     *
      * @param note
      */
     public void createNewNote(Note note) {
@@ -77,6 +80,7 @@ public class GlobalDataCache {
 
     /**
      * 插入一条新便签
+     *
      * @param content
      * @param createTime
      * @param lastModifiedTime
@@ -92,6 +96,7 @@ public class GlobalDataCache {
 
     /**
      * 删除指定id的便签
+     *
      * @param id
      */
     public void deleteNote(int id) {
@@ -108,6 +113,7 @@ public class GlobalDataCache {
 
     /**
      * 更新便签
+     *
      * @param id
      * @param content
      * @param lastModifiedTime
@@ -127,6 +133,7 @@ public class GlobalDataCache {
 
     /**
      * 获取最后插入便签的id
+     *
      * @return
      */
     public int getLastId() {

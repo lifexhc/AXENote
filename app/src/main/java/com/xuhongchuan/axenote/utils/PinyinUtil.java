@@ -7,24 +7,24 @@ import java.io.UnsupportedEncodingException;
  * Created by 网络
  */
 public class PinyinUtil {
-    static final int GB_SP_DIFF=160;
+    static final int GB_SP_DIFF = 160;
 
     //存放国标一级汉字不同读音的起始区位码
-    static final int[] secPosValueList = { 1601, 1637, 1833, 2078, 2274, 2302, 2433, 2594, 2787, 3106, 3212,
-            3472, 3635, 3722, 3730, 3858, 4027, 4086, 4390, 4558, 4684, 4925, 5249, 5600 };
+    static final int[] secPosValueList = {1601, 1637, 1833, 2078, 2274, 2302, 2433, 2594, 2787, 3106, 3212,
+            3472, 3635, 3722, 3730, 3858, 4027, 4086, 4390, 4558, 4684, 4925, 5249, 5600};
 
     //存放国标一级汉字不同读音的起始区位码对应读音
-    static final char[] firstLetter = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n',
-            'o', 'p', 'q', 'r', 's', 't', 'w', 'x', 'y', 'z' };
+    static final char[] firstLetter = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't', 'w', 'x', 'y', 'z'};
 
     /**
      * 判断一个字符串是否存在汉字
      */
     public static boolean contains(String characters) {
-        for(int i=0;i<characters.length();i++) {
+        for (int i = 0; i < characters.length(); i++) {
             char ch = characters.charAt(i);
             //判断是否为汉字，如果左移7为0就不是汉字，否则是汉字
-            if((ch>>7)!=0){
+            if ((ch >> 7) != 0) {
                 return true;
             }
         }
@@ -37,10 +37,10 @@ public class PinyinUtil {
      */
     public static String getSpells(String characters) {
         StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < characters.length();i++) {
+        for (int i = 0; i < characters.length(); i++) {
             char ch = characters.charAt(i);
             //判断是否为汉字，如果左移7为0就不是汉字，否则是汉字
-            if ((ch >> 7) == 0){
+            if ((ch >> 7) == 0) {
                 buffer.append(ch);
             } else {
                 // TODO:插入图片时文本如果有65532这个字符导致搜索就崩溃

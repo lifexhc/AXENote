@@ -16,6 +16,7 @@ public class BitmapUtils {
 
     /**
      * 压缩图片
+     *
      * @param filePath
      * @param activity
      * @param scale
@@ -30,6 +31,7 @@ public class BitmapUtils {
 
     /**
      * 采样率压缩
+     *
      * @param filePath
      * @param activity
      * @param scale
@@ -50,7 +52,7 @@ public class BitmapUtils {
         // 如果原始图片的宽大于设备宽度的 * scale
         // 计算一个合适的压缩率
         if (realWidth > displayWidth) {
-            opts.inSampleSize = realWidth/displayWidth;
+            opts.inSampleSize = realWidth / displayWidth;
         }
 
         opts.inJustDecodeBounds = false;
@@ -60,6 +62,7 @@ public class BitmapUtils {
 
     /**
      * 像素压缩
+     *
      * @param bitmap
      * @param activity
      * @param scale
@@ -72,12 +75,12 @@ public class BitmapUtils {
 
         // 原始图片的宽高
         int realWidth = bitmap.getWidth();
-        int realHeight= bitmap.getHeight();
+        int realHeight = bitmap.getHeight();
         // 压缩比例
         float pixelScale = 1.0F;
 
         if (realWidth > displayWidth) {
-            pixelScale = (float) displayWidth/realWidth;
+            pixelScale = (float) displayWidth / realWidth;
         }
 
         // 创建操作图片用的matrix对象 Matrix
@@ -92,6 +95,7 @@ public class BitmapUtils {
 
     /**
      * 质量压缩
+     *
      * @param bitmap
      * @return
      */

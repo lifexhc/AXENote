@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_header"
-    android:layout_width="match_parent" android:layout_height="@dimen/nav_header_height"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
+    android:gravity="bottom"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark" android:orientation="vertical"
-    android:gravity="bottom">
-
-    <!--&lt;!&ndash; 圆形头像 &ndash;&gt;-->
-    <!--<de.hdodenhof.circleimageview.CircleImageView-->
-        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-        <!--android:id="@+id/header_image"-->
-        <!--android:layout_width="64dp"-->
-        <!--android:layout_height="64dp"-->
-        <!--android:src="@mipmap/logo"-->
-        <!--app:civ_border_width="1dp"-->
-        <!--app:civ_border_color="#FFFFFF"/>-->
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <!-- 用户名 -->
     <TextView
@@ -30,9 +22,9 @@
 
     <!-- 励志语/座右铭 -->
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_description"
-        android:id="@+id/textView" />
+        android:text="@string/app_description" />
 
 </LinearLayout>

@@ -13,6 +13,7 @@ public class AXEDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * 获取单例对象
+     *
      * @return
      */
     public static AXEDatabaseHelper getInstatce() {

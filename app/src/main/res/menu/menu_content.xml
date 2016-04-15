@@ -1,12 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
 
-    <item android:title="insert_image"
+    <item
         android:id="@+id/insert_image"
         android:icon="@mipmap/ic_rich_insert_image"
         android:orderInCategory="200"
-        app:showAsAction="always" >
+        android:title="insert_image"
+        app:showAsAction="always">
 
     </item>
 </menu>

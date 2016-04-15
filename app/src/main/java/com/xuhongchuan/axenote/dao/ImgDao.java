@@ -27,6 +27,7 @@ public class ImgDao {
 
     /**
      * 获取单例对象
+     *
      * @return
      */
     public static ImgDao getInstance() {
@@ -42,6 +43,7 @@ public class ImgDao {
 
     /**
      * 保存一张图片
+     *
      * @param bitmap
      */
     public void insertImg(Bitmap bitmap) {
@@ -49,7 +51,7 @@ public class ImgDao {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
 
-        ContentValues cv = new  ContentValues();
+        ContentValues cv = new ContentValues();
         cv.put(GlobalValue.COLUMN_NAME_IMG_VALUES, byteArray);
         mDB.insert(GlobalValue.TABLE_NAME_IMG, null, cv);
     }
@@ -76,12 +78,13 @@ public class ImgDao {
 
     /**
      * 获取最后插入图片的id
+     *
      * @return
      */
     public int getLastId() {
         Cursor cursor = mDB.rawQuery("select last_insert_rowid() from" + GlobalValue.TABLE_NAME_IMG, null);
         int rowid = -1;
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             rowid = cursor.getInt(0);
         }
         cursor.close();

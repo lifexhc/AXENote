@@ -19,7 +19,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IChangeT
     /**
      * 广播
      */
-    BroadcastReceiver mReceiver = new BroadcastReceiver(){
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(GlobalValue.CHANGE_THEME)) {

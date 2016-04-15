@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_fragment_register"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    >
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <LinearLayout
@@ -16,10 +15,10 @@
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
-            >
-            <TableRow
-                android:layout_marginTop="10dp">
+            android:layout_marginTop="130dp">
+
+            <TableRow android:layout_marginTop="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -30,11 +29,11 @@
                     android:id="@+id/et_user_name"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/accent"/>
+                    android:textColor="@color/accent" />
             </TableRow>
 
-            <TableRow
-                android:layout_marginTop="10dp">
+            <TableRow android:layout_marginTop="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -45,38 +44,40 @@
                     android:id="@+id/rt_password"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/accent"/>
+                    android:textColor="@color/accent" />
             </TableRow>
 
-            <TableRow
-                android:layout_marginTop="10dp">
+            <TableRow android:layout_marginTop="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/confirm_password"
                     android:textColor="@color/primary" />
+
                 <EditText
                     android:id="@+id/et_confitm_password"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/accent"/>
+                    android:textColor="@color/accent" />
             </TableRow>
 
             <TableRow
                 android:layout_marginTop="20dp"
-                android:translationZ="5dp"
-                android:elevation="3dp">
+                android:elevation="3dp"
+                android:translationZ="5dp">
+
                 <Button
                     android:id="@+id/btn_register"
-                    android:layout_span="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/register"
-                    android:textSize="18sp"
-                    android:textColor="#fff"
+                    android:layout_span="2"
                     android:background="@color/primary"
-                    android:translationZ="5dp"
-                    android:elevation="3dp"/>
+                    android:elevation="3dp"
+                    android:text="@string/register"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:translationZ="5dp" />
             </TableRow>
         </TableLayout>
 

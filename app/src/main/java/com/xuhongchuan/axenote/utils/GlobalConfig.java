@@ -2,6 +2,7 @@ package com.xuhongchuan.axenote.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 /**
  * 全局配置
  * Created by xuhongchuan on 15/12/16.

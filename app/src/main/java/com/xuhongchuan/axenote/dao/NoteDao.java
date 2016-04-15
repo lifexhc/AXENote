@@ -25,6 +25,7 @@ public class NoteDao {
 
     /**
      * 获取单例对象
+     *
      * @return
      */
     public static NoteDao getInstance() {
@@ -40,6 +41,7 @@ public class NoteDao {
 
     /**
      * 插入一条新便签
+     *
      * @param content
      * @param createTime
      * @param lastModifiedTime
@@ -56,6 +58,7 @@ public class NoteDao {
 
     /**
      * 删除指定id的便签
+     *
      * @param id
      */
     public void deleteNote(int id) {
@@ -64,6 +67,7 @@ public class NoteDao {
 
     /**
      * 修改数据
+     *
      * @param id
      * @param content
      * @param lastModifiedTime
@@ -77,6 +81,7 @@ public class NoteDao {
 
     /**
      * 查询便签数量
+     *
      * @return
      */
     public int getNoteCount() {
@@ -92,6 +97,7 @@ public class NoteDao {
 
     /**
      * 查询指定id的便签
+     *
      * @param id
      */
     public Note getNote(int id) {
@@ -118,6 +124,7 @@ public class NoteDao {
 
     /**
      * 查询所有便签
+     *
      * @return
      */
     public ArrayList<Note> getAllNotes() {
@@ -142,12 +149,13 @@ public class NoteDao {
 
     /**
      * 获取最后插入便签的id
+     *
      * @return
      */
     public int getLastId() {
         Cursor cursor = mDb.rawQuery("select last_insert_rowid() from" + GlobalValue.TABLE_NAME_NOTE, null);
         int rowid = -1;
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             rowid = cursor.getInt(0);
         }
         cursor.close();
@@ -156,10 +164,11 @@ public class NoteDao {
 
     /**
      * 获取最大排序值
+     *
      * @return
      */
     public int getMaxOrdinal() {
-        String select = "select max(" + GlobalValue.COLUMN_NAME_ORDINAL+ ") from " +
+        String select = "select max(" + GlobalValue.COLUMN_NAME_ORDINAL + ") from " +
                 GlobalValue.TABLE_NAME_NOTE;
         Cursor cursor = mDb.rawQuery(select, null);
         int maxOrd = -1;
@@ -172,6 +181,7 @@ public class NoteDao {
 
     /**
      * 交换两条便签的排序值
+     *
      * @param id1
      * @param id2
      */

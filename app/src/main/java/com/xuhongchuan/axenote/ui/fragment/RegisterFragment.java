@@ -22,7 +22,7 @@ public class RegisterFragment extends Fragment implements IChangeTheme {
     private Button mBtnRegister;
     private Prism mPrism;
     private RelativeLayout mRL;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

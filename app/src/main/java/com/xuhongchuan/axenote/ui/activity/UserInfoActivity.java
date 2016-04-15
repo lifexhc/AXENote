@@ -24,7 +24,7 @@ import com.xuhongchuan.axenote.utils.GlobalValue;
 /**
  * Created by xuhongchuan on 15/12/2.
  */
-public class UserInfoActivity extends FragmentActivity implements IChangeTheme{
+public class UserInfoActivity extends FragmentActivity implements IChangeTheme {
 
     private Toolbar mToolbar;
     private UserInfoFragmentPagerAdapter mPagerAdapter;
@@ -36,7 +36,7 @@ public class UserInfoActivity extends FragmentActivity implements IChangeTheme{
     /**
      * 广播
      */
-    BroadcastReceiver mReceiver = new BroadcastReceiver(){
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(GlobalValue.CHANGE_THEME)) {
