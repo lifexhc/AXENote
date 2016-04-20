@@ -17,8 +17,6 @@ import com.xuhongchuan.axenote.utils.GlobalConfig;
 public class VersionActivity extends BaseActivity {
 
     private Toolbar mToolbar;
-    private Button mBtnCheckUpdate; // 检查更新
-
     private Prism mPrism; // 主题切换
 
     private void initElement() {
@@ -67,7 +65,20 @@ public class VersionActivity extends BaseActivity {
             llVersion.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {
             mPrism.setColour(res.getColor(R.color.primary));
-            llVersion.setBackgroundColor(res.getColor(R.color.icons));
+            llVersion.setBackgroundColor(res.getColor(R.color.white));
+        }
+
+        changeToolbarIconTheme();
+    }
+
+    /**
+     * 修改toolbar上图标的颜色
+     */
+    private void changeToolbarIconTheme() {
+        if (GlobalConfig.getInstance().isNightMode(this)) {
+            mToolbar.setNavigationIcon(R.drawable.ic_back_arrow_night);
+        } else {
+            mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
         }
     }
 }

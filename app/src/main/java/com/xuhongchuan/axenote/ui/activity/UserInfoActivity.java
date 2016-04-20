@@ -117,5 +117,18 @@ public class UserInfoActivity extends FragmentActivity implements IChangeTheme {
         } else {
             mPrism.setColour(res.getColor(R.color.primary));
         }
+
+        changeToolbarIconTheme();
+    }
+
+    /**
+     * 修改toolbar上图标的颜色
+     */
+    private void changeToolbarIconTheme() {
+        if (GlobalConfig.getInstance().isNightMode(this)) {
+            mToolbar.setNavigationIcon(R.drawable.ic_back_arrow_night);
+        } else {
+            mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+        }
     }
 }

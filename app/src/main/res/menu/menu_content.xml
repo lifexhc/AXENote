@@ -4,10 +4,10 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/insert_image"
-        android:icon="@mipmap/ic_rich_insert_image"
+        android:id="@+id/insert_img"
+        android:icon="@drawable/ic_insert_img"
         android:orderInCategory="200"
-        android:title="insert_image"
+        android:title="insert_img"
         app:showAsAction="always">
 
     </item>

@@ -64,7 +64,20 @@ public class AboutAuthorActivity extends BaseActivity {
             rlAboutAuthor.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {
             mPrism.setColour(res.getColor(R.color.primary));
-            rlAboutAuthor.setBackgroundColor(res.getColor(R.color.icons));
+            rlAboutAuthor.setBackgroundColor(res.getColor(R.color.white));
+        }
+
+        changeToolbarIconTheme();
+    }
+
+    /**
+     * 修改toolbar上图标的颜色
+     */
+    private void changeToolbarIconTheme() {
+        if (GlobalConfig.getInstance().isNightMode(this)) {
+            mToolbar.setNavigationIcon(R.drawable.ic_back_arrow_night);
+        } else {
+            mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
         }
     }
 }

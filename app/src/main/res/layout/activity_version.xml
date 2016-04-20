@@ -17,7 +17,7 @@
         android:layout_height="64dp"
         android:layout_below="@id/ly_toolbar"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/logo"
+        android:src="@mipmap/ic_launcher"
         app:civ_border_color="#FFFFFF"
         app:civ_border_width="1dp" />
 
@@ -29,13 +29,5 @@
         android:layout_below="@id/ci_logo"
         android:layout_marginTop="10dp"
         android:text="@string/version_number" />
-
-    <!--<Button-->
-    <!--android:id="@+id/btn_check_update"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@id/tv_version"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:text="@string/check_update"/>-->
 
 </LinearLayout>

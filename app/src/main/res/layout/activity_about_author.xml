@@ -16,7 +16,7 @@
         android:layout_below="@id/ly_toolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/xuhongchuan"
+        android:src="@drawable/xuhongchuan"
         app:civ_border_color="#FFFFFF"
         app:civ_border_width="1dp" />
 

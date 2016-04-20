@@ -12,6 +12,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.stylingandroid.prism.Prism;
@@ -33,8 +35,6 @@ import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import java.util.Date;
 import java.util.List;
 
@@ -44,10 +44,11 @@ public class MainActivity extends BaseActivity
     private Toolbar mToolbar;
     private FloatingActionButton mFAB;
     private RecyclerView mRecycleView;
+    private MenuItem mSync;
+    private SearchView mSearchView;
     private NoteListAdapter mAdapter;
-
-    private CircleImageView mHeaderImage;
     private NavigationView mNavigationView;
+    private ImageView mSearchViewIcon; // SearchView的图标，用于切换主题时修改图标
 
     private Prism mPrism; // 主题切换
 
@@ -123,15 +124,16 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initElement();
+        initView();
         initTheme();
     }
 
     /**
      * 初始化元素
      */
-    private void initElement() {
+    private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
 
         // 悬浮按钮
@@ -167,9 +169,7 @@ public class MainActivity extends BaseActivity
         // 侧滑菜单内容
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
-
-        // 头像
-//        mHeaderImage = (CircleImageView) mNavigationView.findViewById(R.id.header_image);
+        mNavigationView.setItemIconTintList(null);
 
         // 和侧滑菜单绑定
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -183,8 +183,7 @@ public class MainActivity extends BaseActivity
      * 初始化主题
      */
     public void initTheme() {
-        NavigationView nav = (NavigationView) findViewById(R.id.nav_view);
-        LinearLayout llHeader = (LinearLayout) nav.findViewById(R.id.ll_header);
+        LinearLayout llHeader = (LinearLayout) mNavigationView.findViewById(R.id.ll_header);
 
         mPrism = Prism.Builder.newInstance()
                 .background(getWindow())
@@ -201,23 +200,48 @@ public class MainActivity extends BaseActivity
     @Override
     public void changeTheme() {
         Resources res = getResources();
-        if (GlobalConfig.getInstance().isNightMode(MainActivity.this)) {
+        boolean isNightMode = GlobalConfig.getInstance().isNightMode(MainActivity.this);
+        if (isNightMode) {
             mPrism.setColour(res.getColor(R.color.divider));
         } else {
             mPrism.setColour(res.getColor(R.color.primary));
         }
         CoordinatorLayout dl = (CoordinatorLayout) findViewById(R.id.app_bar_main);
-        NavigationView nav = (NavigationView) findViewById(R.id.nav_view);
-        if (GlobalConfig.getInstance().isNightMode(MainActivity.this)) {
+        if (isNightMode) {
             dl.setBackgroundColor(res.getColor(R.color.divider));
-            nav.setBackgroundColor(res.getColor(R.color.bg_night));
-        } else {
-            dl.setBackgroundColor(res.getColor(R.color.icons));
-            nav.setBackgroundColor(res.getColor(R.color.icons));
-        }
+            mNavigationView.setBackgroundColor(res.getColor(R.color.bg_night));
+            mNavigationView.getMenu().clear();
+            mNavigationView.inflateMenu(R.menu.activity_main_drawer_night);
 
+            mFAB.setImageDrawable(getResources().getDrawable(R.drawable.ic_plus_night));
+        } else {
+            dl.setBackgroundColor(res.getColor(R.color.white));
+            mNavigationView.setBackgroundColor(res.getColor(R.color.white));
+            mNavigationView.getMenu().clear();
+            mNavigationView.inflateMenu(R.menu.activity_main_drawer);
+
+            mFAB.setImageDrawable(getResources().getDrawable(R.drawable.ic_plus));
+        }
         mAdapter.notifyDataSetChanged();
 
+        changeToolbarIconTheme();
+    }
+
+    /**
+     * 修改toolbar上图标的颜色
+     */
+    private void changeToolbarIconTheme() {
+        if (mSync != null && mSearchView != null) {
+            if (GlobalConfig.getInstance().isNightMode(this)) {
+                mSync.setIcon(R.drawable.ic_sync_night);
+                mSearchViewIcon.setImageResource(R.drawable.ic_search_night);
+                mToolbar.setNavigationIcon(R.drawable.ic_menu_night);
+            } else {
+                mSync.setIcon(R.drawable.ic_sync);
+                mSearchViewIcon.setImageResource(R.drawable.ic_search);
+                mToolbar.setNavigationIcon(R.drawable.ic_menu);
+            }
+        }
     }
 
     @Override
@@ -237,10 +261,21 @@ public class MainActivity extends BaseActivity
      */
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+
         // 初始化SearchView
-        MenuItem searchItem = menu.findItem(R.id.search);
-        SearchView sv = (SearchView) searchItem.getActionView();
-        sv.setOnQueryTextListener(this);
+        MenuItem searchViewMenuItem = menu.findItem(R.id.search);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchViewMenuItem);
+        int searchImgId = android.support.v7.appcompat.R.id.search_button;
+        mSearchViewIcon = (ImageView) mSearchView.findViewById(searchImgId);
+        mSearchViewIcon.setImageResource(R.drawable.ic_search);
+        mSearchView.setOnQueryTextListener(this);
+
+        // 初始化同步button
+        mSync = menu.findItem(R.id.sync);
+
+        // 初始化icon主题
+        changeToolbarIconTheme();
+
         return true;
     }
 
@@ -249,12 +284,6 @@ public class MainActivity extends BaseActivity
      * toolbar菜单点击事件
      */
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-//        if (id == R.id.cached) { // 同步事件
-//
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -269,9 +298,15 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_theme) { // 主题
             Resources res = getResources();
             final String[] themes = {res.getString(R.string.day), res.getString(R.string.night)};
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(res.getString(R.string.choice_theme));
             final GlobalConfig config = GlobalConfig.getInstance();
+            final AlertDialog.Builder builder;
+            // 根据当前主题设置对话框主题
+            if (config.isNightMode(MainActivity.this)) {
+                builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+            } else {
+                builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+            }
+            builder.setTitle(res.getString(R.string.choice_theme));
             int checkedItem = config.isNightMode(MainActivity.this) ? 1 : 0; // 默认选中项
             builder.setSingleChoiceItems(themes, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
@@ -284,9 +319,10 @@ public class MainActivity extends BaseActivity
                     // 发送切换主题广播
                     Intent intent = new Intent(GlobalValue.CHANGE_THEME);
                     sendBroadcast(intent);
+                    dialog.dismiss();
                 }
             });
-            AlertDialog dialog = builder.create();
+            final AlertDialog dialog = builder.create();
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {

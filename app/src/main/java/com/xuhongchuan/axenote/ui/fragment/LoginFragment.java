@@ -60,7 +60,7 @@ public class LoginFragment extends Fragment implements IChangeTheme {
             mRL.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {
             mPrism.setColour(res.getColor(R.color.primary));
-            mRL.setBackgroundColor(res.getColor(R.color.icons));
+            mRL.setBackgroundColor(res.getColor(R.color.white));
         }
     }
 }

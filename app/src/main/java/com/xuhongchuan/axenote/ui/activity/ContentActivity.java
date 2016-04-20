@@ -52,17 +52,18 @@ public class ContentActivity extends BaseActivity {
     public static final int READ_EXTERNAL_STORAGE_REQ_CODE = 2;
     private final int RQ_GET_IMAGE_FROM_SD_CARD = 1;
 
-    private String mFilePath; // 图片路径，从SD卡获取图片时使用
-
     private Toolbar mToolbar;
     private EditText mEtContent;
+    MenuItem mInsertImg;
+
+    private Prism mPrism; // 主题切换
 
     private int mId; // 便签ID
     private String mContent; // 便签内容
     private long mCreateTime; // 便签创建时间
     private long mLastModifiedTime; // 便签最后编辑时间
 
-    private Prism mPrism; // 主题切换
+    private String mFilePath; // 图片路径，从SD卡获取图片时使用
 
     /**
      * 获取传递进来的便签信息
@@ -81,7 +82,7 @@ public class ContentActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
-        initElement();
+        initView();
         initTheme();
         initContent();
     }
@@ -89,7 +90,7 @@ public class ContentActivity extends BaseActivity {
     /**
      * 初始化元素
      */
-    private void initElement() {
+    private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -168,11 +169,34 @@ public class ContentActivity extends BaseActivity {
             mPrism.setColour(res.getColor(R.color.primary));
             etContext.setBackgroundColor(res.getColor(R.color.bg_note));
         }
+
+        changeToolbarIconTheme();
+    }
+
+    /**
+     * 修改toolbar上图标的颜色
+     */
+    private void changeToolbarIconTheme() {
+        if (mInsertImg != null) {
+            if (GlobalConfig.getInstance().isNightMode(this)) {
+                mInsertImg.setIcon(R.drawable.ic_insert_img_night);
+                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow_night);
+            } else {
+                mInsertImg.setIcon(R.drawable.ic_insert_img);
+                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+            }
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_content, menu);
+
+        // 初始化插入图片button
+        mInsertImg = menu.findItem(R.id.insert_img);
+
+        // 初始化icon主题
+        changeToolbarIconTheme();
         return true;
     }
 
@@ -180,7 +204,7 @@ public class ContentActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.insert_image) { // 插入图片
+        if (id == R.id.insert_img) { // 插入图片
             requestPermission();
         }
         return super.onOptionsItemSelected(item);
