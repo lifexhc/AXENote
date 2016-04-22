@@ -25,6 +25,8 @@
 
         <activity android:name=".ui.activity.ContentActivity"></activity>
 
+        <activity android:name=".ui.activity.LoginActivity"></activity>
+
         <activity android:name=".ui.activity.UserInfoActivity"></activity>
 
         <activity android:name=".ui.activity.AboutAuthorActivity"></activity>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_fragment_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,25 +10,27 @@
         android:id="@+id/ll_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp">
+            android:layout_marginTop="120dp">
 
             <TableRow android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/user_name_space"
+                    android:text="@string/mobile_phone_number"
                     android:textColor="@color/primary" />
 
                 <EditText
                     android:id="@+id/et_user_name"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
+                    android:layout_span="2"
                     android:textColor="@color/accent" />
             </TableRow>
 
@@ -40,9 +43,10 @@
                     android:textColor="@color/primary" />
 
                 <EditText
-                    android:id="@+id/rt_password"
+                    android:id="@+id/et_password"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
+                    android:layout_span="2"
                     android:textColor="@color/accent" />
             </TableRow>
 
@@ -51,14 +55,25 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/confirm_password"
+                    android:text="@string/sms_code"
                     android:textColor="@color/primary" />
 
                 <EditText
-                    android:id="@+id/et_confitm_password"
-                    android:layout_width="220dp"
+                    android:id="@+id/et_sms_code"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/accent" />
+
+                <Button
+                    android:id="@+id/btn_get_sms_code"
+                    android:layout_width="110dp"
+                    android:layout_height="32dp"
+                    android:background="@color/primary"
+                    android:elevation="3dp"
+                    android:text="@string/get_sms_code"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:translationZ="5dp" />
             </TableRow>
 
             <TableRow
@@ -70,7 +85,7 @@
                     android:id="@+id/btn_register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_span="2"
+                    android:layout_span="3"
                     android:background="@color/primary"
                     android:elevation="3dp"
                     android:text="@string/register"

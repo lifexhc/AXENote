@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
-
 import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.infr.IChangeTheme;
@@ -19,9 +19,12 @@ import com.xuhongchuan.axenote.utils.GlobalConfig;
  * Created by xuhongchuan on 15/12/2.
  */
 public class LoginFragment extends Fragment implements IChangeTheme {
+    private EditText mEtMobilePhoneNumber;
+    private EditText mEtPassword;
     private Button mBtnLogin;
-    private Prism mPrism;
     private RelativeLayout mRL;
+
+    private Prism mPrism;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,8 +35,19 @@ public class LoginFragment extends Fragment implements IChangeTheme {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        mEtMobilePhoneNumber = (EditText) view.findViewById(R.id.et_mobile_phone_number);
+        mEtPassword = (EditText) view.findViewById(R.id.et_password);
         mBtnLogin = (Button) view.findViewById(R.id.btn_login);
         mRL = (RelativeLayout) view.findViewById(R.id.rl_fragment_login);
+
+        // 登录
+        mBtnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         initTheme();
         return view;
     }
@@ -63,4 +77,5 @@ public class LoginFragment extends Fragment implements IChangeTheme {
             mRL.setBackgroundColor(res.getColor(R.color.white));
         }
     }
+
 }

@@ -38,6 +38,9 @@ import com.xuhongchuan.axenote.utils.GlobalConfig;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Created by xuhongchuan on 15/10/17.
+ */
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
@@ -306,7 +309,7 @@ public class MainActivity extends BaseActivity
             } else {
                 builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
             }
-            builder.setTitle(res.getString(R.string.choice_theme));
+            builder.setTitle(res.getString(R.string.choose_theme));
             int checkedItem = config.isNightMode(MainActivity.this) ? 1 : 0; // 默认选中项
             builder.setSingleChoiceItems(themes, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
@@ -330,6 +333,9 @@ public class MainActivity extends BaseActivity
                 }
             });
             dialog.show();
+        } else if (id == R.id.nav_user_info) { // 用户信息
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_version) { // 版本号
             Intent intent = new Intent(this, VersionActivity.class);
             startActivity(intent);

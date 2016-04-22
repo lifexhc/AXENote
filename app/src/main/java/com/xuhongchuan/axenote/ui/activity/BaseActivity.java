@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.infr.IChangeTheme;
 import com.xuhongchuan.axenote.utils.GlobalValue;
+import com.xuhongchuan.axenote.utils.L;
 
 /**
  * Created by xuhongchuan on 15/11/28.
@@ -47,7 +48,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IChangeT
         super.onCreate(savedInstanceState);
         // Activity切换效果
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
     }
 
     @Override
