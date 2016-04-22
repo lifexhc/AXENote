@@ -37,4 +37,12 @@ dependencies {
     // https://blog.leancloud.cn/3612/
     compile 'com.stylingandroid.prism:prism:1.0.1'
 
+    // LeanCloud
+    // 基础包
+    compile ('cn.leancloud.android:avoscloud-sdk:v3.+')
+    // 推送与实时聊天需要的包
+    compile ('cn.leancloud.android:avoscloud-push:v3.+@aar'){transitive = true}
+    // 统计包
+    compile ('cn.leancloud.android:avoscloud-statistics:v3.+')
+
 }
