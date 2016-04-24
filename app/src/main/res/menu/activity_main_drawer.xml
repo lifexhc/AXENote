@@ -7,11 +7,6 @@
                     android:id="@+id/nav_theme"
                     android:icon="@drawable/ic_theme"
                     android:title="@string/theme" />
-
-                <item
-                    android:id="@+id/nav_user_info"
-                    android:icon="@drawable/ic_user_info"
-                    android:title="@string/user_message" />
             </group>
         </menu>
     </item>

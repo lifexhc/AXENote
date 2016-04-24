@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity
     private Toolbar mToolbar;
     private FloatingActionButton mFAB;
     private RecyclerView mRecycleView;
-    private MenuItem mSync;
     private SearchView mSearchView;
     private NoteListAdapter mAdapter;
     private NavigationView mNavigationView;
@@ -231,13 +230,11 @@ public class MainActivity extends BaseActivity
      * 修改toolbar上图标的颜色
      */
     private void changeToolbarIconTheme() {
-        if (mSync != null && mSearchView != null) {
+        if (mSearchView != null) {
             if (GlobalConfig.getInstance().isNightMode(this)) {
-                mSync.setIcon(R.drawable.ic_sync_night);
                 mSearchViewIcon.setImageResource(R.drawable.ic_search_night);
                 mToolbar.setNavigationIcon(R.drawable.ic_menu_night);
             } else {
-                mSync.setIcon(R.drawable.ic_sync);
                 mSearchViewIcon.setImageResource(R.drawable.ic_search);
                 mToolbar.setNavigationIcon(R.drawable.ic_menu);
             }
@@ -269,9 +266,6 @@ public class MainActivity extends BaseActivity
         mSearchViewIcon = (ImageView) mSearchView.findViewById(searchImgId);
         mSearchViewIcon.setImageResource(R.drawable.ic_search);
         mSearchView.setOnQueryTextListener(this);
-
-        // 初始化同步button
-        mSync = menu.findItem(R.id.sync);
 
         // 初始化icon主题
         changeToolbarIconTheme();
@@ -306,7 +300,7 @@ public class MainActivity extends BaseActivity
             } else {
                 builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
             }
-            builder.setTitle(res.getString(R.string.choice_theme));
+            builder.setTitle(res.getString(R.string.select_theme));
             int checkedItem = config.isNightMode(MainActivity.this) ? 1 : 0; // 默认选中项
             builder.setSingleChoiceItems(themes, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
