@@ -27,6 +27,7 @@
         android:layout_height="match_parent"
         android:background="#FFF9C4"
         android:gravity="top"
+        android:padding="10dp"
         android:singleLine="false" />
 
 </LinearLayout>
