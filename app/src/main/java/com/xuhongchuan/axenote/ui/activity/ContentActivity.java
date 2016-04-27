@@ -37,6 +37,7 @@ import com.xuhongchuan.axenote.utils.BitmapUtils;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
+import com.xuhongchuan.axenote.utils.L;
 
 import java.util.Date;
 
@@ -252,54 +253,11 @@ public class ContentActivity extends BaseActivity {
      * 从SD卡获取图片
      */
     public void getImgFromSDCard() {
-        Intent getImage = new Intent(Intent.ACTION_GET_CONTENT);
-        getImage.addCategory(Intent.CATEGORY_OPENABLE);
-        getImage.setType("image/*");
-        startActivityForResult(getImage, RQ_GET_IMAGE_FROM_SD_CARD);
-    }
-
-    @SuppressLint("NewApi")
-    public static String getRealPathFromURI(Context context, Uri uri) {
-        String filePath = "";
-        String wholeID = DocumentsContract.getDocumentId(uri);
-
-        // Split at colon, use second item in the array
-        String id = wholeID.split(":")[1];
-
-        String[] column = {MediaStore.Images.Media.DATA};
-
-        // where id is equal to
-        String sel = MediaStore.Images.Media._ID + "=?";
-
-        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                column, sel, new String[]{id}, null);
-
-        int columnIndex = cursor.getColumnIndex(column[0]);
-
-        if (cursor.moveToFirst()) {
-            filePath = cursor.getString(columnIndex);
-        }
-        cursor.close();
-        return filePath;
-    }
-
-    @SuppressLint("NewApi")
-    public static String getRealPathFromURI_API11to18(Context context, Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        String result = null;
-
-        CursorLoader cursorLoader = new CursorLoader(
-                context,
-                contentUri, proj, null, null, null);
-        Cursor cursor = cursorLoader.loadInBackground();
-
-        if (cursor != null) {
-            int column_index =
-                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            result = cursor.getString(column_index);
-        }
-        return result;
+        Intent getImgIntent = new Intent();
+        getImgIntent.setAction(Intent.ACTION_GET_CONTENT);
+        getImgIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        getImgIntent.setType("image/*");
+        startActivityForResult(getImgIntent, RQ_GET_IMAGE_FROM_SD_CARD);
     }
 
     @Override
@@ -310,7 +268,8 @@ public class ContentActivity extends BaseActivity {
                 case RQ_GET_IMAGE_FROM_SD_CARD:
                     // 获取图片的路径
                     Uri originalUri = intent.getData();
-                    mFilePath = getRealPathFromURI(this, originalUri);
+                    L.d(this, "uri:" + originalUri.toString());
+                    mFilePath = getFilePathFromURI(this, originalUri);
                     // 根据路径从SD卡获取图片并压缩
                     final Bitmap bitmap = BitmapUtils.compressBitmap(mFilePath, this, 0.75F);
                     // 插入图片到数据库
@@ -347,6 +306,43 @@ public class ContentActivity extends BaseActivity {
             }
         }
     }
+
+    @SuppressLint("NewApi")
+    public static String getFilePathFromURI(Context context, Uri uri) {
+        // 有两种uri格式
+        // uri:content://media/external/images/media/88
+        // uri:content://com.android.providers.media.documents/document/image%3A13004
+        // 判断uri格式是否第二种
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            String filePath = "";
+            String wholeID = DocumentsContract.getDocumentId(uri);
+            String id = wholeID.split(":")[1];
+            String[] column = {MediaStore.Images.Media.DATA};
+            String sel = MediaStore.Images.Media._ID + "=?";
+            Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    column, sel, new String[]{id}, null);
+            int columnIndex = cursor.getColumnIndex(column[0]);
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex);
+            }
+            cursor.close();
+            return filePath;
+        } else {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            String result = null;
+
+            CursorLoader cursorLoader = new CursorLoader(context, uri, proj, null, null, null);
+            Cursor cursor = cursorLoader.loadInBackground();
+
+            if (cursor != null) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                result = cursor.getString(column_index);
+            }
+            return result;
+        }
+    }
+
 }
 
 
