@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 
 /**
  * Created by xuhongchuan on 16/1/23.
@@ -50,7 +51,7 @@ public class BitmapUtils {
         int realWidth = opts.outWidth;
 
         // 如果原始图片的宽大于设备宽度的 * scale
-        // 计算一个合适的压缩率
+        // 计算一个合适的采样率
         if (realWidth > displayWidth) {
             opts.inSampleSize = realWidth / displayWidth;
         }
@@ -100,22 +101,18 @@ public class BitmapUtils {
      * @return
      */
     public static Bitmap qualityCompress(Bitmap bitmap) {
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (baos.toByteArray().length / 1024 > 128) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
-        } else {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        int options = 100;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        // 图片如果大于400kb,直接把options设为50减少循环次数
+        if (baos.toByteArray().length / 1024 > 400) {
+            options = 50;
         }
-        int options = 50;
-        //TODO 如果循环次数太多的话太耗时，待优化
-        while (baos.toByteArray().length / 1024 > 64) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            baos.reset(); // 重置baos即清空baos
-            bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos); // 这里压缩options%，把压缩后的数据存放到baos中
-            if (options == 10) {
-                break;
-            }
-            options -= 10; // 每次都减少10
+        // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        while (baos.toByteArray().length / 1024 > 100 && options > 10) {
+            baos.reset();
+            options -= 10;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray()); // 把压缩后的数据baos存放到ByteArrayInputStream中
         bitmap = BitmapFactory.decodeStream(isBm, null, null); // 把ByteArrayInputStream数据生成图片
