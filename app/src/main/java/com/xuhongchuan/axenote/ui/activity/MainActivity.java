@@ -146,12 +146,16 @@ public class MainActivity extends BaseActivity
                 GlobalDataCache cache = GlobalDataCache.getInstance();
                 cache.createNewNote("", currentTime, currentTime);
 
-                Intent intent = new Intent(MainActivity.this, ContentActivity.class);
-                intent.putExtra(ContentActivity.EXTRA_ID, cache.getLastId());
-                intent.putExtra(ContentActivity.EXTRA_CONTENT, "");
-                intent.putExtra(ContentActivity.EXTRA_CREATE_TIME, currentTime);
-                intent.putExtra(ContentActivity.EXTRA_LAST_MODIFIED_TIME, currentTime);
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                intent.putExtra("position", 0);
+//                intent.putExtra(EditorActivity.EXTRA_ID, cache.getLastId());
+//                intent.putExtra(EditorActivity.EXTRA_CONTENT, "");
+//                intent.putExtra(EditorActivity.EXTRA_CREATE_TIME, currentTime);
+//                intent.putExtra(EditorActivity.EXTRA_LAST_MODIFIED_TIME, currentTime);
                 startActivity(intent);
+
+//                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+//                startActivity(intent);
             }
         });
 

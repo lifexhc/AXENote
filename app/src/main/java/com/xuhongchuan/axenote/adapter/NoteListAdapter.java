@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
-import com.xuhongchuan.axenote.ui.activity.ContentActivity;
+import com.xuhongchuan.axenote.ui.activity.EditorActivity;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.PinyinUtil;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
@@ -67,13 +67,16 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Note note = GlobalDataCache.getInstance().getNotes().get(getPosition());
+//                    Note note = GlobalDataCache.getInstance().getNotes().get(getPosition());
+//                    L.d("getPosition()", getPosition() + "");
+//                    L.d("getNotes", note.getContent());
                     // 进入便签编辑Activity，并且传递当前便签内容和索引
-                    Intent intent = new Intent(view.getContext(), ContentActivity.class);
-                    intent.putExtra(ContentActivity.EXTRA_ID, note.getId());
-                    intent.putExtra(ContentActivity.EXTRA_CONTENT, note.getContent());
-                    intent.putExtra(ContentActivity.EXTRA_CREATE_TIME, note.getCreateTime());
-                    intent.putExtra(ContentActivity.EXTRA_LAST_MODIFIED_TIME, note.getLastModifiedTime());
+                    Intent intent = new Intent(view.getContext(), EditorActivity.class);
+//                    intent.putExtra(EditorActivity.EXTRA_ID, note.getId());
+//                    intent.putExtra(EditorActivity.EXTRA_CONTENT, note.getContent());
+//                    intent.putExtra(EditorActivity.EXTRA_CREATE_TIME, note.getCreateTime());
+//                    intent.putExtra(EditorActivity.EXTRA_LAST_MODIFIED_TIME, note.getLastModifiedTime());
+                    intent.putExtra("position", getPosition());
                     view.getContext().startActivity(intent);
                 }
             });

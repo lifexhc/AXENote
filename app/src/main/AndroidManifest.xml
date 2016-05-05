@@ -25,13 +25,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.ContentActivity"></activity>
-
         <activity android:name=".ui.activity.UserInfoActivity"></activity>
 
         <activity android:name=".ui.activity.AboutAuthorActivity"></activity>
 
         <activity android:name=".ui.activity.VersionActivity"></activity>
+        
+        <activity android:name=".ui.activity.EditorActivity"></activity>
     </application>
 
 </manifest>

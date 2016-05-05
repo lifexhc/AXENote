@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript">
+    window.onload = initEditor;
+
+	function showHtml() {
+		var editor = document.getElementById("editor");
+		return editor.innerHTML;
+	}
+
+	function insertImg(base64) {
+		var html = '<img src="data:image/jpeg;base64,' + base64 + '"/>';
+		document.execCommand('insertHTML', false, html);
+	}
+
+	function initEditor() {
+	    window.EditorActivity.initEditor();
+	}
+
+	function initContent(html) {
+	    var editor = document.getElementById("editor");
+	    editor.innerHTML = html;
+		<!--document.execCommand('insertHTML', false, html);-->
+	}
+
+	function getEditorContent() {
+	    var editor = document.getElementById("editor");
+		window.AndroidEditor.getEditorContent(editor.innerHTML);
+	}
+</script>
+</head>
+
+<body>
+<div id="editor" contentEditable="true"></div>
+
+</body>
+</html>

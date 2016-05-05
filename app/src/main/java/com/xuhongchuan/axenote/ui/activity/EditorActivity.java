@@ -5,36 +5,25 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import com.stylingandroid.prism.Prism;
+import android.webkit.JavascriptInterface;
 import com.xuhongchuan.axenote.R;
-import com.xuhongchuan.axenote.dao.ImgDao;
+import com.xuhongchuan.axenote.data.Note;
+import com.xuhongchuan.axenote.ui.view.RichEditor;
 import com.xuhongchuan.axenote.utils.BitmapUtils;
-import com.xuhongchuan.axenote.utils.GlobalConfig;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.L;
@@ -42,56 +31,33 @@ import com.xuhongchuan.axenote.utils.L;
 import java.util.Date;
 
 /**
- * Created by xuhongchuan on 15/10/17.
+ * Created by xuhongchuan on 16/5/3.
  */
-public class ContentActivity extends BaseActivity {
-
-    public static String EXTRA_ID = "id";
-    public static String EXTRA_CONTENT = "content";
-    public static String EXTRA_CREATE_TIME = "createTime";
-    public static String EXTRA_LAST_MODIFIED_TIME = "lastModifiedTime";
-    public static final int READ_EXTERNAL_STORAGE_REQ_CODE = 2;
+public class EditorActivity extends BaseActivity {
     private final int RQ_GET_IMAGE_FROM_SD_CARD = 1;
+    public static final int READ_EXTERNAL_STORAGE_REQ_CODE = 2;
 
-    private Toolbar mToolbar;
-    private EditText mEtContent;
-    MenuItem mInsertImg;
-
-    private Prism mPrism; // 主题切换
+//    public static String EXTRA_ID = "id";
+//    public static String EXTRA_CONTENT = "content";
+//    public static String EXTRA_CREATE_TIME = "createTime";
+//    public static String EXTRA_LAST_MODIFIED_TIME = "lastModifiedTime";
 
     private int mId; // 便签ID
     private String mContent; // 便签内容
     private long mCreateTime; // 便签创建时间
     private long mLastModifiedTime; // 便签最后编辑时间
 
+    private RichEditor mWebView;
+    private Toolbar mToolbar;
+    MenuItem mInsertImg;
     private String mFilePath; // 图片路径，从SD卡获取图片时使用
 
-    /**
-     * 获取传递进来的便签信息
-     */
-    private void initContent() {
-        Intent intent = getIntent();
-        mId = intent.getIntExtra(EXTRA_ID, -1);
-        mContent = intent.getStringExtra(EXTRA_CONTENT);
-        mCreateTime = intent.getLongExtra(EXTRA_CREATE_TIME, 0);
-        mLastModifiedTime = intent.getLongExtra(EXTRA_LAST_MODIFIED_TIME, 0);
-
-        parseContent();
-    }
 
     @Override
+    @SuppressLint("JavascriptInterface")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content);
-        initView();
-        initTheme();
-        initContent();
-    }
-
-    /**
-     * 初始化元素
-     */
-    private void initView() {
+        setContentView(R.layout.richeditor);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -105,88 +71,43 @@ public class ContentActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+        mWebView = (RichEditor) findViewById(R.id.webview);
+        mWebView.addJavascriptInterface(new JsInterface(), "AndroidEditor");
+        mWebView.addJavascriptInterface(EditorActivity.this, "EditorActivity");
 
-        mEtContent = (EditText) findViewById(R.id.et_content);
+        initContent();
     }
 
     /**
-     * 解析便签的富文本内容
+     * 获取传递进来的便签信息
      */
-    private void parseContent() {
-        /**
-         * 解析Html的<img>标签
-         */
-        Html.ImageGetter imageGetter = new Html.ImageGetter() {
+    private void initContent() {
+        Intent intent = getIntent();
+        int position = intent.getIntExtra("position", 0);
+        Note note = GlobalDataCache.getInstance().getNotes().get(position);
+//        mId = intent.getIntExtra(EXTRA_ID, -1);
+//        mContent = intent.getStringExtra(EXTRA_CONTENT);
+//        mCreateTime = intent.getLongExtra(EXTRA_CREATE_TIME, 0);
+//        mLastModifiedTime = intent.getLongExtra(EXTRA_LAST_MODIFIED_TIME, 0);
+        mId = note.getId();
+        mContent = note.getContent();
+        mCreateTime = note.getCreateTime();
+        mLastModifiedTime = note.getLastModifiedTime();
+
+    }
+
+    private Handler mHandler = new Handler();
+
+    @JavascriptInterface
+    public void initEditor() {
+        //mWebView.loadUrl("javascript:initContent(" + mContent + ")");
+        mHandler.post(new Runnable() {
             @Override
-            public Drawable getDrawable(String source) {
-                if (source != null && !source.equals("")) {
-                    int imgId = Integer.parseInt(source);
-                    Bitmap bitmap = ImgDao.getInstance().getImg(imgId);
-                    BitmapDrawable d = new BitmapDrawable(Resources.getSystem(), bitmap);
-                    d.setGravity(Gravity.CENTER);
-                    DisplayMetrics dm = new DisplayMetrics();
-                    getWindowManager().getDefaultDisplay().getMetrics(dm);
-                    d.setBounds(0, 0, dm.widthPixels, d.getIntrinsicHeight());
-                    return d;
-                }
-                return null;
+            public void run() {
+                mWebView.loadUrl("javascript:initContent('" + mContent + "')");
             }
-        };
-        mEtContent.setText(Html.fromHtml(mContent, imageGetter, null));
-    }
+        });
 
-    /**
-     * 初始化主题
-     */
-    public void initTheme() {
-        mPrism = Prism.Builder.newInstance()
-                .background(getWindow())
-                .background(mToolbar)
-                .build();
-        changeTheme();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mContent = Html.toHtml(mEtContent.getText());
-
-        GlobalDataCache.getInstance().updateNote(mId, mContent, new Date().getTime());
-        // 发送更新便签列表的广播
-        Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
-        sendBroadcast(intent);
-    }
-
-    /**
-     * 切换主题
-     */
-    public void changeTheme() {
-        Resources res = getResources();
-        EditText etContext = (EditText) findViewById(R.id.et_content);
-        if (GlobalConfig.getInstance().isNightMode(ContentActivity.this)) {
-            mPrism.setColour(res.getColor(R.color.divider));
-            etContext.setBackgroundColor(res.getColor(R.color.bg_night));
-        } else {
-            mPrism.setColour(res.getColor(R.color.primary));
-            etContext.setBackgroundColor(res.getColor(R.color.bg_note));
-        }
-
-        changeToolbarIconTheme();
-    }
-
-    /**
-     * 修改toolbar上图标的颜色
-     */
-    private void changeToolbarIconTheme() {
-        if (mInsertImg != null) {
-            if (GlobalConfig.getInstance().isNightMode(this)) {
-                mInsertImg.setIcon(R.drawable.ic_insert_img_night);
-                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow_night);
-            } else {
-                mInsertImg.setIcon(R.drawable.ic_insert_img);
-                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
-            }
-        }
     }
 
     @Override
@@ -195,9 +116,6 @@ public class ContentActivity extends BaseActivity {
 
         // 初始化插入图片button
         mInsertImg = menu.findItem(R.id.insert_img);
-
-        // 初始化icon主题
-        changeToolbarIconTheme();
         return true;
     }
 
@@ -261,6 +179,7 @@ public class ContentActivity extends BaseActivity {
     }
 
     @Override
+    @SuppressLint("addJavascriptInterface")
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_OK) {
@@ -272,40 +191,33 @@ public class ContentActivity extends BaseActivity {
                     mFilePath = getFilePathFromURI(this, originalUri);
                     // 根据路径从SD卡获取图片并压缩
                     final Bitmap bitmap = BitmapUtils.compressBitmap(mFilePath, this, 0.75F);
-                    // 插入图片到数据库
-                    // TODO:在主线程插入图片到SQLite太耗费时间，插一张图片要几百毫秒
-                    // TODO:但是又需要获得在插入SQLite后的imgId
+                    String base64 = BitmapUtils.toBase64(bitmap);
+                    L.d(this, bitmap.getByteCount() / 1024 + "kb");
+                    long startTime=System.currentTimeMillis();   // 开始时间
+                    L.d("base64", base64);
 
-                    // TODO:如果文本删除了图片，SQLite并没有删除
-                    ImgDao.getInstance().insertImg(bitmap);
-                    int lastImgId = ImgDao.getInstance().getLastId(); // 图片在数据库的id
+                    mWebView.loadUrl("javascript:insertImg('" + base64 + "')");
 
-                    BitmapDrawable d = new BitmapDrawable(Resources.getSystem(), bitmap);
-                    d.setGravity(Gravity.CENTER);
-                    DisplayMetrics dm = new DisplayMetrics();
-                    getWindowManager().getDefaultDisplay().getMetrics(dm);
-                    d.setBounds(0, 0, dm.widthPixels, d.getIntrinsicHeight());
-                    if (bitmap != null) {
-                        // 根据Bitmap对象创建ImageSpan对象
-                        ImageSpan imageSpan = new ImageSpan(d, lastImgId + "", ImageSpan.ALIGN_BASELINE);
 
-                        // 创建一个SpannableString对象，以便插入用ImageSpan对象封装的图像
-                        String img = "i_m_g";
-                        SpannableString spannableString = new SpannableString(img);
-                        // 用ImageSpan对象替换face
-                        spannableString.setSpan(imageSpan, 0, img.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        // 插入图片到EditText，上下换一行
-                        mEtContent.append("\n");
-                        mEtContent.append(spannableString);
-                        mEtContent.append("\n");
-                    } else {
-                        Toast.makeText(this, getResources().getString(R.string.get_img_failed), Toast.LENGTH_SHORT).show();
-                    }
+                    long endTime=System.currentTimeMillis(); // 结束时间
+                    L.d("BitmapUtils", "loadUrl用时：" + (endTime-startTime) + "ms");
                     break;
             }
         }
     }
+
+    public class JsInterface {
+        @JavascriptInterface
+        public void getEditorContent(String value) {
+            mContent = value;
+            GlobalDataCache.getInstance().updateNote(mId, mContent, new Date().getTime());
+            // 发送更新便签列表的广播
+            Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
+            sendBroadcast(intent);
+        }
+    }
+
+
 
     @SuppressLint("NewApi")
     public static String getFilePathFromURI(Context context, Uri uri) {
@@ -343,6 +255,29 @@ public class ContentActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mWebView.loadUrl("javascript:getEditorContent()");
+            }
+        });
+    }
+
+    @Override
+    public void initTheme() {
+
+    }
+
+    @Override
+    public void changeTheme() {
+
+    }
+
 }
+
+
 
 

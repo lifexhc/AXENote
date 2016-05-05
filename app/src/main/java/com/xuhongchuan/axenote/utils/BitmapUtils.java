@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 
 import java.io.ByteArrayInputStream;
@@ -39,6 +40,8 @@ public class BitmapUtils {
      * @return
      */
     public static Bitmap sampleCompress(String filePath, Activity activity, float scale) {
+        long startTime=System.currentTimeMillis();   // 开始时间
+
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, opts);
@@ -58,6 +61,9 @@ public class BitmapUtils {
 
         opts.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, opts);
+
+        long endTime=System.currentTimeMillis(); // 结束时间
+        L.d("BitmapUtils", "采样率压缩用时：" + (endTime-startTime) + "ms");
         return bitmap;
     }
 
@@ -70,6 +76,8 @@ public class BitmapUtils {
      * @return
      */
     public static Bitmap pixelCompress(Bitmap bitmap, Activity activity, float scale) {
+        long startTime=System.currentTimeMillis();   // 开始时间
+
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         int displayWidth = (int) (dm.widthPixels * scale);
@@ -91,6 +99,9 @@ public class BitmapUtils {
 
         // 压缩图片
         Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, realWidth, realHeight, matrix, true);
+
+        long endTime=System.currentTimeMillis(); // 结束时间
+        L.d("BitmapUtils", "像素压缩用时：" + (endTime-startTime) + "ms");
         return resizedBitmap;
     }
 
@@ -101,6 +112,8 @@ public class BitmapUtils {
      * @return
      */
     public static Bitmap qualityCompress(Bitmap bitmap) {
+        long startTime=System.currentTimeMillis();   // 开始时间
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int options = 100;
         bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
@@ -116,7 +129,29 @@ public class BitmapUtils {
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray()); // 把压缩后的数据baos存放到ByteArrayInputStream中
         bitmap = BitmapFactory.decodeStream(isBm, null, null); // 把ByteArrayInputStream数据生成图片
+
+        long endTime=System.currentTimeMillis(); // 结束时间
+        L.d("BitmapUtils", "质量压缩用时：" + (endTime-startTime) + "ms");
         return bitmap;
+    }
+
+    /**
+     * 将bitmap转为base64
+     *
+     * @param bitmap
+     * @return
+     */
+    public static String toBase64(Bitmap bitmap) {
+        long startTime=System.currentTimeMillis();   // 开始时间
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+
+        long endTime=System.currentTimeMillis(); // 结束时间
+        String base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+        L.d("BitmapUtils", "toBase64用时：" + (endTime-startTime) + "ms");
+        return base64;
     }
 
 }
