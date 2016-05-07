@@ -9,6 +9,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuhongchuan.axenote.R;
@@ -54,14 +55,22 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
-        String title = GlobalDataCache.getInstance().getNotes().get(position).getTitle();
-        holder.mTextView.setText(title + " " + GlobalDataCache.getInstance().getNotes().get(position).getPosition());
+        Note note = GlobalDataCache.getInstance().getNotes().get(position);
+        String title = note.getTitle();
+        boolean hasImage = note.getHasImage();
+        holder.mTextView.setText(title);
+        if (hasImage) {
+            holder.mLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            holder.mLinearLayout.setVisibility(View.INVISIBLE);
+        }
         Resources res = mContext.getResources();
         if (GlobalConfig.getInstance().isNightMode(mContext)) {
             holder.itemView.setBackgroundColor(res.getColor(R.color.bg_night));
         } else {
             holder.itemView.setBackgroundColor(res.getColor(R.color.bg_note));
         }
+
     }
 
     @Override
@@ -85,10 +94,12 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     public static class NoteListViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         TextView mTextView;
+        LinearLayout mLinearLayout;
 
         public NoteListViewHolder(final View view) {
             super(view);
             mTextView = (TextView) view.findViewById(R.id.tv_note_tittle);
+            mLinearLayout = (LinearLayout) view.findViewById(R.id.ll_hasImage);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

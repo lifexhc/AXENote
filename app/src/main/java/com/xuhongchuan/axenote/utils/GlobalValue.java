@@ -31,7 +31,4 @@ public class GlobalValue {
     // SharedPreferences的文件名
     public static String SHARED_PRE_FILE_NAME = "axenote_data";
 
-    // 其它
-    public static int TITLE_LENGTH = 12; // 便签标题长度
-
 }

@@ -124,6 +124,20 @@ public class GlobalDataCache {
     }
 
     /**
+     * 更新便签
+     *
+     * @param id
+     * @param title
+     * @param content
+     * @param hasImage
+     * @param lastModifiedTime
+     */
+    public void updateNote(int id, String title, String content, boolean hasImage, long lastModifiedTime) {
+        NoteDao.getInstance().updateNote(id, title, content, hasImage, lastModifiedTime);
+        syncNotes();
+    }
+
+    /**
      * 交换两条便签的排序值
      *
      * @param position1

@@ -9,8 +9,9 @@
 
     <TextView
         android:id="@+id/tv_note_tittle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="8.5"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="5dp"
@@ -20,5 +21,21 @@
         android:singleLine="true"
         android:text="some info"
         android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_hasImage"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/iv_hasImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_insert_img_gray" />
+
+    </LinearLayout>
 
 </LinearLayout>

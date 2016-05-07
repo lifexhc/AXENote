@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.widget.Toast;
+
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.view.RichEditor;
@@ -36,11 +38,6 @@ import java.util.Date;
 public class EditorActivity extends BaseActivity {
     private final int RQ_GET_IMAGE_FROM_SD_CARD = 1;
     public static final int READ_EXTERNAL_STORAGE_REQ_CODE = 2;
-
-//    public static String EXTRA_ID = "id";
-//    public static String EXTRA_CONTENT = "content";
-//    public static String EXTRA_CREATE_TIME = "createTime";
-//    public static String EXTRA_LAST_MODIFIED_TIME = "lastModifiedTime";
 
     private int mId; // 便签ID
     private String mContent; // 便签内容
@@ -71,6 +68,7 @@ public class EditorActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
         mWebView = (RichEditor) findViewById(R.id.webview);
         mWebView.addJavascriptInterface(new JsInterface(), "AndroidEditor");
         mWebView.addJavascriptInterface(EditorActivity.this, "EditorActivity");
@@ -85,10 +83,6 @@ public class EditorActivity extends BaseActivity {
         Intent intent = getIntent();
         int position = intent.getIntExtra("position", 0);
         Note note = GlobalDataCache.getInstance().getNotes().get(position);
-//        mId = intent.getIntExtra(EXTRA_ID, -1);
-//        mContent = intent.getStringExtra(EXTRA_CONTENT);
-//        mCreateTime = intent.getLongExtra(EXTRA_CREATE_TIME, 0);
-//        mLastModifiedTime = intent.getLongExtra(EXTRA_LAST_MODIFIED_TIME, 0);
         mId = note.getId();
         mContent = note.getContent();
         mCreateTime = note.getCreateTime();
@@ -100,14 +94,12 @@ public class EditorActivity extends BaseActivity {
 
     @JavascriptInterface
     public void initEditor() {
-        //mWebView.loadUrl("javascript:initContent(" + mContent + ")");
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 mWebView.loadUrl("javascript:initContent('" + mContent + "')");
             }
         });
-
     }
 
     @Override
@@ -205,9 +197,14 @@ public class EditorActivity extends BaseActivity {
 
     public class JsInterface {
         @JavascriptInterface
-        public void getEditorContent(String value) {
-            mContent = value;
-            GlobalDataCache.getInstance().updateNote(mId, mContent, false, new Date().getTime());
+        public void getEditorContent(String title, String content, int count) {
+            L.d(EditorActivity.this, "title --> " + title);
+            mContent = content;
+            boolean hasImage = false;
+            if (count > 0) {
+                hasImage = true;
+            }
+            GlobalDataCache.getInstance().updateNote(mId, title, mContent, hasImage, new Date().getTime());
             // 发送更新便签列表的广播
             Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
             sendBroadcast(intent);

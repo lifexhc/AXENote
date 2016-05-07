@@ -59,11 +59,6 @@ public class NoteDao {
         // 创建新便签
         ContentValues values = new ContentValues();
         String title = ""; // 便签标题
-        if (content.length() > GlobalValue.TITLE_LENGTH) {
-            title = content.substring(0, GlobalValue.TITLE_LENGTH - 1);
-        } else {
-            title = content;
-        }
         values.put(GlobalValue.COLUMN_NAME_TITLE, title);
         values.put(GlobalValue.COLUMN_NAME_CONTENT, content);
         if (hasImage) {
@@ -103,12 +98,27 @@ public class NoteDao {
      */
     public void updateNote(int id, String content, boolean hasImage, long lastModifiedTime) {
         ContentValues values = new ContentValues();
-        String title = ""; // 便签标题
-        if (content.length() > 12) {
-            title = content.substring(0, 11);
+        values.put(GlobalValue.COLUMN_NAME_CONTENT, content);
+        values.put(GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME, lastModifiedTime);
+        if (hasImage) {
+            values.put(GlobalValue.COLUMN_NAME_HAS_IMAGE, 1);
         } else {
-            title = content;
+            values.put(GlobalValue.COLUMN_NAME_HAS_IMAGE, 0);
         }
+        mDb.update(GlobalValue.TABLE_NAME_NOTE, values, GlobalValue.COLUMN_NAME_ID + " = ?", new String[]{id + ""});
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param id
+     * @param title
+     * @param content
+     * @param hasImage
+     * @param lastModifiedTime
+     */
+    public void updateNote(int id, String title, String content, boolean hasImage, long lastModifiedTime) {
+        ContentValues values = new ContentValues();
         values.put(GlobalValue.COLUMN_NAME_TITLE, title);
         values.put(GlobalValue.COLUMN_NAME_CONTENT, content);
         values.put(GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME, lastModifiedTime);

@@ -22,5 +22,15 @@ function initContent(html) {
 <!-- 获取文本内容 -->
 function getEditorContent() {
     var editor = document.getElementById("editor");
-    window.AndroidEditor.getEditorContent(editor.innerHTML);
+    var imgCount = editor.getElementsByTagName("img").length;
+    var html = editor.innerHTML;
+    var text = editor.textContent;
+    var title;
+    if (text.length > 16) {
+        title = text.substring(0, 16);
+    } else {
+        title = text;
+    }
+
+    window.AndroidEditor.getEditorContent(title, html, imgCount);
 }
