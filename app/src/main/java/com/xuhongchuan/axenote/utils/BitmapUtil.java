@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by xuhongchuan on 16/1/23.
  */
-public class BitmapUtils {
+public class BitmapUtil {
 
     /**
      * 压缩图片
@@ -63,7 +63,7 @@ public class BitmapUtils {
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, opts);
 
         long endTime=System.currentTimeMillis(); // 结束时间
-        L.d("BitmapUtils", "采样率压缩用时：" + (endTime-startTime) + "ms");
+        L.d("BitmapUtil", "采样率压缩用时：" + (endTime-startTime) + "ms");
         return bitmap;
     }
 
@@ -101,7 +101,7 @@ public class BitmapUtils {
         Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, realWidth, realHeight, matrix, true);
 
         long endTime=System.currentTimeMillis(); // 结束时间
-        L.d("BitmapUtils", "像素压缩用时：" + (endTime-startTime) + "ms");
+        L.d("BitmapUtil", "像素压缩用时：" + (endTime-startTime) + "ms");
         return resizedBitmap;
     }
 
@@ -131,7 +131,7 @@ public class BitmapUtils {
         bitmap = BitmapFactory.decodeStream(isBm, null, null); // 把ByteArrayInputStream数据生成图片
 
         long endTime=System.currentTimeMillis(); // 结束时间
-        L.d("BitmapUtils", "质量压缩用时：" + (endTime-startTime) + "ms");
+        L.d("BitmapUtil", "质量压缩用时：" + (endTime-startTime) + "ms");
         return bitmap;
     }
 
@@ -150,7 +150,7 @@ public class BitmapUtils {
 
         long endTime=System.currentTimeMillis(); // 结束时间
         String base64 = Base64.encodeToString(bytes, Base64.DEFAULT);
-        L.d("BitmapUtils", "toBase64用时：" + (endTime-startTime) + "ms");
+        L.d("BitmapUtil", "toBase64用时：" + (endTime-startTime) + "ms");
         return base64;
     }
 

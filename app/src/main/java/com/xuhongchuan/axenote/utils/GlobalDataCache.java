@@ -1,8 +1,13 @@
 package com.xuhongchuan.axenote.utils;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
 import com.xuhongchuan.axenote.dao.NoteDao;
 import com.xuhongchuan.axenote.data.Note;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,13 +17,23 @@ import java.util.List;
  */
 public class GlobalDataCache {
 
-    private static GlobalDataCache mInstance;
+    // 便签列表
     private List<Note> notes;
 
-    public GlobalDataCache() {
-        initNotes();
+    // 单例对象
+    private static GlobalDataCache mInstance;
+
+    // 构造方法
+    private GlobalDataCache() {
+        notes = new ArrayList<>();
+        syncNotes();
     }
 
+    /**
+     * 获取单例对象
+     *
+     * @return
+     */
     public static GlobalDataCache getInstance() {
         if (mInstance == null) {
             synchronized (GlobalDataCache.class) {
@@ -30,10 +45,19 @@ public class GlobalDataCache {
         return mInstance;
     }
 
-    public void initNotes() {
-        notes = NoteDao.getInstance().getAllNotes();
+    /**
+     * 和Sqlite同步便签列表
+     */
+    public void syncNotes() {
+        notes.clear();
+        notes.addAll(NoteDao.getInstance().getAllNotes());
     }
 
+    /**
+     * 获取所有便签
+     *
+     * @return
+     */
     public List<Note> getNotes() {
         return notes;
     }
@@ -54,18 +78,16 @@ public class GlobalDataCache {
     }
 
     /**
-     * 获取指定排序值的便签
+     * 插入一条新便签
      *
-     * @param ordinal
-     * @return
+     * @param content
+     * @param hasImage
+     * @param createTime
+     * @param lastModifiedTime
      */
-    public Note getNoteByOrdinal(int ordinal) {
-        for (Note note : notes) {
-            if (note.getOrdinal() == ordinal) {
-                return note;
-            }
-        }
-        return null;
+    public void createNewNote(String content, boolean hasImage, long createTime, long lastModifiedTime) {
+        NoteDao.getInstance().createNewNote(content, hasImage, createTime, lastModifiedTime);
+        syncNotes();
     }
 
     /**
@@ -75,23 +97,7 @@ public class GlobalDataCache {
      */
     public void createNewNote(Note note) {
         notes.add(note);
-        NoteDao.getInstance().createNewNote(note.getContent(), note.getCreateTime(), note.getLastModifiedTime());
-    }
-
-    /**
-     * 插入一条新便签
-     *
-     * @param content
-     * @param createTime
-     * @param lastModifiedTime
-     */
-    public void createNewNote(String content, long createTime, long lastModifiedTime) {
-        Note note = new Note();
-        note.setContent(content);
-        note.setCreateTime(createTime);
-        note.setLastModifiedTime(lastModifiedTime);
-
-        createNewNote(note);
+        createNewNote(note.getContent(), note.getHasImage(), note.getCreateTime(), note.getLastModifiedTime());
     }
 
     /**
@@ -100,15 +106,8 @@ public class GlobalDataCache {
      * @param id
      */
     public void deleteNote(int id) {
-        Iterator it = notes.iterator();
-        Note note = null;
-        while (it.hasNext()) {
-            note = (Note) it.next();
-            if (note.getId() == id) {
-                it.remove();
-            }
-        }
         NoteDao.getInstance().deleteNote(id);
+        syncNotes();
     }
 
     /**
@@ -116,28 +115,22 @@ public class GlobalDataCache {
      *
      * @param id
      * @param content
+     * @param hasImage
      * @param lastModifiedTime
      */
-    public void updateNote(int id, String content, long lastModifiedTime) {
-        Iterator it = notes.iterator();
-        Note note = null;
-        while (it.hasNext()) {
-            note = (Note) it.next();
-            if (note.getId() == id) {
-                note.setContent(content);
-                note.setLastModifiedTime(lastModifiedTime);
-            }
-        }
-        NoteDao.getInstance().updateNote(id, content, lastModifiedTime);
+    public void updateNote(int id, String content, boolean hasImage, long lastModifiedTime) {
+        NoteDao.getInstance().updateNote(id, content, hasImage, lastModifiedTime);
+        syncNotes();
     }
 
     /**
-     * 获取最后插入便签的id
+     * 交换两条便签的排序值
      *
-     * @return
+     * @param position1
+     * @param position2
      */
-    public int getLastId() {
-        return NoteDao.getInstance().getLastId();
+    public void swapNote(int position1, int position2) {
+        Collections.swap(notes, position1, position2);
     }
 
 }

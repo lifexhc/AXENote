@@ -43,12 +43,8 @@ public class PinyinUtil {
             if ((ch >> 7) == 0) {
                 buffer.append(ch);
             } else {
-                // TODO:插入图片时文本如果有65532这个字符导致搜索就崩溃
-                // TODO:暂时跳过65532，尚未解决
-                if (ch != 65532) {
-                    char spell = getFirstLetter(ch);
-                    buffer.append(String.valueOf(spell));
-                }
+                char spell = getFirstLetter(ch);
+                buffer.append(String.valueOf(spell));
             }
         }
         return buffer.toString().toLowerCase();

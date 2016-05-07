@@ -2,22 +2,17 @@ package com.xuhongchuan.axenote.ui.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.xuhongchuan.axenote.utils.L;
 
 /**
  * Created by xuhongchuan on 16/5/3.
  */
 public class RichEditor extends WebView {
 
-    private static final String SETUP_HTML = "file:///android_asset/webview2.html";
+    private static final String SETUP_HTML = "file:///android_asset/rich_editor.html";
 
     public RichEditor(Context context) {
         this(context, null);
@@ -34,7 +29,6 @@ public class RichEditor extends WebView {
         setWebChromeClient(new WebChromeClient());
         setWebViewClient(new EditorWebViewClient());
         loadUrl(SETUP_HTML);
-//        loadUrl("https://www.baidu.com/");
     }
 
     protected class EditorWebViewClient extends WebViewClient {

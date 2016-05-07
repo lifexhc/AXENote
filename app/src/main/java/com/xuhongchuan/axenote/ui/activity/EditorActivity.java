@@ -23,7 +23,7 @@ import android.webkit.JavascriptInterface;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.view.RichEditor;
-import com.xuhongchuan.axenote.utils.BitmapUtils;
+import com.xuhongchuan.axenote.utils.BitmapUtil;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.L;
@@ -190,17 +190,14 @@ public class EditorActivity extends BaseActivity {
                     L.d(this, "uri:" + originalUri.toString());
                     mFilePath = getFilePathFromURI(this, originalUri);
                     // 根据路径从SD卡获取图片并压缩
-                    final Bitmap bitmap = BitmapUtils.compressBitmap(mFilePath, this, 0.75F);
-                    String base64 = BitmapUtils.toBase64(bitmap);
+                    final Bitmap bitmap = BitmapUtil.compressBitmap(mFilePath, this, 0.75F);
+                    String base64 = BitmapUtil.toBase64(bitmap);
                     L.d(this, bitmap.getByteCount() / 1024 + "kb");
                     long startTime=System.currentTimeMillis();   // 开始时间
                     L.d("base64", base64);
-
                     mWebView.loadUrl("javascript:insertImg('" + base64 + "')");
-
-
                     long endTime=System.currentTimeMillis(); // 结束时间
-                    L.d("BitmapUtils", "loadUrl用时：" + (endTime-startTime) + "ms");
+                    L.d("BitmapUtil", "loadUrl用时：" + (endTime-startTime) + "ms");
                     break;
             }
         }
@@ -210,14 +207,12 @@ public class EditorActivity extends BaseActivity {
         @JavascriptInterface
         public void getEditorContent(String value) {
             mContent = value;
-            GlobalDataCache.getInstance().updateNote(mId, mContent, new Date().getTime());
+            GlobalDataCache.getInstance().updateNote(mId, mContent, false, new Date().getTime());
             // 发送更新便签列表的广播
             Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
             sendBroadcast(intent);
         }
     }
-
-
 
     @SuppressLint("NewApi")
     public static String getFilePathFromURI(Context context, Uri uri) {

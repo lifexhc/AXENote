@@ -3,6 +3,7 @@ package com.xuhongchuan.axenote.utils;
 import android.util.Log;
 
 /**
+ * Log
  * Created by xuhongchuan on 15/7/31.
  */
 public class L {

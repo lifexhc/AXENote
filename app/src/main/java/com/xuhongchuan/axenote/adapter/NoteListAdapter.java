@@ -3,6 +3,7 @@ package com.xuhongchuan.axenote.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,9 +12,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuhongchuan.axenote.R;
+import com.xuhongchuan.axenote.dao.NoteDao;
+import com.xuhongchuan.axenote.infr.ItemTouchHelperViewHolder;
 import com.xuhongchuan.axenote.data.Note;
+import com.xuhongchuan.axenote.infr.ItemTouchHelperAdapter;
 import com.xuhongchuan.axenote.ui.activity.EditorActivity;
+import com.xuhongchuan.axenote.utils.AXEApplication;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
+import com.xuhongchuan.axenote.utils.L;
 import com.xuhongchuan.axenote.utils.PinyinUtil;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
 
@@ -21,9 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 便签列表适配器
  * Created by xuhongchuan on 15/10/17.
  */
-public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteListViewHolder> {
+public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteListViewHolder>
+    implements ItemTouchHelperAdapter {
+    private static int FROM; // swap的from
+    private static int TO; // swap的to
+    private static boolean ENABLE = true; // 是否执行swap
 
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
@@ -43,8 +54,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
 
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
-        String content = GlobalDataCache.getInstance().getNotes().get(position).getContent();
-        holder.mTextView.setText(Html.fromHtml(content));
+        String title = GlobalDataCache.getInstance().getNotes().get(position).getTitle();
+        holder.mTextView.setText(title + " " + GlobalDataCache.getInstance().getNotes().get(position).getPosition());
         Resources res = mContext.getResources();
         if (GlobalConfig.getInstance().isNightMode(mContext)) {
             holder.itemView.setBackgroundColor(res.getColor(R.color.bg_night));
@@ -58,7 +69,21 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
         return GlobalDataCache.getInstance().getNotes().size();
     }
 
-    public static class NoteListViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        notifyItemRemoved(position);
+        GlobalDataCache cache = GlobalDataCache.getInstance();
+        cache.deleteNote(cache.getNotes().get(position).getId());
+        notifyItemRangeChanged(position, getItemCount());
+        ENABLE = false; // 在onItemClear()不执行swap
+    }
+
+    public static class NoteListViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         TextView mTextView;
 
         public NoteListViewHolder(final View view) {
@@ -67,19 +92,44 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Note note = GlobalDataCache.getInstance().getNotes().get(getPosition());
-//                    L.d("getPosition()", getPosition() + "");
-//                    L.d("getNotes", note.getContent());
                     // 进入便签编辑Activity，并且传递当前便签内容和索引
                     Intent intent = new Intent(view.getContext(), EditorActivity.class);
-//                    intent.putExtra(EditorActivity.EXTRA_ID, note.getId());
-//                    intent.putExtra(EditorActivity.EXTRA_CONTENT, note.getContent());
-//                    intent.putExtra(EditorActivity.EXTRA_CREATE_TIME, note.getCreateTime());
-//                    intent.putExtra(EditorActivity.EXTRA_LAST_MODIFIED_TIME, note.getLastModifiedTime());
                     intent.putExtra("position", getPosition());
                     view.getContext().startActivity(intent);
                 }
             });
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+            FROM = getPosition();
+            L.d("onItemSelected", "FROM ->" + FROM);
+        }
+
+        @Override
+        public void onItemClear() {
+            TO = getPosition();
+            if (FROM != TO && ENABLE) { // 排除滑动删除
+                L.d("onItemClear", "TO ->" + TO);
+                long startTime=System.currentTimeMillis();   // 开始时间
+
+                NoteDao dao = NoteDao.getInstance();
+                GlobalDataCache cache = GlobalDataCache.getInstance();
+
+                // 交换数据库两条便签的排序值
+                dao.swapIndex(FROM, TO);
+                long endTime=System.currentTimeMillis(); // 结束时间
+                L.d("MainActivity", "交换数据库两条便签的排序值所花时间：" + (endTime-startTime) + "ms");
+
+                startTime=System.currentTimeMillis();   // 开始时间
+//                cache.swapNote(FROM, TO); // 更新Note列表
+                cache.syncNotes();
+                endTime=System.currentTimeMillis(); // 结束时间
+                L.d("MainActivity", "更新Note列表所花时间：" + (endTime-startTime) + "ms");
+            }
+            ENABLE = true;
+            itemView.setBackgroundColor(AXEApplication.getApplication().getResources().getColor(R.color.bg_note));
         }
     }
 
@@ -91,15 +141,15 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
     public void filter(String query) {
         // 重新初始化数据
         GlobalDataCache cache = GlobalDataCache.getInstance();
-        cache.initNotes();
+        cache.syncNotes();
         List<Note> notes = cache.getNotes();
 
         PinyinUtil contrastPinyin = new PinyinUtil(); // 拼音模糊查询工具类
-        List<Note> data = new ArrayList<Note>();
+        List<Note> data = new ArrayList<>();
 
         for (Note note : notes) {
             int index = 0;
-            String content = Html.fromHtml(note.getContent()).toString();
+            String content = note.getContent();
             if (contrastPinyin.contains(query)) {
                 index = content.indexOf(query);
             } else {

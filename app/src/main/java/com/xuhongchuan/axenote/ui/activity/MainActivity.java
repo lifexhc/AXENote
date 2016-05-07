@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -27,14 +28,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.stylingandroid.prism.Prism;
+import com.stylingandroid.prism.filter.SystemChromeFilter;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.NoteListAdapter;
+import com.xuhongchuan.axenote.adapter.SimpleItemTouchHelperCallback;
 import com.xuhongchuan.axenote.dao.NoteDao;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
+import com.xuhongchuan.axenote.utils.L;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +63,7 @@ public class MainActivity extends BaseActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(GlobalValue.REFRESH_NOTE_LIST)) {
-                GlobalDataCache.getInstance().initNotes();
+                GlobalDataCache.getInstance().syncNotes();
                 mAdapter.notifyDataSetChanged();
             }
         }
@@ -78,45 +83,73 @@ public class MainActivity extends BaseActivity
         unregisterReceiver(mReceiver);
     }
 
-    /**
-     * NoteList相关事件
-     */
-    ItemTouchHelper.Callback mCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+    private Handler mHandler = new Handler();
 
-        @Override
-        /**
-         * 长按移动便签
-         */
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            int fromPosition = viewHolder.getAdapterPosition(); // 得到拖动ViewHolder的position
-            int toPosition = target.getAdapterPosition(); // 得到目标ViewHolder的position
-
-            // 交换数据库两条便签的排序值
-            List<Note> notes;
-            NoteDao dao = NoteDao.getInstance();
-            notes = dao.getAllNotes();
-            int id1 = notes.get(fromPosition).getId();
-            int id2 = notes.get(toPosition).getId();
-            dao.swapOrdinal(id1, id2);
-
-            mAdapter.notifyItemMoved(fromPosition, toPosition);
-            GlobalDataCache.getInstance().initNotes(); // 更新Note列表
-            // 返回true表示执行拖动
-            return true;
-        }
-
-        @Override
-        /**
-         * 滑动删除便签
-         */
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            mAdapter.notifyItemRemoved(position);
-            GlobalDataCache cache = GlobalDataCache.getInstance();
-            cache.deleteNote(cache.getNotes().get(position).getId());
-            mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
-        }
-    };
+//    /**
+//     * NoteList相关事件
+//     */
+//    ItemTouchHelper.Callback mCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+//
+//        @Override
+//        public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
+//            super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+//            L.d(this, "onMoved");
+//            mRecycleView.startDrag()
+//        }
+//
+//        @Override
+//    /**
+//     * 长按移动便签
+//     */
+//    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+//        final int fromPosition = viewHolder.getAdapterPosition(); // 得到拖动ViewHolder的position
+//        final int toPosition = target.getAdapterPosition(); // 得到目标ViewHolder的position
+//
+//        long startTime=System.currentTimeMillis();   // 开始时间
+//
+//        final NoteDao dao = NoteDao.getInstance();
+//        final GlobalDataCache cache = GlobalDataCache.getInstance();
+//        final List<Note> notes = cache.getNotes();
+//
+//        // 交换数据库两条便签的排序值
+//        mHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                int id1 = notes.get(fromPosition).getId();
+//                int id2 = notes.get(toPosition).getId();
+//                dao.swapIndex(id1, id2);
+//            }
+//        });
+//        long endTime=System.currentTimeMillis(); // 结束时间
+//        L.d("MainActivity", "交换数据库两条便签的排序值所花时间：" + (endTime-startTime) + "ms");
+//
+//        startTime=System.currentTimeMillis();   // 开始时间
+//        cache.swapIndex(fromPosition, toPosition); // 更新Note列表
+//        mAdapter.notifyItemMoved(fromPosition, toPosition);
+//
+//        endTime=System.currentTimeMillis(); // 结束时间
+//        L.d("MainActivity", "更新Note列表所花时间：" + (endTime-startTime) + "ms");
+//        // 返回true表示执行拖动
+//        return true;
+//    }
+//
+//    @Override
+//    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+//        if (actionState == ItemTouchHelper.)
+//    }
+//
+//    @Override
+//    /**
+//     * 滑动删除便签
+//     */
+//    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+//        int position = viewHolder.getAdapterPosition();
+//        mAdapter.notifyItemRemoved(position);
+//        GlobalDataCache cache = GlobalDataCache.getInstance();
+//        cache.deleteNote(cache.getNotes().get(position).getId());
+//        mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+//    }
+//};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,18 +177,11 @@ public class MainActivity extends BaseActivity
                 long currentTime = date.getTime();
                 // 创建新便签
                 GlobalDataCache cache = GlobalDataCache.getInstance();
-                cache.createNewNote("", currentTime, currentTime);
+                cache.createNewNote("", false, currentTime, currentTime);
 
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 intent.putExtra("position", 0);
-//                intent.putExtra(EditorActivity.EXTRA_ID, cache.getLastId());
-//                intent.putExtra(EditorActivity.EXTRA_CONTENT, "");
-//                intent.putExtra(EditorActivity.EXTRA_CREATE_TIME, currentTime);
-//                intent.putExtra(EditorActivity.EXTRA_LAST_MODIFIED_TIME, currentTime);
                 startActivity(intent);
-
-//                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-//                startActivity(intent);
             }
         });
 
@@ -166,8 +192,9 @@ public class MainActivity extends BaseActivity
         mRecycleView.setAdapter(mAdapter);
 
         // 为NoteList绑定事件
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mCallback);
-        itemTouchHelper.attachToRecyclerView(mRecycleView);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRecycleView);
 
         // 侧滑菜单内容
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
