@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -28,20 +27,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.stylingandroid.prism.Prism;
-import com.stylingandroid.prism.filter.SystemChromeFilter;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.NoteListAdapter;
 import com.xuhongchuan.axenote.adapter.SimpleItemTouchHelperCallback;
-import com.xuhongchuan.axenote.dao.NoteDao;
-import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
-import com.xuhongchuan.axenote.utils.L;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
@@ -51,11 +44,6 @@ public class MainActivity extends BaseActivity
     private RecyclerView mRecycleView;
     private SearchView mSearchView;
     private NoteListAdapter mAdapter;
-    private NavigationView mNavigationView;
-    private ImageView mSearchViewIcon; // SearchView的图标，用于切换主题时修改图标
-
-    private Prism mPrism; // 主题切换
-
     /**
      * 广播
      */
@@ -68,6 +56,9 @@ public class MainActivity extends BaseActivity
             }
         }
     };
+    private NavigationView mNavigationView;
+    private ImageView mSearchViewIcon; // SearchView的图标，用于切换主题时修改图标
+    private Prism mPrism; // 主题切换
 
     @Override
     protected void onResume() {
@@ -177,7 +168,7 @@ public class MainActivity extends BaseActivity
 
             mFAB.setImageDrawable(getResources().getDrawable(R.drawable.ic_plus_night));
         } else {
-            dl.setBackgroundColor(res.getColor(R.color.white));
+            dl.setBackgroundColor(res.getColor(R.color.bg_main));
             mNavigationView.setBackgroundColor(res.getColor(R.color.white));
             mNavigationView.getMenu().clear();
             mNavigationView.inflateMenu(R.menu.activity_main_drawer);

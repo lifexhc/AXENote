@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.xuhongchuan.axenote.infr.ItemTouchHelperAdapter;
 import com.xuhongchuan.axenote.ui.activity.EditorActivity;
 import com.xuhongchuan.axenote.utils.AXEApplication;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
-import com.xuhongchuan.axenote.utils.L;
 import com.xuhongchuan.axenote.utils.PinyinUtil;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
 
@@ -32,7 +30,7 @@ import java.util.List;
  * Created by xuhongchuan on 15/10/17.
  */
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteListViewHolder>
-    implements ItemTouchHelperAdapter {
+        implements ItemTouchHelperAdapter {
     private static int FROM; // swap的from
     private static int TO; // swap的to
     private static boolean ENABLE = true; // 是否执行swap
@@ -92,58 +90,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
         ENABLE = false; // 在onItemClear()不执行swap
     }
 
-    public static class NoteListViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
-        TextView mTextView;
-        LinearLayout mLinearLayout;
-
-        public NoteListViewHolder(final View view) {
-            super(view);
-            mTextView = (TextView) view.findViewById(R.id.tv_note_tittle);
-            mLinearLayout = (LinearLayout) view.findViewById(R.id.ll_hasImage);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 进入便签编辑Activity，并且传递当前便签内容和索引
-                    Intent intent = new Intent(view.getContext(), EditorActivity.class);
-                    intent.putExtra("position", getPosition());
-                    view.getContext().startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
-            FROM = getPosition();
-            L.d("onItemSelected", "FROM ->" + FROM);
-        }
-
-        @Override
-        public void onItemClear() {
-            TO = getPosition();
-            if (FROM != TO && ENABLE) { // 排除滑动删除
-                L.d("onItemClear", "TO ->" + TO);
-                long startTime=System.currentTimeMillis();   // 开始时间
-
-                NoteDao dao = NoteDao.getInstance();
-                GlobalDataCache cache = GlobalDataCache.getInstance();
-
-                // 交换数据库两条便签的排序值
-                dao.swapIndex(FROM, TO);
-                long endTime=System.currentTimeMillis(); // 结束时间
-                L.d("MainActivity", "交换数据库两条便签的排序值所花时间：" + (endTime-startTime) + "ms");
-
-                startTime=System.currentTimeMillis();   // 开始时间
-//                cache.swapNote(FROM, TO); // 更新Note列表
-                cache.syncNotes();
-                endTime=System.currentTimeMillis(); // 结束时间
-                L.d("MainActivity", "更新Note列表所花时间：" + (endTime-startTime) + "ms");
-            }
-            ENABLE = true;
-            itemView.setBackgroundColor(AXEApplication.getApplication().getResources().getColor(R.color.bg_note));
-        }
-    }
-
     /**
      * 查询
      *
@@ -175,6 +121,46 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
         notes.addAll(data);
 
         notifyDataSetChanged(); // 刷新RecyclerView
+    }
+
+    public static class NoteListViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+        TextView mTextView;
+        LinearLayout mLinearLayout;
+
+        public NoteListViewHolder(final View view) {
+            super(view);
+            mTextView = (TextView) view.findViewById(R.id.tv_note_tittle);
+            mLinearLayout = (LinearLayout) view.findViewById(R.id.ll_hasImage);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 进入便签编辑Activity，并且传递当前便签内容和索引
+                    Intent intent = new Intent(view.getContext(), EditorActivity.class);
+                    intent.putExtra("position", getPosition());
+                    view.getContext().startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+            FROM = getPosition();
+        }
+
+        @Override
+        public void onItemClear() {
+            TO = getPosition();
+            if (FROM != TO && ENABLE) { // 排除滑动删除
+                NoteDao dao = NoteDao.getInstance();
+                GlobalDataCache cache = GlobalDataCache.getInstance();
+                // 交换数据库两条便签的排序值
+                cache.swapNote(FROM, TO); // 交换缓存Note列表
+                dao.swapPosition(FROM, TO); // 交换数据库Note列表
+            }
+            ENABLE = true;
+            itemView.setBackgroundColor(AXEApplication.getApplication().getResources().getColor(R.color.bg_note));
+        }
     }
 
 }

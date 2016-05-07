@@ -9,12 +9,11 @@
     <color name="divider">#2f2f2f</color>
 
     <color name="bg_night">#4f4f4f</color>
-    <color name="bg_note">#FFFde7</color>
+    <color name="bg_note">#FFF9C4</color>
 
     <color name="white">#FFFFFF</color>
     <color name="night">#0288DE</color>
     <color name="checked">#B6B6B6</color>
 
-    <color name="f5f5f5">#f5f5f5</color>
-    <color name="e0e0e0">#bdbdbd</color>
+    <color name="bg_main">#bdbdbd</color>
 </resources>

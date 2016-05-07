@@ -1,26 +1,32 @@
 @charset "UTF-8";
 /* CSS Document */
 
+* {
+    border-style:hidden;
+}
+
 html {
     width: 100%;
     height: 100%;
 }
 
 body {
-    width: 96%;
-    height: 96%;
+    width: 100%;
+    height: 100%;
     margin: 0;
-    padding: 2%;
+    padding: 0;
+    background-color: #FFF9C4;
 }
 
 #editor {
-    width: 100%;
-    height: 100%;
+    width: 96%;
+    height: 96%;
+    padding: 2%;
+    background-color: #FFF9C4;
 }
 
 img {
     width: 80%;
     display: block;
-    text-align:center;
     margin:0 auto;
 }

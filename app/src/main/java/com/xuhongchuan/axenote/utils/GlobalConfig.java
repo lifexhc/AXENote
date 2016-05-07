@@ -9,11 +9,10 @@ import android.content.SharedPreferences;
  */
 public class GlobalConfig {
 
-    // 当前是否为夜间模式
-    private final String SP_KEY_NIGHT_MODE = "nightMode";
-
     // 单例对象
     private static GlobalConfig mInstance;
+    // 当前是否为夜间模式
+    private final String SP_KEY_NIGHT_MODE = "nightMode";
 
     // 构造方法
     private GlobalConfig() {

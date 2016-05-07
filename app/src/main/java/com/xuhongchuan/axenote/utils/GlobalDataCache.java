@@ -17,11 +17,10 @@ import java.util.List;
  */
 public class GlobalDataCache {
 
-    // 便签列表
-    private List<Note> notes;
-
     // 单例对象
     private static GlobalDataCache mInstance;
+    // 便签列表
+    private List<Note> notes;
 
     // 构造方法
     private GlobalDataCache() {

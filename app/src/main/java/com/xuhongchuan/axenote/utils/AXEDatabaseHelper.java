@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class AXEDatabaseHelper extends SQLiteOpenHelper {
 
+    // 删除Note表sql语句
+    public static final String SQL_DELETE_NOTE =
+            "drop table if exists " + GlobalValue.TABLE_NAME_NOTE;
     // 创建Note表sql语句
     private static final String SQL_CREATE_NOTE = "create table if not exists " + GlobalValue.TABLE_NAME_NOTE + "(" +
             GlobalValue.COLUMN_NAME_ID + " integer primary key autoincrement," +
@@ -19,11 +22,6 @@ public class AXEDatabaseHelper extends SQLiteOpenHelper {
             GlobalValue.COLUMN_NAME_CREATE_TIME + " integer," +
             GlobalValue.COLUMN_NAME_LAST_MODIFIED_TIME + " integer," +
             GlobalValue.COLUMN_NAME_POSITION + " integer)";
-
-    // 删除Note表sql语句
-    public static final String SQL_DELETE_NOTE =
-            "drop table if exists " + GlobalValue.TABLE_NAME_NOTE;
-
     // 单例对象
     private static AXEDatabaseHelper mInstance;
 

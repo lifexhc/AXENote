@@ -17,11 +17,10 @@ import java.util.ArrayList;
  */
 public class NoteDao {
 
-    // SQLite对象
-    private SQLiteDatabase mDb;
-
     // 单例对象
     private static NoteDao mInstance;
+    // SQLite对象
+    private SQLiteDatabase mDb;
 
     // 构造方法
     private NoteDao() {
@@ -53,7 +52,6 @@ public class NoteDao {
         // 所有便签的index + 1
         String sql = "update " + GlobalValue.TABLE_NAME_NOTE + " set " + GlobalValue.COLUMN_NAME_POSITION
                 + " = " + GlobalValue.COLUMN_NAME_POSITION + " + 1";
-        L.d("NoteDao", sql);
         mDb.execSQL(sql);
 
         // 创建新便签
@@ -84,7 +82,6 @@ public class NoteDao {
         String sql = "update " + GlobalValue.TABLE_NAME_NOTE + " set " + GlobalValue.COLUMN_NAME_POSITION
                 + " = " + GlobalValue.COLUMN_NAME_POSITION + " - 1 " + "where "
                 + GlobalValue.COLUMN_NAME_POSITION + " > " + position;
-        L.d("NoteDao", sql);
         mDb.execSQL(sql);
 
     }
@@ -236,7 +233,7 @@ public class NoteDao {
      * @param position1
      * @param position2
      */
-    public void swapIndex(int position1, int position2) {
+    public void swapPosition(int position1, int position2) {
         // 记录position1的便签的id
         int id = 0;
 

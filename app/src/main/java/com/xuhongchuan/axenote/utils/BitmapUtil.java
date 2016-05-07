@@ -130,8 +130,8 @@ public class BitmapUtil {
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray()); // 把压缩后的数据baos存放到ByteArrayInputStream中
         bitmap = BitmapFactory.decodeStream(isBm, null, null); // 把ByteArrayInputStream数据生成图片
 
-        long endTime=System.currentTimeMillis(); // 结束时间
-        L.d("BitmapUtil", "质量压缩用时：" + (endTime-startTime) + "ms");
+        long endTime = System.currentTimeMillis(); // 结束时间
+        L.d("BitmapUtil", "质量压缩用时：" + (endTime - startTime) + "ms");
         return bitmap;
     }
 

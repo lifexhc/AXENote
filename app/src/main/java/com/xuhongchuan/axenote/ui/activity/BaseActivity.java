@@ -12,6 +12,7 @@ import com.xuhongchuan.axenote.infr.IChangeTheme;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 
 /**
+ * 祖宗Activity
  * Created by xuhongchuan on 15/11/28.
  */
 public abstract class BaseActivity extends AppCompatActivity implements IChangeTheme {

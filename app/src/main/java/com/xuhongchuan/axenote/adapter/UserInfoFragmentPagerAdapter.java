@@ -16,8 +16,8 @@ public class UserInfoFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
 
     private Context mContext;
-    private List<Fragment> mFragment = new ArrayList<Fragment>();
-    private List<String> mFragTitles = new ArrayList<String>();
+    private List<Fragment> mFragment = new ArrayList<>();
+    private List<String> mFragTitles = new ArrayList<>();
 
     public UserInfoFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);

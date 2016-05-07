@@ -2,21 +2,35 @@
 
 window.onload = initEditor;
 
-<!-- 插入图片 -->
-function insertImg(base64) {
-    var html = '<img src="data:image/jpeg;base64,' + base64 + '"/>';
-    document.execCommand('insertHTML', false, html);
-}
-
-<!-- 加载完毕调用initContent() -->
+<!-- 通知Android编辑器 -->
 function initEditor() {
     window.EditorActivity.initEditor();
+}
+
+<!-- 设置主题 -->
+function initTheme(isNightMode) {
+    var editor = document.getElementById("editor");
+    if (isNightMode == 1) {
+        document.body.style.backgroundColor = "#4f4f4f";
+        editor.style.backgroundColor = "#4f4f4f";
+    } else {
+        document.body.style.backgroundColor = "#FFF9C4";
+        editor.style.backgroundColor = "#FFF9C4";
+    }
+
 }
 
 <!-- 初始化便签内容 -->
 function initContent(html) {
     var editor = document.getElementById("editor");
     editor.innerHTML = html;
+}
+
+<!-- 插入图片 -->
+function insertImg(base64) {
+    var html = '<img src="data:image/jpeg;base64,' + base64 + '"/>';
+    html += '<br/>';
+    document.execCommand('insertHTML', false, html);
 }
 
 <!-- 获取文本内容 -->
@@ -31,6 +45,5 @@ function getEditorContent() {
     } else {
         title = text;
     }
-
     window.AndroidEditor.getEditorContent(title, html, imgCount);
 }

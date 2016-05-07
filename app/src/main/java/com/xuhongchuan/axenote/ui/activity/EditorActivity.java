@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -20,25 +21,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
+import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.view.RichEditor;
 import com.xuhongchuan.axenote.utils.BitmapUtil;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.GlobalValue;
-import com.xuhongchuan.axenote.utils.L;
 
 import java.util.Date;
 
 /**
+ * 编辑界面
  * Created by xuhongchuan on 16/5/3.
  */
 public class EditorActivity extends BaseActivity {
-    private final int RQ_GET_IMAGE_FROM_SD_CARD = 1;
     public static final int READ_EXTERNAL_STORAGE_REQ_CODE = 2;
-
+    private final int RQ_GET_IMAGE_FROM_SD_CARD = 1;
+    private Prism mPrism; // 主题切换
     private int mId; // 便签ID
     private String mContent; // 便签内容
     private long mCreateTime; // 便签创建时间
@@ -46,15 +49,51 @@ public class EditorActivity extends BaseActivity {
 
     private RichEditor mWebView;
     private Toolbar mToolbar;
-    MenuItem mInsertImg;
+    private MenuItem mInsertImg;
     private String mFilePath; // 图片路径，从SD卡获取图片时使用
+    private Handler mHandler = new Handler();
 
+    @SuppressLint("NewApi")
+    public static String getFilePathFromURI(Context context, Uri uri) {
+        // 有两种uri格式
+        // uri:content://media/external/images/media/88
+        // uri:content://com.android.providers.media.documents/document/image%3A13004
+        // 判断uri格式是否第二种
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            String filePath = "";
+            String wholeID = DocumentsContract.getDocumentId(uri);
+            String id = wholeID.split(":")[1];
+            String[] column = {MediaStore.Images.Media.DATA};
+            String sel = MediaStore.Images.Media._ID + "=?";
+            Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    column, sel, new String[]{id}, null);
+            int columnIndex = cursor.getColumnIndex(column[0]);
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex);
+            }
+            cursor.close();
+            return filePath;
+        } else {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            String result = null;
+
+            CursorLoader cursorLoader = new CursorLoader(context, uri, proj, null, null, null);
+            Cursor cursor = cursorLoader.loadInBackground();
+
+            if (cursor != null) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                result = cursor.getString(column_index);
+            }
+            return result;
+        }
+    }
 
     @Override
     @SuppressLint("JavascriptInterface")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.richeditor);
+        setContentView(R.layout.activity_editor);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -73,6 +112,7 @@ public class EditorActivity extends BaseActivity {
         mWebView.addJavascriptInterface(new JsInterface(), "AndroidEditor");
         mWebView.addJavascriptInterface(EditorActivity.this, "EditorActivity");
 
+        initTheme();
         initContent();
     }
 
@@ -90,13 +130,17 @@ public class EditorActivity extends BaseActivity {
 
     }
 
-    private Handler mHandler = new Handler();
-
     @JavascriptInterface
     public void initEditor() {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                boolean isNightMode = GlobalConfig.getInstance().isNightMode(EditorActivity.this);
+                if (isNightMode) {
+                    mWebView.loadUrl("javascript:initTheme('" + 1 + "')");
+                } else {
+                    mWebView.loadUrl("javascript:initTheme('" + 0 + "')");
+                }
                 mWebView.loadUrl("javascript:initContent('" + mContent + "')");
             }
         });
@@ -108,6 +152,9 @@ public class EditorActivity extends BaseActivity {
 
         // 初始化插入图片button
         mInsertImg = menu.findItem(R.id.insert_img);
+
+        // 初始化icon主题
+        changeToolbarIconTheme();
         return true;
     }
 
@@ -179,71 +226,13 @@ public class EditorActivity extends BaseActivity {
                 case RQ_GET_IMAGE_FROM_SD_CARD:
                     // 获取图片的路径
                     Uri originalUri = intent.getData();
-                    L.d(this, "uri:" + originalUri.toString());
                     mFilePath = getFilePathFromURI(this, originalUri);
                     // 根据路径从SD卡获取图片并压缩
                     final Bitmap bitmap = BitmapUtil.compressBitmap(mFilePath, this, 0.75F);
                     String base64 = BitmapUtil.toBase64(bitmap);
-                    L.d(this, bitmap.getByteCount() / 1024 + "kb");
-                    long startTime=System.currentTimeMillis();   // 开始时间
-                    L.d("base64", base64);
                     mWebView.loadUrl("javascript:insertImg('" + base64 + "')");
-                    long endTime=System.currentTimeMillis(); // 结束时间
-                    L.d("BitmapUtil", "loadUrl用时：" + (endTime-startTime) + "ms");
                     break;
             }
-        }
-    }
-
-    public class JsInterface {
-        @JavascriptInterface
-        public void getEditorContent(String title, String content, int count) {
-            L.d(EditorActivity.this, "title --> " + title);
-            mContent = content;
-            boolean hasImage = false;
-            if (count > 0) {
-                hasImage = true;
-            }
-            GlobalDataCache.getInstance().updateNote(mId, title, mContent, hasImage, new Date().getTime());
-            // 发送更新便签列表的广播
-            Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
-            sendBroadcast(intent);
-        }
-    }
-
-    @SuppressLint("NewApi")
-    public static String getFilePathFromURI(Context context, Uri uri) {
-        // 有两种uri格式
-        // uri:content://media/external/images/media/88
-        // uri:content://com.android.providers.media.documents/document/image%3A13004
-        // 判断uri格式是否第二种
-        if (DocumentsContract.isDocumentUri(context, uri)) {
-            String filePath = "";
-            String wholeID = DocumentsContract.getDocumentId(uri);
-            String id = wholeID.split(":")[1];
-            String[] column = {MediaStore.Images.Media.DATA};
-            String sel = MediaStore.Images.Media._ID + "=?";
-            Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    column, sel, new String[]{id}, null);
-            int columnIndex = cursor.getColumnIndex(column[0]);
-            if (cursor.moveToFirst()) {
-                filePath = cursor.getString(columnIndex);
-            }
-            cursor.close();
-            return filePath;
-        } else {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            String result = null;
-
-            CursorLoader cursorLoader = new CursorLoader(context, uri, proj, null, null, null);
-            Cursor cursor = cursorLoader.loadInBackground();
-
-            if (cursor != null) {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                result = cursor.getString(column_index);
-            }
-            return result;
         }
     }
 
@@ -254,18 +243,66 @@ public class EditorActivity extends BaseActivity {
             @Override
             public void run() {
                 mWebView.loadUrl("javascript:getEditorContent()");
+                mWebView.clearCache(true);
             }
         });
     }
 
-    @Override
+    /**
+     * 初始化主题
+     */
     public void initTheme() {
-
+        mPrism = Prism.Builder.newInstance()
+                .background(getWindow())
+                .background(mToolbar)
+                .build();
+        changeTheme();
     }
 
-    @Override
+    /**
+     * 切换主题
+     */
     public void changeTheme() {
+        Resources res = getResources();
+        LinearLayout llEditor = (LinearLayout) findViewById(R.id.ll_activity_editor);
+        if (GlobalConfig.getInstance().isNightMode(EditorActivity.this)) {
+            mPrism.setColour(res.getColor(R.color.divider));
+            llEditor.setBackgroundColor(res.getColor(R.color.bg_night));
+        } else {
+            mPrism.setColour(res.getColor(R.color.primary));
+            llEditor.setBackgroundColor(res.getColor(R.color.bg_note));
+        }
+        changeToolbarIconTheme();
+    }
 
+    /**
+     * 修改toolbar上图标的颜色
+     */
+    private void changeToolbarIconTheme() {
+        if (mInsertImg != null) {
+            if (GlobalConfig.getInstance().isNightMode(this)) {
+                mInsertImg.setIcon(R.drawable.ic_insert_img_night);
+                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow_night);
+            } else {
+                mInsertImg.setIcon(R.drawable.ic_insert_img);
+                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+            }
+        }
+    }
+
+    public class JsInterface {
+        @JavascriptInterface
+        public void getEditorContent(String title, String content, int count) {
+            mContent = content;
+            boolean hasImage = false;
+            if (count > 0) {
+                hasImage = true;
+            }
+            GlobalDataCache.getInstance().updateNote(mId, title, mContent, hasImage, new Date().getTime());
+            // 发送更新便签列表的广播
+            Intent intent = new Intent(GlobalValue.REFRESH_NOTE_LIST);
+            sendBroadcast(intent);
+        }
     }
 
 }
