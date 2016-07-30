@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.stylingandroid.prism.Prism;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.NoteListAdapter;
 import com.xuhongchuan.axenote.adapter.SimpleItemTouchHelperCallback;
@@ -77,7 +78,6 @@ public class MainActivity extends BaseActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         initView();
         initTheme();
@@ -314,4 +314,8 @@ public class MainActivity extends BaseActivity
         return false;
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 }

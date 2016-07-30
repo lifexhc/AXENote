@@ -1,5 +1,25 @@
 apply plugin: 'com.android.application'
 
+String VERSION_NAME = "1.0.0"
+
+/**
+ * 初始化版本号
+ * @param str
+ * @return
+ */
+int getVersionCode(String str) {
+    int buildID = 0;
+    String[] array = str.split("\\.").toList();
+    int major = array[0].toInteger();
+    int minor = array[1].toInteger();
+    int release = array[2].toInteger();
+    if(array.length > 3) {
+        buildID = array[3].toInteger();
+    }
+    int code = major * 1000000 + minor * 10000 + release * 100  + buildID * 1;
+    return code;
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -8,15 +28,49 @@ android {
         applicationId "com.xuhongchuan.axenote"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 3
-        versionName "beta2.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        versionName VERSION_NAME
+        versionCode getVersionCode(VERSION_NAME)
+
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' //'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
+
+    signingConfigs {
+        // 读取local.properties
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+        // 读取签名
+        keystore {
+            storeFile file(properties.getProperty("STORE_FILE"))
+            storePassword properties.getProperty("STORE_PASSWORD")
+            keyAlias properties.getProperty("KEY_ALIAS")
+            keyPassword properties.getProperty("KEY_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        debug {
+            // 显示log
+            buildConfigField "boolean", "LOG_ENABLE", "true"
+
+            // 签名
+            signingConfig signingConfigs.keystore
+        }
+
+        release {
+            // 不显示log
+            buildConfigField "boolean", "LOG_ENABLE", "false"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // 签名
+            signingConfig signingConfigs.keystore
+        }
+    }
+
 }
 
 dependencies {
@@ -37,9 +91,8 @@ dependencies {
     // https://blog.leancloud.cn/3612/
     compile 'com.stylingandroid.prism:prism:1.0.1'
 
-    // 加载图片
-    // https://github.com/facebook/fresco
-    // 中文文档：http://fresco-cn.org/docs/index.html#_
-    compile 'com.facebook.fresco:fresco:0.9.0+'
-
+    // Bugly
+    // https://bugly.qq.com/androidfast
+    // https://github.com/vell001/BetaSDKDemo
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
 }

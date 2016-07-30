@@ -24,7 +24,7 @@ import com.xuhongchuan.axenote.utils.GlobalValue;
 /**
  * Created by xuhongchuan on 15/12/2.
  */
-public class UserInfoActivity extends FragmentActivity implements IChangeTheme {
+public class UserInfoActivity extends BaseActivity implements IChangeTheme {
 
     private Toolbar mToolbar;
     private UserInfoFragmentPagerAdapter mPagerAdapter;
@@ -62,7 +62,6 @@ public class UserInfoActivity extends FragmentActivity implements IChangeTheme {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info);
 
         initElement();
         initTab();
@@ -130,5 +129,10 @@ public class UserInfoActivity extends FragmentActivity implements IChangeTheme {
         } else {
             mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
         }
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_user_info;
     }
 }

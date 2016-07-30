@@ -2,6 +2,8 @@ package com.xuhongchuan.axenote.utils;
 
 import android.util.Log;
 
+import com.xuhongchuan.axenote.BuildConfig;
+
 /**
  * Log
  * Created by xuhongchuan on 15/7/31.
@@ -24,7 +26,7 @@ public class L {
     }
 
     public static void d(Object tag, String msg, Throwable e) {
-        if (LEVEL <= DEBUG) {
+        if (BuildConfig.LOG_ENABLE && LEVEL <= DEBUG) {
             if (e != null) {
                 Log.d(getTag(tag), msg, e);
             } else {
@@ -42,7 +44,7 @@ public class L {
     }
 
     public static void i(Object tag, String msg, Throwable e) {
-        if (LEVEL <= INFO) {
+        if (BuildConfig.LOG_ENABLE && LEVEL <= INFO) {
             if (e != null) {
                 Log.i(getTag(tag), msg, e);
             } else {
@@ -60,7 +62,7 @@ public class L {
     }
 
     public static void w(Object tag, String msg, Throwable e) {
-        if (LEVEL <= WARN) {
+        if (BuildConfig.LOG_ENABLE && LEVEL <= WARN) {
             if (e != null) {
                 Log.w(getTag(tag), msg, e);
             } else {
@@ -78,7 +80,7 @@ public class L {
     }
 
     public static void e(Object tag, String msg, Throwable e) {
-        if (LEVEL <= ERROR) {
+        if (BuildConfig.LOG_ENABLE && LEVEL <= ERROR) {
             if (e != null) {
                 Log.e(getTag(tag), msg, e);
             } else {

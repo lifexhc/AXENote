@@ -21,7 +21,6 @@ public class AboutAuthorActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about_author);
 
         initElement();
         initTheme();
@@ -79,5 +78,10 @@ public class AboutAuthorActivity extends BaseActivity {
         } else {
             mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
         }
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_about_author;
     }
 }

@@ -93,7 +93,6 @@ public class EditorActivity extends BaseActivity {
     @SuppressLint("JavascriptInterface")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -305,6 +304,10 @@ public class EditorActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_editor;
+    }
 }
 
 

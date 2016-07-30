@@ -6,8 +6,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.stylingandroid.prism.Prism;
+import com.xuhongchuan.axenote.BuildConfig;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
 
@@ -18,6 +20,7 @@ public class VersionActivity extends BaseActivity {
 
     private Toolbar mToolbar;
     private Prism mPrism; // 主题切换
+    private TextView mTvVersion;
 
     private void initElement() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -30,12 +33,14 @@ public class VersionActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
+        mTvVersion = (TextView) findViewById(R.id.tv_version);
+        mTvVersion.setText(getResources().getString((R.string.version_number)) + BuildConfig.VERSION_NAME);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_version);
 
         initElement();
         initTheme();
@@ -80,5 +85,10 @@ public class VersionActivity extends BaseActivity {
         } else {
             mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
         }
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_version;
     }
 }
