@@ -22,12 +22,12 @@ int getVersionCode(String str) {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.xuhongchuan.axenote"
-        minSdkVersion 15
-        targetSdkVersion 23
+        minSdkVersion 19
+        targetSdkVersion 21
         versionName VERSION_NAME
         versionCode getVersionCode(VERSION_NAME)
 
@@ -35,6 +35,8 @@ android {
             // 设置支持的SO库架构
             abiFilters 'armeabi' //'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
+
+//        vectorDrawables.useSupportLibrary = true
     }
 
     signingConfigs {
@@ -76,20 +78,15 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
 
-    compile 'com.android.support:recyclerview-v7:23.0.1'
-    compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
 
     // 圆形头像
     // https://github.com/hdodenhof/CircleImageView
     compile 'de.hdodenhof:circleimageview:2.0.0'
-
-    // 主题切换框架
-    // https://github.com/StylingAndroid/Prism
-    // https://blog.leancloud.cn/3612/
-    compile 'com.stylingandroid.prism:prism:1.0.1'
 
     // Bugly
     // https://bugly.qq.com/androidfast

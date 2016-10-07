@@ -1,10 +1,9 @@
 package com.xuhongchuan.axenote.utils;
 
 import android.app.Application;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.tencent.bugly.Bugly;
-import com.tencent.bugly.beta.Beta;
-import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * Application
@@ -27,6 +26,15 @@ public class AXEApplication extends Application {
 
         // bugly初始化
         Bugly.init(getApplicationContext(), "900043504", false);
+
+        boolean isNightMode = GlobalConfig.getInstance().isNightMode(getApplication());
+        if (isNightMode) {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     @Override

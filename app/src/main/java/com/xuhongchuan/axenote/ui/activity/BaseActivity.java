@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.infr.IChangeTheme;
+import com.xuhongchuan.axenote.utils.GlobalConfig;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.L;
 
@@ -28,9 +30,39 @@ public abstract class BaseActivity extends AppCompatActivity implements IChangeT
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(GlobalValue.CHANGE_THEME)) {
                 changeTheme();
+                recreate();
             }
         }
     };
+
+    @Override
+    public void changeTheme() {
+        boolean isNightMode = GlobalConfig.getInstance().isNightMode(BaseActivity.this);
+        if (isNightMode) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        changeTheme();
+        super.onCreate(savedInstanceState);
+        if (getLayoutId() != 0) {
+            setContentView(getLayoutId());
+        }
+        // Activity切换效果
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+        L.d(TAG, getClass().getName() + " onCreate");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        L.d(TAG, getClass().getName() + " onStart");
+    }
 
     @Override
     protected void onResume() {
@@ -39,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IChangeT
         filter.addAction(GlobalValue.CHANGE_THEME);
         registerReceiver(mReceiver, filter);
 
-        L.d(TAG, getClass().getName() + " resume");
+        L.d(TAG, getClass().getName() + " onResume");
     }
 
     @Override
@@ -47,17 +79,25 @@ public abstract class BaseActivity extends AppCompatActivity implements IChangeT
         super.onPause();
         unregisterReceiver(mReceiver);
 
-        L.d(TAG, getClass().getName() + " pause");
+        L.d(TAG, getClass().getName() + " onPause");
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getLayoutId() != 0) {
-            setContentView(getLayoutId());
-        }
-        // Activity切换效果
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    protected void onStop() {
+        super.onStop();
+        L.d(TAG, getClass().getName() + " onStop");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        L.d(TAG, getClass().getName() + " onRestart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        L.d(TAG, getClass().getName() + " onDestroy");
     }
 
     @Override

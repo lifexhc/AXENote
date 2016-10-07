@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -21,9 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.JavascriptInterface;
-import android.widget.LinearLayout;
 
-import com.stylingandroid.prism.Prism;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.ui.view.RichEditor;
@@ -41,7 +38,6 @@ import java.util.Date;
 public class EditorActivity extends BaseActivity {
     public static final int READ_EXTERNAL_STORAGE_REQ_CODE = 2;
     private final int RQ_GET_IMAGE_FROM_SD_CARD = 1;
-    private Prism mPrism; // 主题切换
     private int mId; // 便签ID
     private String mContent; // 便签内容
     private long mCreateTime; // 便签创建时间
@@ -111,7 +107,6 @@ public class EditorActivity extends BaseActivity {
         mWebView.addJavascriptInterface(new JsInterface(), "AndroidEditor");
         mWebView.addJavascriptInterface(EditorActivity.this, "EditorActivity");
 
-        initTheme();
         initContent();
     }
 
@@ -248,40 +243,13 @@ public class EditorActivity extends BaseActivity {
     }
 
     /**
-     * 初始化主题
-     */
-    public void initTheme() {
-        mPrism = Prism.Builder.newInstance()
-                .background(getWindow())
-                .background(mToolbar)
-                .build();
-        changeTheme();
-    }
-
-    /**
-     * 切换主题
-     */
-    public void changeTheme() {
-        Resources res = getResources();
-        LinearLayout llEditor = (LinearLayout) findViewById(R.id.ll_activity_editor);
-        if (GlobalConfig.getInstance().isNightMode(EditorActivity.this)) {
-            mPrism.setColour(res.getColor(R.color.divider));
-            llEditor.setBackgroundColor(res.getColor(R.color.bg_night));
-        } else {
-            mPrism.setColour(res.getColor(R.color.primary));
-            llEditor.setBackgroundColor(res.getColor(R.color.bg_note));
-        }
-        changeToolbarIconTheme();
-    }
-
-    /**
      * 修改toolbar上图标的颜色
      */
     private void changeToolbarIconTheme() {
         if (mInsertImg != null) {
             if (GlobalConfig.getInstance().isNightMode(this)) {
-                mInsertImg.setIcon(R.drawable.ic_insert_img_night);
-                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow_night);
+                mInsertImg.setIcon(R.drawable.ic_insert_img);
+                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
             } else {
                 mInsertImg.setIcon(R.drawable.ic_insert_img);
                 mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);

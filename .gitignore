@@ -1,3 +1,5 @@
+*.DS_Store
+
 .gradle
 /local.properties
 .idea
@@ -41,6 +43,11 @@ captures/
 
 # Intellij
 *.iml
+.idea/workspace.xml
+.idea/libraries
 
 # Keystore files
 *.jks
+
+# vim
+*.swp

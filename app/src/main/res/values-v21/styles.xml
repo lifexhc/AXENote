@@ -1,13 +1,13 @@
-<resources>>
+<resources>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+    <!--<style name="AppTheme.NoActionBar">-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+        <!--<item name="android:statusBarColor">@color/primary_dark</item>-->
 
-        <!-- API21 -->
-        <item name="android:navigationBarColor">@color/primary</item>
-    </style>
+        <!--&lt;!&ndash; API21 &ndash;&gt;-->
+        <!--<item name="android:navigationBarColor">@color/primary</item>-->
+    <!--</style>-->
 
 </resources>

@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,10 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.stylingandroid.prism.Prism;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.NoteListAdapter;
 import com.xuhongchuan.axenote.adapter.SimpleItemTouchHelperCallback;
@@ -59,7 +55,6 @@ public class MainActivity extends BaseActivity
     };
     private NavigationView mNavigationView;
     private ImageView mSearchViewIcon; // SearchView的图标，用于切换主题时修改图标
-    private Prism mPrism; // 主题切换
 
     @Override
     protected void onResume() {
@@ -78,9 +73,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initView();
-        initTheme();
     }
 
     /**
@@ -133,61 +126,13 @@ public class MainActivity extends BaseActivity
     }
 
     /**
-     * 初始化主题
-     */
-    public void initTheme() {
-        LinearLayout llHeader = (LinearLayout) mNavigationView.findViewById(R.id.ll_header);
-
-        mPrism = Prism.Builder.newInstance()
-                .background(getWindow())
-                .background(mToolbar)
-                .background(mFAB)
-                .background(llHeader)
-                .build();
-        changeTheme();
-    }
-
-    /**
-     * 修改主题
-     */
-    @Override
-    public void changeTheme() {
-        Resources res = getResources();
-        boolean isNightMode = GlobalConfig.getInstance().isNightMode(MainActivity.this);
-        if (isNightMode) {
-            mPrism.setColour(res.getColor(R.color.divider));
-        } else {
-            mPrism.setColour(res.getColor(R.color.primary));
-        }
-        CoordinatorLayout dl = (CoordinatorLayout) findViewById(R.id.app_bar_main);
-        if (isNightMode) {
-            dl.setBackgroundColor(res.getColor(R.color.divider));
-            mNavigationView.setBackgroundColor(res.getColor(R.color.bg_night));
-            mNavigationView.getMenu().clear();
-            mNavigationView.inflateMenu(R.menu.activity_main_drawer_night);
-
-            mFAB.setImageDrawable(getResources().getDrawable(R.drawable.ic_plus_night));
-        } else {
-            dl.setBackgroundColor(res.getColor(R.color.bg_main));
-            mNavigationView.setBackgroundColor(res.getColor(R.color.white));
-            mNavigationView.getMenu().clear();
-            mNavigationView.inflateMenu(R.menu.activity_main_drawer);
-
-            mFAB.setImageDrawable(getResources().getDrawable(R.drawable.ic_plus));
-        }
-        mAdapter.notifyDataSetChanged();
-
-        changeToolbarIconTheme();
-    }
-
-    /**
      * 修改toolbar上图标的颜色
      */
     private void changeToolbarIconTheme() {
         if (mSearchView != null) {
             if (GlobalConfig.getInstance().isNightMode(this)) {
-                mSearchViewIcon.setImageResource(R.drawable.ic_search_night);
-                mToolbar.setNavigationIcon(R.drawable.ic_menu_night);
+                mSearchViewIcon.setImageResource(R.drawable.ic_search);
+                mToolbar.setNavigationIcon(R.drawable.ic_menu);
             } else {
                 mSearchViewIcon.setImageResource(R.drawable.ic_search);
                 mToolbar.setNavigationIcon(R.drawable.ic_menu);
@@ -250,9 +195,9 @@ public class MainActivity extends BaseActivity
             final AlertDialog.Builder builder;
             // 根据当前主题设置对话框主题
             if (config.isNightMode(MainActivity.this)) {
-                builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+                builder = new AlertDialog.Builder(this, R.style.Dialog_Alert);
             } else {
-                builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+                builder = new AlertDialog.Builder(this, R.style.Dialog_Alert);
             }
             builder.setTitle(res.getString(R.string.select_theme));
             int checkedItem = config.isNightMode(MainActivity.this) ? 1 : 0; // 默认选中项

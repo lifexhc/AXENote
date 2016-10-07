@@ -6,7 +6,5 @@ package com.xuhongchuan.axenote.infr;
  */
 public interface IChangeTheme {
 
-    void initTheme();
-
     void changeTheme();
 }
