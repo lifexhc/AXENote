@@ -4,6 +4,8 @@ import android.app.Application;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.tencent.bugly.Bugly;
+import com.tencent.bugly.crashreport.CrashReport;
+import com.xuhongchuan.axenote.BuildConfig;
 
 /**
  * Application
@@ -24,8 +26,10 @@ public class AXEApplication extends Application {
         super.onCreate();
         mInstance = this;
 
-        // bugly初始化
-        Bugly.init(getApplicationContext(), "900043504", false);
+        // Bugly初始化
+        CrashReport.UserStrategy buglyStrategy = new CrashReport.UserStrategy(getApplicationContext());
+        buglyStrategy.setAppVersion(BuildConfig.VERSION_NAME);
+        Bugly.init(getApplicationContext(), "900043504", false, buglyStrategy);
 
         boolean isNightMode = GlobalConfig.getInstance().isNightMode(getApplication());
         if (isNightMode) {
