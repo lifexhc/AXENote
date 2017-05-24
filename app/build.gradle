@@ -35,31 +35,12 @@ android {
             // 设置支持的SO库架构
             abiFilters 'armeabi' //'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
-
-//        vectorDrawables.useSupportLibrary = true
-    }
-
-    signingConfigs {
-        // 读取local.properties
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-        // 读取签名
-        keystore {
-            storeFile file(properties.getProperty("STORE_FILE"))
-            storePassword properties.getProperty("STORE_PASSWORD")
-            keyAlias properties.getProperty("KEY_ALIAS")
-            keyPassword properties.getProperty("KEY_PASSWORD")
-        }
     }
 
     buildTypes {
         debug {
             // 显示log
             buildConfigField "boolean", "LOG_ENABLE", "true"
-
-            // 签名
-            signingConfig signingConfigs.keystore
         }
 
         release {
@@ -67,9 +48,6 @@ android {
             buildConfigField "boolean", "LOG_ENABLE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            // 签名
-            signingConfig signingConfigs.keystore
         }
     }
 
