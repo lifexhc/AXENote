@@ -15,6 +15,8 @@ import com.xuhongchuan.axenote.utils.GlobalConfig;
 import com.xuhongchuan.axenote.utils.GlobalValue;
 import com.xuhongchuan.axenote.utils.L;
 
+import butterknife.ButterKnife;
+
 /**
  * 祖宗Activity
  * Created by xuhongchuan on 15/11/28.
@@ -53,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IChangeT
         if (getLayoutId() != 0) {
             setContentView(getLayoutId());
         }
+        ButterKnife.bind(this);
         // Activity切换效果
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 

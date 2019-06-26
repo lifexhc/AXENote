@@ -1,7 +1,6 @@
 package com.xuhongchuan.axenote.ui.activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,34 +11,32 @@ import com.bumptech.glide.request.RequestOptions;
 import com.xuhongchuan.axenote.BuildConfig;
 import com.xuhongchuan.axenote.R;
 
+import butterknife.BindView;
+
 /**
  * Created by xuhongchuan on 15/10/21.
  */
 public class VersionActivity extends BaseActivity {
 
-    private Toolbar mToolbar;
-    private TextView mTvVersion;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.tv_version)
+    TextView versionView;
+    @BindView(R.id.ic_logo)
+    ImageView logoView;
 
     private void initElement() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        mTvVersion = (TextView) findViewById(R.id.tv_version);
-        mTvVersion.setText(getResources().getString((R.string.version_number)) + BuildConfig.VERSION_NAME);
+        versionView.setText(String.format(getResources().getString(R.string.version_number), BuildConfig.VERSION_NAME));
 
-        ImageView avatarView = (ImageView) findViewById(R.id.ic_logo);
         Glide.with(this)
                 .load(R.mipmap.ic_launcher)
                 .apply(new RequestOptions().circleCrop())
-                .into(avatarView);
+                .into(logoView);
     }
 
     @Override

@@ -14,7 +14,6 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.JavascriptInterface;
 
 import androidx.appcompat.widget.Toolbar;
@@ -32,11 +31,19 @@ import com.xuhongchuan.axenote.utils.GlobalValue;
 
 import java.util.Date;
 
+import butterknife.BindView;
+
 /**
  * 编辑界面
  * Created by xuhongchuan on 16/5/3.
  */
 public class EditorActivity extends BaseActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.webview)
+    RichEditor richEditor;
+
     public static final int READ_EXTERNAL_STORAGE_REQ_CODE = 2;
     private final int RQ_GET_IMAGE_FROM_SD_CARD = 1;
     private int mId; // 便签ID
@@ -44,8 +51,6 @@ public class EditorActivity extends BaseActivity {
     private long mCreateTime; // 便签创建时间
     private long mLastModifiedTime; // 便签最后编辑时间
 
-    private RichEditor mWebView;
-    private Toolbar mToolbar;
     private MenuItem mInsertImg;
     private String mFilePath; // 图片路径，从SD卡获取图片时使用
     private Handler mHandler = new Handler();
@@ -90,23 +95,16 @@ public class EditorActivity extends BaseActivity {
     @SuppressLint("JavascriptInterface")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
         /**
          * 返回箭头
          */
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        mWebView = (RichEditor) findViewById(R.id.webview);
-        mWebView.addJavascriptInterface(new JsInterface(), "AndroidEditor");
-        mWebView.addJavascriptInterface(EditorActivity.this, "EditorActivity");
+        richEditor.addJavascriptInterface(new JsInterface(), "AndroidEditor");
+        richEditor.addJavascriptInterface(EditorActivity.this, "EditorActivity");
 
         initContent();
     }
@@ -132,11 +130,11 @@ public class EditorActivity extends BaseActivity {
             public void run() {
                 boolean isNightMode = GlobalConfig.getInstance().isNightMode(EditorActivity.this);
                 if (isNightMode) {
-                    mWebView.loadUrl("javascript:initTheme('" + 1 + "')");
+                    richEditor.loadUrl("javascript:initTheme('" + 1 + "')");
                 } else {
-                    mWebView.loadUrl("javascript:initTheme('" + 0 + "')");
+                    richEditor.loadUrl("javascript:initTheme('" + 0 + "')");
                 }
-                mWebView.loadUrl("javascript:initContent('" + mContent + "')");
+                richEditor.loadUrl("javascript:initContent('" + mContent + "')");
             }
         });
     }
@@ -225,7 +223,7 @@ public class EditorActivity extends BaseActivity {
                     // 根据路径从SD卡获取图片并压缩
                     final Bitmap bitmap = BitmapUtil.compressBitmap(mFilePath, this, 0.75F);
                     String base64 = BitmapUtil.toBase64(bitmap);
-                    mWebView.loadUrl("javascript:insertImg('" + base64 + "')");
+                    richEditor.loadUrl("javascript:insertImg('" + base64 + "')");
                     break;
             }
         }
@@ -234,12 +232,9 @@ public class EditorActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mWebView.loadUrl("javascript:getEditorContent()");
-                mWebView.clearCache(true);
-            }
+        mHandler.post(() -> {
+            richEditor.loadUrl("javascript:getEditorContent()");
+            richEditor.clearCache(true);
         });
     }
 
@@ -250,10 +245,10 @@ public class EditorActivity extends BaseActivity {
         if (mInsertImg != null) {
             if (GlobalConfig.getInstance().isNightMode(this)) {
                 mInsertImg.setIcon(R.drawable.ic_insert_img);
-                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+                toolbar.setNavigationIcon(R.drawable.ic_back_arrow);
             } else {
                 mInsertImg.setIcon(R.drawable.ic_insert_img);
-                mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+                toolbar.setNavigationIcon(R.drawable.ic_back_arrow);
             }
         }
     }

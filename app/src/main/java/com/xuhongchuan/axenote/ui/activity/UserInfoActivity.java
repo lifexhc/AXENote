@@ -1,7 +1,6 @@
 package com.xuhongchuan.axenote.ui.activity;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -13,15 +12,22 @@ import com.xuhongchuan.axenote.infr.IChangeTheme;
 import com.xuhongchuan.axenote.ui.fragment.LoginFragment;
 import com.xuhongchuan.axenote.ui.fragment.RegisterFragment;
 
+import butterknife.BindView;
+
 /**
  * Created by xuhongchuan on 15/12/2.
  */
 public class UserInfoActivity extends BaseActivity implements IChangeTheme {
 
-    private Toolbar mToolbar;
-    private UserInfoFragmentPagerAdapter mPagerAdapter;
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
+
+    private UserInfoFragmentPagerAdapter pagerAdapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,28 +37,19 @@ public class UserInfoActivity extends BaseActivity implements IChangeTheme {
     }
 
     private void initElement() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("");
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setTitle("");
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void initTab() {
-        mPagerAdapter = new UserInfoFragmentPagerAdapter(getSupportFragmentManager(), this);
-        mPagerAdapter.addFragment(new LoginFragment(), getString(R.string.login));
-        mPagerAdapter.addFragment(new RegisterFragment(), getString(R.string.register));
+        pagerAdapter = new UserInfoFragmentPagerAdapter(getSupportFragmentManager(), this);
+        pagerAdapter.addFragment(new LoginFragment(), getString(R.string.login));
+        pagerAdapter.addFragment(new RegisterFragment(), getString(R.string.register));
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setAdapter(mPagerAdapter);
+        viewPager.setAdapter(pagerAdapter);
 
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
     @Override

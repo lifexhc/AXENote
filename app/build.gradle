@@ -24,6 +24,11 @@ android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
         applicationId "com.xuhongchuan.axenote"
         minSdkVersion 21
@@ -61,6 +66,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.0.2"
     implementation "com.google.android.material:material:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.0.0"
+
+    implementation "com.jakewharton:butterknife:10.1.0"
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.1.0"
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 

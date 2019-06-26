@@ -10,7 +10,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -34,13 +33,23 @@ import com.xuhongchuan.axenote.utils.GlobalConfig;
 
 import java.util.Date;
 
+import butterknife.BindView;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
-    private Toolbar mToolbar;
-    private FloatingActionButton mFAB;
-    private RecyclerView mRecycleView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.rv_note_list)
+    RecyclerView recyclerView;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
     private SearchView mSearchView;
+    private ImageView mSearchViewIcon; // SearchView的图标，用于切换主题时修改图标
+
     private NoteListAdapter mAdapter;
     /**
      * 广播
@@ -54,8 +63,12 @@ public class MainActivity extends BaseActivity
             }
         }
     };
-    private NavigationView mNavigationView;
-    private ImageView mSearchViewIcon; // SearchView的图标，用于切换主题时修改图标
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initView();
+    }
 
     @Override
     protected void onResume() {
@@ -71,57 +84,45 @@ public class MainActivity extends BaseActivity
         unregisterReceiver(mReceiver);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initView();
-    }
-
     /**
      * 初始化元素
      */
     private void initView() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
         // 悬浮按钮
-        mFAB = (FloatingActionButton) findViewById(R.id.fab);
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Date date = new Date();
-                long currentTime = date.getTime();
-                // 创建新便签
-                GlobalDataCache cache = GlobalDataCache.getInstance();
-                cache.createNewNote("", false, currentTime, currentTime);
+        fab.setOnClickListener(view -> {
+            Date date = new Date();
+            long currentTime = date.getTime();
+            // 创建新便签
+            GlobalDataCache cache = GlobalDataCache.getInstance();
+            cache.createNewNote("", false, currentTime, currentTime);
 
-                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-                intent.putExtra("position", 0);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+            intent.putExtra("position", 0);
+            startActivity(intent);
         });
 
         // 便签列表
-        mRecycleView = (RecyclerView) findViewById(R.id.rv_note_list);
         mAdapter = new NoteListAdapter(this);
-        mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mRecycleView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(mAdapter);
 
         // 为NoteList绑定事件
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(mRecycleView);
+        touchHelper.attachToRecyclerView(recyclerView);
 
         // 侧滑菜单内容
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.setItemIconTintList(null);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
         // 和侧滑菜单绑定
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
     }
@@ -133,10 +134,10 @@ public class MainActivity extends BaseActivity
         if (mSearchView != null) {
             if (GlobalConfig.getInstance().isNightMode(this)) {
                 mSearchViewIcon.setImageResource(R.drawable.ic_search);
-                mToolbar.setNavigationIcon(R.drawable.ic_menu);
+                toolbar.setNavigationIcon(R.drawable.ic_menu);
             } else {
                 mSearchViewIcon.setImageResource(R.drawable.ic_search);
-                mToolbar.setNavigationIcon(R.drawable.ic_menu);
+                toolbar.setNavigationIcon(R.drawable.ic_menu);
             }
         }
     }
