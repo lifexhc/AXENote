@@ -10,23 +10,21 @@
         android:id="@+id/ly_toolbar"
         layout="@layout/toolbar" />
 
-    <!-- 圆形头像 -->
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/ci_logo"
+    <!-- logo -->
+    <ImageView
+        android:id="@+id/ic_logo"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_below="@id/ly_toolbar"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/ic_launcher"
-        app:civ_border_color="#FFFFFF"
-        app:civ_border_width="1dp" />
+        android:src="@mipmap/ic_launcher" />
 
     <!-- 版本号 -->
     <TextView
         android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ci_logo"
+        android:layout_below="@id/ic_logo"
         android:layout_marginTop="10dp"
         android:text="@string/version_number" />
 

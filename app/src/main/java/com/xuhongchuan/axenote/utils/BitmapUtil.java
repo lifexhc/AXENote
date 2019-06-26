@@ -9,7 +9,6 @@ import android.util.DisplayMetrics;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.Date;
 
 /**
  * Created by xuhongchuan on 16/1/23.

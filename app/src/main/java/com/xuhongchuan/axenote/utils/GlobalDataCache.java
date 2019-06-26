@@ -1,14 +1,10 @@
 package com.xuhongchuan.axenote.utils;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-
 import com.xuhongchuan.axenote.dao.NoteDao;
 import com.xuhongchuan.axenote.data.Note;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**

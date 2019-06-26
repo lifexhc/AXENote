@@ -11,11 +11,11 @@
         android:id="@+id/tv_note_tittle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="8.5"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="8.5"
         android:ellipsize="end"
         android:padding="10dp"
         android:singleLine="true"
@@ -28,7 +28,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1.5"
         android:gravity="center"
-        android:visibility="invisible" >
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/iv_hasImage"

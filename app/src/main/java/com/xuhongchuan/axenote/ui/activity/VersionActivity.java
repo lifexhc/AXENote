@@ -1,10 +1,14 @@
 package com.xuhongchuan.axenote.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.xuhongchuan.axenote.BuildConfig;
 import com.xuhongchuan.axenote.R;
 
@@ -30,6 +34,12 @@ public class VersionActivity extends BaseActivity {
 
         mTvVersion = (TextView) findViewById(R.id.tv_version);
         mTvVersion.setText(getResources().getString((R.string.version_number)) + BuildConfig.VERSION_NAME);
+
+        ImageView avatarView = (ImageView) findViewById(R.id.ic_logo);
+        Glide.with(this)
+                .load(R.mipmap.ic_launcher)
+                .apply(new RequestOptions().circleCrop())
+                .into(avatarView);
     }
 
     @Override

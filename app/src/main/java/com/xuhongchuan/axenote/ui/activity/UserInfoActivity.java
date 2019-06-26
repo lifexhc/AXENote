@@ -1,21 +1,17 @@
 package com.xuhongchuan.axenote.ui.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.xuhongchuan.axenote.R;
 import com.xuhongchuan.axenote.adapter.UserInfoFragmentPagerAdapter;
 import com.xuhongchuan.axenote.infr.IChangeTheme;
 import com.xuhongchuan.axenote.ui.fragment.LoginFragment;
 import com.xuhongchuan.axenote.ui.fragment.RegisterFragment;
-import com.xuhongchuan.axenote.utils.GlobalValue;
 
 /**
  * Created by xuhongchuan on 15/12/2.

@@ -1,9 +1,13 @@
 package com.xuhongchuan.axenote.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 
+import androidx.appcompat.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.xuhongchuan.axenote.R;
 
 /**
@@ -30,6 +34,12 @@ public class AboutAuthorActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
+        ImageView avatarView = (ImageView) findViewById(R.id.ic_author_avatar);
+        Glide.with(this)
+                .load(R.drawable.xuhongchuan)
+                .apply(new RequestOptions().circleCrop())
+                .into(avatarView);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.xuhongchuan.axenote.utils;
 
 import android.app.Application;
-import android.support.v7.app.AppCompatDelegate;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
