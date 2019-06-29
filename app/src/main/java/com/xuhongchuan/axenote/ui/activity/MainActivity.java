@@ -7,9 +7,11 @@ import android.content.IntentFilter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.xuhongchuan.axenote.R;
@@ -106,6 +109,17 @@ public class MainActivity extends BaseActivity
 
         // 便签列表
         mAdapter = new NoteListAdapter(this);
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int itemCount = parent.getAdapter().getItemCount();
+                outRect.top = ConvertUtils.dp2px(15);
+                if (parent.getChildAdapterPosition(view) == (itemCount - 1)) {
+                    outRect.bottom = ConvertUtils.dp2px(15);
+                }
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
 
@@ -132,13 +146,8 @@ public class MainActivity extends BaseActivity
      */
     private void changeToolbarIconTheme() {
         if (mSearchView != null) {
-            if (GlobalConfig.getInstance().isNightMode(this)) {
-                mSearchViewIcon.setImageResource(R.drawable.ic_search);
-                toolbar.setNavigationIcon(R.drawable.ic_menu);
-            } else {
-                mSearchViewIcon.setImageResource(R.drawable.ic_search);
-                toolbar.setNavigationIcon(R.drawable.ic_menu);
-            }
+            mSearchViewIcon.setImageResource(R.drawable.ic_search);
+            toolbar.setNavigationIcon(R.drawable.ic_menu);
         }
     }
 
@@ -162,9 +171,8 @@ public class MainActivity extends BaseActivity
 
         // 初始化SearchView
         MenuItem searchViewMenuItem = menu.findItem(R.id.search);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(searchViewMenuItem);
-        int searchImgId = R.id.search_button;
-        mSearchViewIcon = (ImageView) mSearchView.findViewById(searchImgId);
+        mSearchView = (SearchView) searchViewMenuItem.getActionView();
+        mSearchViewIcon = mSearchView.findViewById(R.id.search_button);
         mSearchViewIcon.setImageResource(R.drawable.ic_search);
         mSearchView.setOnQueryTextListener(this);
 
@@ -195,12 +203,7 @@ public class MainActivity extends BaseActivity
             final String[] themes = {res.getString(R.string.day), res.getString(R.string.night)};
             final GlobalConfig config = GlobalConfig.getInstance();
             final AlertDialog.Builder builder;
-            // 根据当前主题设置对话框主题
-            if (config.isNightMode(MainActivity.this)) {
-                builder = new AlertDialog.Builder(this, R.style.Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(this, R.style.Dialog_Alert);
-            }
+            builder = new AlertDialog.Builder(this);
             builder.setTitle(res.getString(R.string.select_theme));
             int checkedItem = config.isNightMode(MainActivity.this) ? 1 : 0; // 默认选中项
             builder.setSingleChoiceItems(themes, checkedItem, new DialogInterface.OnClickListener() {

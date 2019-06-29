@@ -4,10 +4,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- 临时 -->
-    <string name="jay">周杰伦</string>
-    <string name="aiyo">哎哟，不错哦！</string>
-
     <!-- 侧边栏 -->
     <string name="settings">设置</string>
     <string name="last_sync">上次同步</string>
@@ -29,7 +25,6 @@
     <string name="motto">其疾如风，其徐如林，侵略如火，不动如山。</string>
     <string name="jianshu">简书：@许宏川</string>
     <string name="weibo">微博：@许宏川</string>
-    <string name="weixin">微信：xuhongchuan-uht</string>
     <string name="mail">邮箱：life.xhc@gmail.com</string>
 
     <!-- 用户信息 -->
@@ -47,5 +42,5 @@
     <string name="night">夜间</string>
     <string name="get_img_failed">获取图片失败</string>
 
-    <string name="app_description">一个简洁的便签</string>
+    <string name="app_description">一个简洁的便签应用</string>
 </resources>

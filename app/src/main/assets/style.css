@@ -15,14 +15,15 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #FFF9C4;
 }
 
 #editor {
     width: 96%;
     height: 96%;
     padding: 2%;
-    background-color: #FFF9C4;
+    font-size: 18px;
+    line-height: 28px;
+    color: #333333;
 }
 
 img {

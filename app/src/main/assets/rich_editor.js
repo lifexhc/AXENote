@@ -14,10 +14,9 @@ function initTheme(isNightMode) {
         document.body.style.backgroundColor = "#4f4f4f";
         editor.style.backgroundColor = "#4f4f4f";
     } else {
-        document.body.style.backgroundColor = "#FFF9C4";
-        editor.style.backgroundColor = "#FFF9C4";
+        document.body.style.backgroundColor = "#fefcef";
+        editor.style.backgroundColor = "#fefcef";
     }
-
 }
 
 <!-- 初始化便签内容 -->

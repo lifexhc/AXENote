@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +18,6 @@ import com.xuhongchuan.axenote.infr.ItemTouchHelperViewHolder;
 import com.xuhongchuan.axenote.data.Note;
 import com.xuhongchuan.axenote.infr.ItemTouchHelperAdapter;
 import com.xuhongchuan.axenote.ui.activity.EditorActivity;
-import com.xuhongchuan.axenote.utils.AXEApplication;
 import com.xuhongchuan.axenote.utils.GlobalDataCache;
 import com.xuhongchuan.axenote.utils.PinyinUtil;
 import com.xuhongchuan.axenote.utils.GlobalConfig;
@@ -57,18 +56,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
         Note note = GlobalDataCache.getInstance().getNotes().get(position);
         String title = note.getTitle();
         boolean hasImage = note.getHasImage();
-        holder.mTextView.setText(title);
-        if (hasImage) {
-            holder.mLinearLayout.setVisibility(View.VISIBLE);
-        } else {
-            holder.mLinearLayout.setVisibility(View.INVISIBLE);
-        }
+        holder.titleView.setText(title);
+        holder.imageIconView.setVisibility(hasImage ? View.VISIBLE : View.INVISIBLE);
         Resources res = mContext.getResources();
-        if (GlobalConfig.getInstance().isNightMode(mContext)) {
-            holder.itemView.setBackgroundColor(res.getColor(R.color.bg_night));
-        } else {
-            holder.itemView.setBackgroundColor(res.getColor(R.color.bg_note));
-        }
+        holder.itemView.setBackground(res.getDrawable(R.drawable.shape_note_item_bg));
 
     }
 
@@ -124,22 +115,19 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
         notifyDataSetChanged(); // 刷新RecyclerView
     }
 
-    public static class NoteListViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
-        TextView mTextView;
-        LinearLayout mLinearLayout;
+    public class NoteListViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+        TextView titleView;
+        ImageView imageIconView;
 
         public NoteListViewHolder(final View view) {
             super(view);
-            mTextView = (TextView) view.findViewById(R.id.tv_note_tittle);
-            mLinearLayout = (LinearLayout) view.findViewById(R.id.ll_hasImage);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 进入便签编辑Activity，并且传递当前便签内容和索引
-                    Intent intent = new Intent(view.getContext(), EditorActivity.class);
-                    intent.putExtra("position", getPosition());
-                    view.getContext().startActivity(intent);
-                }
+            titleView = view.findViewById(R.id.title);
+            imageIconView = view.findViewById(R.id.image_icon);
+            view.setOnClickListener(v -> {
+                // 进入便签编辑Activity，并且传递当前便签内容和索引
+                Intent intent = new Intent(view.getContext(), EditorActivity.class);
+                intent.putExtra("position", getPosition());
+                view.getContext().startActivity(intent);
             });
         }
 
@@ -160,7 +148,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteLi
                 dao.swapPosition(FROM, TO); // 交换数据库Note列表
             }
             ENABLE = true;
-            itemView.setBackgroundColor(AXEApplication.getApplication().getResources().getColor(R.color.bg_note));
+            itemView.setBackground(mContext.getResources().getDrawable(R.drawable.shape_note_item_bg));
         }
     }
 

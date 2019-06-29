@@ -8,8 +8,7 @@
     <color name="secondary_text">#727272</color>
     <color name="divider">#2f2f2f</color>
 
-    <color name="bg_night">#4f4f4f</color>
-    <color name="bg_note">#FFF9C4</color>
+    <color name="bg_note">#fefcef</color>
 
     <color name="white">#FFFFFF</color>
     <color name="night">#0288DE</color>
